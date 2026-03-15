@@ -1,5 +1,6 @@
 import './globals.css';
-import type { Metadata, ReactNode } from 'next';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { CartProvider } from '@/lib/cart/cart-context';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
