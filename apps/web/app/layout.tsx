@@ -5,7 +5,7 @@ import { CartProvider } from '@/lib/cart/cart-context';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { CartDrawer } from '@/components/cart/cart-drawer';
-
+// layout.tsx is the root layout for the entire application, wrapping all pages and components. It includes the CartProvider for global cart state, the Header and Footer for consistent navigation and branding, and the CartDrawer for accessible cart functionality across the site. The metadata object defines default SEO properties for the application.
 export const metadata: Metadata = {
   title: {
     default: 'Infuse & Muse | Premium Tea Blends',
