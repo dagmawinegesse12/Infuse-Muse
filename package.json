@@ -1,0 +1,8 @@
+{
+  "name": "infuse-and-muse-refined-patch",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/studio"
+  ]
+}
