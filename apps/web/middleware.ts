@@ -5,6 +5,8 @@ import type { NextRequest } from 'next/server';
 const ALLOWED = [
   '/waitlist',
   '/api/waitlist',
+  '/api/unsubscribe',
+  '/unsubscribe',
 ];
 
 export function middleware(request: NextRequest) {
