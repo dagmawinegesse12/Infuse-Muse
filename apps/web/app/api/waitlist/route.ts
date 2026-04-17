@@ -68,9 +68,11 @@ export async function POST(request: Request) {
 
   await addToList(email);
 
-  sendWaitlistConfirmation(email).catch((err) =>
-    console.error('[waitlist] email failed:', err)
-  );
+  try {
+    await sendWaitlistConfirmation(email);
+  } catch (err) {
+    console.error('[waitlist] email failed:', err);
+  }
 
   return NextResponse.json({
     message: "Welcome to the list! You'll hear from us before we launch.",
