@@ -25,7 +25,7 @@ export async function HomeSections() {
 
   return (
     <div className="space-y-24 pb-12">
-      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#173c33] px-6 py-16 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-20">
+      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#0f3d2e] px-6 py-16 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.12),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_30%)]" />
         <div className="relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="max-w-2xl space-y-6">
@@ -125,7 +125,7 @@ export async function HomeSections() {
       </section>
 
       <section className="grid gap-8 rounded-[2.5rem] bg-white/65 p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
-        <div className="rounded-[2rem] bg-[#173c33] p-8 text-white">
+        <div className="rounded-[2rem] bg-[#0f3d2e] p-8 text-white">
           <p className="text-sm uppercase tracking-[0.24em] text-emerald-100/60">
             Brand story
           </p>
@@ -228,7 +228,7 @@ export async function HomeSections() {
           </Button>
         </div>
 
-        <div className="rounded-[2rem] bg-[#173c33] p-8 text-white">
+        <div className="rounded-[2rem] bg-[#0f3d2e] p-8 text-white">
           <p className="text-sm uppercase tracking-[0.24em] text-emerald-100/60">
             Visit or connect
           </p>

@@ -46,7 +46,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
       <div className="mx-auto max-w-xl px-4 py-16 sm:py-24">
 
         {/* Header */}
-        <div className="rounded-[2.5rem] bg-[#173c33] px-8 py-12 text-center text-white">
+        <div className="rounded-[2.5rem] bg-[#0f3d2e] px-8 py-12 text-center text-white">
           <div
             className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full"
             style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
@@ -111,8 +111,8 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           <p className="mt-3 text-sm leading-7 text-[#5a6e68]">
             We&apos;ll reach out with pickup or shipping details. Questions?
             Email us at{' '}
-            <a href="mailto:hello@infuseandmuse.ca" className="text-[#173c33] underline">
-              hello@infuseandmuse.ca
+            <a href="mailto:hello@infuseandmuse.com" className="text-[#0f3d2e] underline">
+              hello@infuseandmuse.com
             </a>
             .
           </p>
@@ -128,7 +128,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/products"
-            className="flex-1 rounded-full bg-[#173c33] px-6 py-3.5 text-center font-serif text-sm text-white"
+            className="flex-1 rounded-full bg-[#0f3d2e] px-6 py-3.5 text-center font-serif text-sm text-white"
           >
             Explore more blends
           </Link>

@@ -5,7 +5,7 @@ const businessName = process.env.NEXT_PUBLIC_BUSINESS_NAME || "Infuse & Muse";
 
 export function absoluteUrl(path = "/") { return new URL(path, siteUrl).toString(); }
 
-export function createMetadata({ title, description, path = "/", image = "/images/logo-hero.png" }: { title: string; description: string; path?: string; image?: string; }): Metadata {
+export function createMetadata({ title, description, path = "/", image = "/images/logo.png" }: { title: string; description: string; path?: string; image?: string; }): Metadata {
   return {
     title,
     description,

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-emerald-950/10 bg-[#102b24] text-emerald-50">
+    <footer className="mt-24 border-t border-white/10 bg-[#092516] text-emerald-50">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
         <div className="space-y-4">
           <h2 className="font-serif text-2xl">Infuse & Muse</h2>

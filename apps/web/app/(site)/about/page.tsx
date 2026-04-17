@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 export default function AboutPage() {
   return (
     <div className="space-y-10">
-      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#173c33] px-8 py-14 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-16">
+      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#0f3d2e] px-8 py-14 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-16">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.07),transparent_30%)]" />
         <div className="relative max-w-2xl">
           <p className="text-sm uppercase tracking-[0.28em] text-emerald-100/70">About Infuse &amp; Muse</p>
@@ -38,7 +38,7 @@ export default function AboutPage() {
         ))}
       </section>
 
-      <section className="rounded-[2.5rem] bg-[#173c33] p-10 text-white">
+      <section className="rounded-[2.5rem] bg-[#0f3d2e] p-10 text-white">
         <h2 className="font-serif text-4xl">Ready to explore the blends?</h2>
         <p className="mt-4 max-w-2xl text-base leading-8 text-emerald-50/75">
           Browse signature and seasonal teas — each with clear tasting notes and a premium presentation designed for ritual and gifting.

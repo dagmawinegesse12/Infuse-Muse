@@ -81,5 +81,5 @@ export const demoFaqs: FAQItem[] = [
 
 export const demoSiteSettings: SiteSettings = {
   businessName: "Infuse & Muse", tagline: "Redefining Stillness", city: "Mississauga", region: "ON", country: "CA",
-  address: "Mississauga, Ontario, Canada", email: "hello@infuseandmuse.ca", phone: "+1 905-555-0189", instagramUrl: "https://www.tiktok.com/@infuseandmuse"
+  address: "Mississauga, Ontario, Canada", email: "hello@infuseandmuse.com", phone: "+1 905-555-0189", instagramUrl: "https://www.tiktok.com/@infuseandmuse"
 };

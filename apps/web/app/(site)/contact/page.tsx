@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 export default function ContactPage() {
   return (
     <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <section className="rounded-[2.5rem] bg-[#173c33] p-10 text-white">
+      <section className="rounded-[2.5rem] bg-[#0f3d2e] p-10 text-white">
         <p className="text-sm uppercase tracking-[0.24em] text-emerald-100/60">Contact</p>
         <h1 className="mt-4 font-serif text-5xl">Questions, gifting, or local pickup?</h1>
         <p className="mt-5 text-base leading-8 text-emerald-50/75">
@@ -11,7 +11,7 @@ export default function ContactPage() {
         </p>
         <div className="mt-8 space-y-4 text-sm text-emerald-50/75">
           <p><strong className="text-white">Location:</strong> Mississauga, Ontario, Canada</p>
-          <p><strong className="text-white">Email:</strong> hello@infuseandmuse.ca</p>
+          <p><strong className="text-white">Email:</strong> hello@infuseandmuse.com</p>
           <p><strong className="text-white">Pickup:</strong> Available on select local orders</p>
         </div>
       </section>

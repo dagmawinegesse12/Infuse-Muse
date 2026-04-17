@@ -6,7 +6,7 @@ export default async function FaqPage() {
 
   return (
     <div className="space-y-10">
-      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#173c33] px-8 py-14 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-16">
+      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#0f3d2e] px-8 py-14 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-16">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.07),transparent_30%)]" />
         <div className="relative max-w-2xl">
           <p className="text-sm uppercase tracking-[0.28em] text-emerald-100/70">FAQ</p>
@@ -28,7 +28,7 @@ export default async function FaqPage() {
         ))}
       </section>
 
-      <section className="rounded-[2.5rem] bg-[#173c33] p-10 text-white">
+      <section className="rounded-[2.5rem] bg-[#0f3d2e] p-10 text-white">
         <h2 className="font-serif text-3xl">Still have questions?</h2>
         <p className="mt-3 max-w-xl text-sm leading-7 text-emerald-50/75">
           Reach out directly for anything not covered here — gifting, local pickup, or custom orders in Mississauga.

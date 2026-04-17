@@ -25,7 +25,7 @@ export function generateOrderConfirmationHtml({
     : 'Hello,';
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://infuseandmuse.ca';
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://infuseandmuse.com';
 
   const orderRef = sessionId.slice(-12).toUpperCase();
 
@@ -35,13 +35,13 @@ export function generateOrderConfirmationHtml({
           .map(
             (item) => `
         <tr>
-          <td style="padding: 14px 0; border-bottom: 1px solid #ede7dd; font-size: 15px; color: #1a3d32; font-family: Georgia, serif;">
+          <td style="padding: 14px 0; border-bottom: 1px solid #ede7dd; font-size: 15px; color: #0f3d2e; font-family: Georgia, serif;">
             ${item.name}
           </td>
           <td style="padding: 14px 0; border-bottom: 1px solid #ede7dd; font-size: 14px; color: #7a6a56; text-align: center; font-family: Arial, sans-serif;">
             &times; ${item.qty}
           </td>
-          <td style="padding: 14px 0; border-bottom: 1px solid #ede7dd; font-size: 15px; color: #1a3d32; text-align: right; font-family: Arial, sans-serif; white-space: nowrap;">
+          <td style="padding: 14px 0; border-bottom: 1px solid #ede7dd; font-size: 15px; color: #0f3d2e; text-align: right; font-family: Arial, sans-serif; white-space: nowrap;">
             ${formatPrice(item.unit * item.qty)}
           </td>
         </tr>`
@@ -65,7 +65,7 @@ export function generateOrderConfirmationHtml({
 
           <!-- ── HEADER ── -->
           <tr>
-            <td style="background-color:#173c33; border-radius:24px 24px 0 0; padding: 44px 44px 36px; text-align:center;">
+            <td style="background-color:#0f3d2e; border-radius:24px 24px 0 0; padding: 44px 44px 36px; text-align:center;">
               <!-- Checkmark circle -->
               <div style="display:inline-block; width:56px; height:56px; background-color:rgba(255,255,255,0.15); border-radius:50%; line-height:56px; text-align:center; margin-bottom:20px;">
                 <span style="color:#ffffff; font-size:24px; line-height:56px;">&#10003;</span>
@@ -85,7 +85,7 @@ export function generateOrderConfirmationHtml({
           <!-- ── GREETING ── -->
           <tr>
             <td style="background-color:#ffffff; padding: 36px 44px 0;">
-              <p style="margin:0 0 10px; font-family:Georgia,serif; font-size:19px; color:#1a3d32;">
+              <p style="margin:0 0 10px; font-family:Georgia,serif; font-size:19px; color:#0f3d2e;">
                 ${greeting}
               </p>
               <p style="margin:0; font-size:15px; line-height:1.8; color:#5a6e68; font-family:Arial,sans-serif;">
@@ -122,7 +122,7 @@ export function generateOrderConfirmationHtml({
                     <td colspan="2" style="padding-top:18px; font-size:12px; color:#9a8f83; text-transform:uppercase; letter-spacing:0.14em; font-family:Arial,sans-serif;">
                       Total paid
                     </td>
-                    <td style="padding-top:18px; font-family:Georgia,serif; font-size:22px; color:#1a3d32; text-align:right; white-space:nowrap;">
+                    <td style="padding-top:18px; font-family:Georgia,serif; font-size:22px; color:#0f3d2e; text-align:right; white-space:nowrap;">
                       ${formatPrice(amountTotal)}
                     </td>
                   </tr>
@@ -146,8 +146,8 @@ export function generateOrderConfirmationHtml({
               </p>
               <p style="margin:0; font-size:14px; line-height:1.85; color:#5a6e68; font-family:Arial,sans-serif;">
                 We'll reach out with pickup or fulfillment details. For questions about your order, gifting, or local pickup in Mississauga, email us at
-                <a href="mailto:hello@infuseandmuse.ca" style="color:#173c33; text-decoration:underline;">hello@infuseandmuse.ca</a>
-                or visit our <a href="${siteUrl}/faq" style="color:#173c33; text-decoration:underline;">FAQ page</a>.
+                <a href="mailto:hello@infuseandmuse.com" style="color:#0f3d2e; text-decoration:underline;">hello@infuseandmuse.com</a>
+                or visit our <a href="${siteUrl}/faq" style="color:#0f3d2e; text-decoration:underline;">FAQ page</a>.
               </p>
             </td>
           </tr>
@@ -156,7 +156,7 @@ export function generateOrderConfirmationHtml({
           <tr>
             <td style="background-color:#ffffff; padding: 28px 44px 0; text-align:center;">
               <a href="${siteUrl}/products"
-                 style="display:inline-block; background-color:#173c33; color:#ffffff; font-family:Georgia,serif; font-size:14px; text-decoration:none; padding:14px 36px; border-radius:100px; letter-spacing:0.06em;">
+                 style="display:inline-block; background-color:#0f3d2e; color:#ffffff; font-family:Georgia,serif; font-size:14px; text-decoration:none; padding:14px 36px; border-radius:100px; letter-spacing:0.06em;">
                 Explore more blends
               </a>
             </td>
@@ -178,7 +178,7 @@ export function generateOrderConfirmationHtml({
           <tr>
             <td style="padding: 20px 0; text-align:center;">
               <p style="margin:0; font-size:11px; color:#b0a898; font-family:Arial,sans-serif;">
-                You received this because you placed an order at infuseandmuse.ca
+                You received this because you placed an order at infuseandmuse.com
               </p>
             </td>
           </tr>

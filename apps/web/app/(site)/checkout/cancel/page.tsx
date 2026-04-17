@@ -5,7 +5,7 @@ export default function CheckoutCancelPage() {
     <div className="mx-auto max-w-lg px-4 py-16 sm:py-24 text-center">
 
       {/* Header */}
-      <div className="rounded-[2.5rem] bg-[#173c33] px-8 py-12 text-white">
+      <div className="rounded-[2.5rem] bg-[#0f3d2e] px-8 py-12 text-white">
         <div
           className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full"
           style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
@@ -25,7 +25,7 @@ export default function CheckoutCancelPage() {
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <Link
           href="/cart"
-          className="flex-1 rounded-full bg-[#173c33] px-6 py-3.5 text-center font-serif text-sm text-white"
+          className="flex-1 rounded-full bg-[#0f3d2e] px-6 py-3.5 text-center font-serif text-sm text-white"
         >
           Return to cart
         </Link>
@@ -40,7 +40,7 @@ export default function CheckoutCancelPage() {
       {/* Help link */}
       <p className="mt-8 text-sm text-emerald-950/50">
         Having trouble?{' '}
-        <a href="mailto:hello@infuseandmuse.ca" className="text-[#173c33] underline">
+        <a href="mailto:hello@infuseandmuse.com" className="text-[#0f3d2e] underline">
           Contact us
         </a>
       </p>
