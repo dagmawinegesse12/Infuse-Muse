@@ -40,26 +40,26 @@ export function WaitlistForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full space-y-3">
-      <div className="flex overflow-hidden rounded-full border border-[#efcb80]/20 bg-[#f5efe6] shadow-lg">
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          className="flex-1 bg-transparent px-5 py-3.5 text-sm text-[#0a2a20] placeholder:text-[#0a2a20]/40 focus:outline-none"
+          placeholder="Your email address"
+          className="flex-1 rounded-full border border-white/20 bg-white/90 px-5 py-3.5 text-sm text-[#0a2a20] placeholder:text-[#0a2a20]/45 focus:border-[#efcb80] focus:outline-none focus:ring-1 focus:ring-[#efcb80]/50"
         />
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="shrink-0 rounded-full bg-[#b8915a] px-6 py-3.5 text-sm font-medium text-[#f5efe6] transition hover:bg-[#c9a066] disabled:opacity-60 my-1 mr-1"
+          className="rounded-full bg-[#efcb80] px-7 py-3.5 text-sm font-semibold text-[#0a2a20] transition hover:bg-[#fad483] disabled:opacity-60"
         >
-          {status === 'loading' ? '…' : 'Join'}
+          {status === 'loading' ? 'Joining…' : 'Join waitlist'}
         </button>
       </div>
       {status === 'error' && (
-        <p className="text-center text-xs text-red-400/80">{message}</p>
+        <p className="text-center text-sm text-red-400">{message}</p>
       )}
     </form>
   );
