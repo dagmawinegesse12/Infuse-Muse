@@ -19,6 +19,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/images') ||
     pathname.startsWith('/icons') ||
     pathname === '/favicon.ico' ||
+    pathname === '/icon.png' ||
+    pathname === '/apple-icon.png' ||
     pathname === '/robots.txt' ||
     pathname === '/sitemap.xml'
   ) {
