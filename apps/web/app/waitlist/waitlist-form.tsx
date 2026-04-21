@@ -32,34 +32,65 @@ export function WaitlistForm() {
 
   if (status === 'success') {
     return (
-      <div className="rounded-2xl border border-[#efcb80]/20 bg-[#efcb80]/8 px-6 py-5 text-center">
-        <p className="font-serif text-xl text-[#efcb80]">You&apos;re on the list.</p>
-        <p className="mt-2 text-sm text-white/50">{message}</p>
+      <div className="py-4 text-center">
+        <p style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: '1.1rem', fontStyle: 'italic', color: '#d4b87a', letterSpacing: '0.04em', marginBottom: '10px' }}>
+          You are on the list. We will be in touch.
+        </p>
+        <p style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: '0.82rem', color: 'rgba(200,190,158,0.6)', letterSpacing: '0.04em', fontStyle: 'italic' }}>
+          Don't see our email? Check your spam or promotions folder.
+        </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <div className="flex flex-col gap-3 sm:flex-row">
+    <form onSubmit={handleSubmit} className="w-full">
+      <div
+        className="mb-2 flex transition-colors"
+        style={{ border: '1px solid rgba(184,154,90,0.45)', background: 'rgba(255,255,255,0.04)' }}
+      >
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your email address"
-          className="flex-1 rounded-full border border-white/20 bg-white/90 px-5 py-3.5 text-sm text-[#0a2a20] placeholder:text-[#0a2a20]/45 focus:border-[#efcb80] focus:outline-none focus:ring-1 focus:ring-[#efcb80]/50"
+          style={{
+            flex: 1,
+            minWidth: 0,
+            background: 'transparent',
+            border: 'none',
+            outline: 'none',
+            padding: '13px 14px',
+            fontFamily: "'EB Garamond', Georgia, serif",
+            fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+            color: '#f0ead8',
+            letterSpacing: '0.02em',
+          }}
         />
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="rounded-full bg-[#efcb80] px-7 py-3.5 text-sm font-semibold text-[#0a2a20] transition hover:bg-[#fad483] disabled:opacity-60"
+          style={{
+            background: '#b89a5a',
+            border: 'none',
+            padding: '13px 16px',
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontWeight: 400,
+            fontSize: 'clamp(0.62rem, 1.6vw, 0.72rem)',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: '#0a1509',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            opacity: status === 'loading' ? 0.6 : 1,
+          }}
         >
-          {status === 'loading' ? 'Joining…' : 'Join waitlist'}
+          {status === 'loading' ? '…' : 'Enter the circle'}
         </button>
       </div>
       {status === 'error' && (
-        <p className="text-center text-sm text-red-400">{message}</p>
+        <p className="text-center text-xs" style={{ color: 'rgba(255,100,100,0.7)', fontStyle: 'italic' }}>{message}</p>
       )}
     </form>
   );

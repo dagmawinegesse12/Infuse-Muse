@@ -17,6 +17,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/fonts') ||
     pathname.startsWith('/images') ||
+    pathname.startsWith('/waitlist-bg') ||
     pathname.startsWith('/icons') ||
     pathname === '/favicon.ico' ||
     pathname === '/icon.png' ||
