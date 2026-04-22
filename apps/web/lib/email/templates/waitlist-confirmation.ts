@@ -18,12 +18,18 @@ export function generateWaitlistConfirmationHtml(email: string): string {
           <!-- HEADER BAR -->
           <tr>
             <td style="background-color:#0f3d2e; border-radius:16px 16px 0 0; padding: 28px 48px 24px; text-align:center;">
-              <p style="margin:0 0 3px; font-family:Georgia,'Times New Roman',serif; font-size:18px; font-weight:normal; color:#efcb80; letter-spacing:0.08em;">
-                Infuse &amp; Muse
-              </p>
-              <p style="margin:0; font-size:10px; letter-spacing:0.24em; text-transform:uppercase; color:rgba(239,203,128,0.45); font-family:Arial,sans-serif;">
-                Luxury Tea &nbsp;&middot;&nbsp; Toronto
-              </p>
+              <img
+                src="${siteUrl}/images/logo2.png"
+                alt="Infuse &amp; Muse crest"
+                width="56"
+                style="display:block; margin:0 auto 10px; width:56px; height:auto;"
+              />
+              <img
+                src="${siteUrl}/images/header1.png"
+                alt="Infuse &amp; Muse"
+                width="240"
+                style="display:block; margin:0 auto; width:240px; height:auto;"
+              />
             </td>
           </tr>
 
@@ -63,9 +69,9 @@ export function generateWaitlistConfirmationHtml(email: string): string {
                   Infuse &amp; Muse
                 </p>
                 <p style="margin:0; font-size:11px; color:#c0b4a8; font-family:Arial,sans-serif;">
-                  <a href="https://www.instagram.com/infuseandmuse" style="color:#c0b4a8; text-decoration:none;">Instagram</a>
+                  <a href="https://www.instagram.com/infuse_and_muse?igsh=aWRwYXNtNDdsMmtj" style="color:#c0b4a8; text-decoration:none;">Instagram</a>
                   &nbsp;&middot;&nbsp;
-                  <a href="https://www.pinterest.com/infuseandmuse" style="color:#c0b4a8; text-decoration:none;">Pinterest</a>
+                  <a href="https://www.tiktok.com/@infuseandmuse" style="color:#c0b4a8; text-decoration:none;">TikTok</a>
                 </p>
               </div>
             </td>
