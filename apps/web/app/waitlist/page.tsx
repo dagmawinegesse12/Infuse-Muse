@@ -40,8 +40,17 @@ export default function WaitlistPage() {
         />
       </div>
 
-      {/* Brand name */}
-      <div className="anim-fade-up relative z-10 mb-8 sm:mb-10" style={{ animationDelay: '0.2s' }}>
+      {/* Logo + Brand name */}
+      <div className="anim-fade-up relative z-10 mb-8 flex flex-col items-center gap-3 sm:mb-10" style={{ animationDelay: '0.2s' }}>
+        <Image
+          src="/images/logo.png"
+          alt="Infuse & Muse"
+          width={56}
+          height={53}
+          priority
+          className="w-8 sm:w-10"
+          style={{ filter: 'brightness(0) saturate(100%) invert(76%) sepia(30%) saturate(500%) hue-rotate(8deg) brightness(95%)' }}
+        />
         <span
           className="wl-brand"
           style={{
@@ -71,8 +80,8 @@ export default function WaitlistPage() {
           className="mb-5 block"
           style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontWeight: 400,
-            fontSize: '0.62rem',
+            fontWeight: 700,
+            fontSize: '0.85rem',
             letterSpacing: '0.32em',
             textTransform: 'uppercase',
             color: '#8a7040',
@@ -155,8 +164,8 @@ export default function WaitlistPage() {
 
         {/* Pillars */}
         <div
-          className="flex w-full"
-          style={{ borderTop: '1px solid rgba(184,154,90,0.18)', paddingTop: 28 }}
+          className="flex w-full flex-col"
+          style={{ borderTop: '1px solid rgba(184,154,90,0.18)', paddingTop: 28, gap: 0 }}
         >
           {[
             ['Access', 'The founding', 'circle'],
@@ -165,19 +174,22 @@ export default function WaitlistPage() {
           ].map(([label, line1, line2], i, arr) => (
             <div
               key={label}
-              className="flex-1 text-center"
+              className="flex items-center justify-between"
               style={{
-                padding: '0 8px',
-                borderRight: i < arr.length - 1 ? '1px solid rgba(184,154,90,0.18)' : 'none',
+                padding: '16px 0',
+                borderBottom: i < arr.length - 1 ? '1px solid rgba(184,154,90,0.12)' : 'none',
               }}
             >
               <span
-                className="wl-pillar-label mb-2 block"
+                className="wl-pillar-label"
                 style={{
                   fontFamily: "'Cormorant Garamond', Georgia, serif",
                   fontWeight: 400,
                   textTransform: 'uppercase',
                   color: '#8a7040',
+                  flexShrink: 0,
+                  width: '30%',
+                  textAlign: 'left',
                 }}
               >
                 {label}
@@ -189,10 +201,10 @@ export default function WaitlistPage() {
                   fontWeight: 400,
                   lineHeight: 1.3,
                   color: '#f0ead8',
+                  textAlign: 'right',
                 }}
               >
-                {line1}<br />
-                <em style={{ fontStyle: 'italic', color: '#c8be9e' }}>{line2}</em>
+                {line1} <em style={{ fontStyle: 'italic', color: '#c8be9e' }}>{line2}</em>
               </span>
             </div>
           ))}
