@@ -40,28 +40,24 @@ export default function WaitlistPage() {
         />
       </div>
 
-      {/* Logo + Brand name */}
+      {/* Logo + Brand name + Tagline */}
       <div className="anim-fade-up relative z-10 mb-8 flex flex-col items-center gap-3 sm:mb-10" style={{ animationDelay: '0.2s' }}>
         <Image
-          src="/images/logo.png"
-          alt="Infuse & Muse"
-          width={56}
-          height={53}
+          src="/images/logo2.png"
+          alt="Infuse & Muse crest"
+          width={120}
+          height={144}
           priority
-          className="w-8 sm:w-10"
-          style={{ filter: 'brightness(0) saturate(100%) invert(76%) sepia(30%) saturate(500%) hue-rotate(8deg) brightness(95%)' }}
+          className="w-14 sm:w-16"
         />
-        <span
-          className="wl-brand"
-          style={{
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontWeight: 400,
-            textTransform: 'uppercase',
-            color: '#d4b87a',
-          }}
-        >
-          Infuse &amp; Muse
-        </span>
+        <Image
+          src="/images/header1.png"
+          alt="Infuse & Muse"
+          width={600}
+          height={120}
+          priority
+          className="w-56 sm:w-72 md:w-84"
+        />
       </div>
 
       {/* Frosted glass card */}
@@ -184,7 +180,7 @@ export default function WaitlistPage() {
                 className="wl-pillar-label"
                 style={{
                   fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontWeight: 400,
+                  fontWeight: 700,
                   textTransform: 'uppercase',
                   color: '#8a7040',
                   flexShrink: 0,
