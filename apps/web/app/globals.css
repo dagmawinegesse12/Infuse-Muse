@@ -25,6 +25,29 @@
   font-display: swap;
 }
 
+/* ── Erotique (standard — for subheadings / refined display) ── */
+@font-face {
+  font-family: 'Erotique';
+  src: url('/fonts/ErotiqueTrial-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Erotique';
+  src: url('/fonts/ErotiqueTrial-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Erotique';
+  src: url('/fonts/ErotiqueTrial-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Montserrat (body / UI) ── */
 @font-face {
   font-family: 'Montserrat';
@@ -98,45 +121,356 @@ body {
   animation: fadeIn 1.2s ease forwards;
 }
 
-/* ── Waitlist responsive ── */
-.wl-brand {
-  font-size: clamp(1rem, 4.5vw, 1.4rem);
-  letter-spacing: clamp(0.15em, 1vw, 0.25em);
-}
+/* ─────────────────────────────────────────────
+   WAITLIST — TYPE SCALE & COMPONENTS
+   2 font families: Cormorant Garamond (display)
+                    Montserrat (body / UI)
+   ───────────────────────────────────────────── */
 
 .wl-card {
-  padding: 32px 20px 28px;
+  padding: 36px 24px 32px;
+  border-radius: 24px;
 }
 @media (min-width: 480px) {
-  .wl-card { padding: 44px 32px 36px; }
+  .wl-card { padding: 48px 36px 40px; }
 }
 @media (min-width: 640px) {
-  .wl-card { padding: 52px 48px 44px; }
+  .wl-card { padding: 56px 52px 48px; }
 }
 
+/* Eyebrow — small uppercase label, readable */
+.wl-eyebrow {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.7rem, 1.8vw, 0.78rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(239, 203, 128, 0.85); /* gold at reduced opacity for hierarchy */
+}
+
+/* Headline — brand display font */
 .wl-headline {
-  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  font-family: 'Erotique Alternate', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  color: #f5f0e8;
 }
 
+/* Body — Montserrat for readability */
 .wl-body {
-  font-size: clamp(0.9rem, 2.8vw, 1rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  line-height: 1.85;
+  color: #ddd6c2; /* warm off-white, clearly legible */
 }
 
+/* Sub-label under body */
 .wl-sublabel {
-  font-size: clamp(0.72rem, 2vw, 0.85rem);
-  letter-spacing: clamp(0.12em, 0.6vw, 0.18em);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.72rem, 1.8vw, 0.8rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c8bfa8; /* lighter neutral, not gold */
 }
 
+/* Pillar label — left-aligned bold label */
 .wl-pillar-label {
-  font-size: clamp(0.46rem, 1.2vw, 0.58rem);
-  letter-spacing: clamp(0.16em, 0.7vw, 0.28em);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.68rem, 1.8vw, 0.78rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(239, 203, 128, 0.9); /* gold accent, larger size makes it readable */
+  flex-shrink: 0;
+  width: 32%;
+  text-align: left;
 }
 
+/* Pillar description — right-aligned body */
 .wl-pillar-body {
-  font-size: clamp(0.78rem, 2.2vw, 0.95rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+  line-height: 1.4;
+  color: #e8e0cc; /* warm white, high contrast */
+  text-align: right;
 }
 
-.wl-footer-item {
-  font-size: clamp(0.5rem, 1.4vw, 0.6rem);
-  letter-spacing: clamp(0.18em, 0.7vw, 0.3em);
+/* Note / fine print */
+.wl-note {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.7rem, 1.8vw, 0.78rem);
+  letter-spacing: 0.06em;
+  color: #a09888; /* clearly lower hierarchy, but legible */
 }
+
+/* Footer location items */
+.wl-footer-item {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.62rem, 1.5vw, 0.72rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(200, 190, 158, 0.85);
+}
+
+/* ── Form components ── */
+.wl-form-row {
+  display: flex;
+  border: 1px solid rgba(184, 154, 90, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  transition: border-color 0.2s ease;
+}
+.wl-form-row:focus-within {
+  border-color: rgba(239, 203, 128, 0.8);
+  outline: 2px solid rgba(239, 203, 128, 0.35);
+  outline-offset: 2px;
+}
+
+.wl-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 14px 16px;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.88rem, 2.5vw, 0.95rem);
+  color: #f5f0e8;
+  letter-spacing: 0.01em;
+}
+.wl-input::placeholder {
+  color: #8a8270;
+}
+
+.wl-btn {
+  background: #c4a055;
+  border: none;
+  padding: 14px 18px;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.7rem, 1.8vw, 0.78rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0a1509;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+.wl-btn:hover:not(:disabled) {
+  background: #d4b068;
+}
+.wl-btn:focus-visible {
+  outline: 2px solid #efcb80;
+  outline-offset: 2px;
+}
+.wl-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+/* Error message */
+.wl-error-msg {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #f87171; /* bright enough to meet contrast, no opacity reduction */
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Success state */
+.wl-success-headline {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  color: #f5f0e8;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+.wl-success-body {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #ddd6c2;
+  margin-bottom: 12px;
+}
+.wl-success-note {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: #a09888;
+  letter-spacing: 0.03em;
+}
+
+/* ═══════════════════════════════════════════════
+   WAITLIST — CURTAIN + HAND ANIMATION (REMOVED)
+   ═══════════════════════════════════════════════ */
+
+.wl-stage {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #050e07;
+  color: #f0ead8;
+}
+
+/* ── Background layers ── */
+.wl-bg-photo {
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url('/images/waitlist-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+@media (min-width: 640px) {
+  .wl-bg-photo { background-position: center center; }
+}
+.wl-stage.settled .wl-bg-photo { opacity: 1; }
+
+.wl-bg-veil {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 75% at 50% 50%, rgba(5,14,7,0.78) 0%, rgba(5,14,7,0.38) 60%, rgba(5,14,7,0.12) 100%),
+    linear-gradient(to bottom, rgba(5,14,7,0.5) 0%, rgba(5,14,7,0.12) 40%, rgba(5,14,7,0.6) 100%);
+}
+.wl-bg-grain {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ── Hand & tray layer (full photo, slides up) ── */
+.wl-hand-layer {
+  position: fixed; inset: 0; z-index: 3; pointer-events: none;
+  background-image: url('/images/waitlist-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  transform: translateY(105%);
+  opacity: 1;
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s;
+}
+@media (min-width: 640px) {
+  .wl-hand-layer { background-position: center center; }
+}
+.wl-stage.hand-in .wl-hand-layer { transform: translateY(0); }
+
+/* ── Curtain panels ── */
+.wl-curtains {
+  position: fixed; inset: 0; z-index: 5;
+  pointer-events: none;
+  display: flex;
+  overflow: hidden;
+}
+.wl-panel {
+  position: relative;
+  flex: 1 1 50%; height: 100%;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 70%, rgba(255,255,255,.04) 92%, rgba(255,255,255,.08) 100%),
+    repeating-linear-gradient(90deg, #0a2116 0px, #123f2b 14px, #1a5f40 28px, #123f2b 42px, #0a2116 56px),
+    radial-gradient(ellipse at 70% 50%, #154a33 0%, #09251a 70%);
+  background-blend-mode: overlay, normal, normal;
+  box-shadow: inset -30px 0 60px rgba(0,0,0,.55), inset 0 0 120px rgba(0,0,0,.35);
+  transform: translateX(0);
+  transition: transform 2.3s cubic-bezier(.77,0,.18,1);
+  will-change: transform;
+}
+.wl-panel-right {
+  box-shadow: inset 30px 0 60px rgba(0,0,0,.55), inset 0 0 120px rgba(0,0,0,.35);
+}
+.wl-stage.open .wl-panel-left  { transform: translateX(-102%); }
+.wl-stage.open .wl-panel-right { transform: translateX(102%);  }
+
+/* ── Seam & rod ── */
+.wl-seam {
+  position: fixed; top: 0; bottom: 0; left: 50%;
+  width: 2px; z-index: 6;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,.5), transparent);
+  transform: translateX(-50%);
+  opacity: .9;
+  transition: opacity 1.2s ease 0.6s;
+  pointer-events: none;
+}
+.wl-stage.open .wl-seam { opacity: 0; }
+
+.wl-rod {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 18px; z-index: 7;
+  background: linear-gradient(to bottom, #5a4521 0%, #b89a5a 35%, #e7cf8f 55%, #8a7040 85%, #3a2b12 100%);
+  box-shadow: 0 4px 10px rgba(0,0,0,.5);
+  transition: opacity 1s ease 1.6s;
+}
+.wl-stage.open .wl-rod { opacity: 0; }
+
+/* ── Ribbon bow ── */
+.wl-ribbon {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 82vw); height: 300px;
+  z-index: 8; pointer-events: none;
+  animation: ribbonSway 3.4s ease-in-out infinite;
+}
+.wl-ribbon svg {
+  width: 100%; height: 100%; overflow: visible;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.55));
+}
+.wl-ribbon .knot,
+.wl-ribbon .bow-loop,
+.wl-ribbon .bow-knot {
+  transform-box: fill-box; transform-origin: center;
+  transition: transform 1.1s cubic-bezier(.6,-.3,.3,1.2), opacity .9s ease;
+}
+.wl-ribbon .tail-l,
+.wl-ribbon .tail-r {
+  transform-box: fill-box; transform-origin: top center;
+  transition: transform 2.2s cubic-bezier(.77,0,.18,1), opacity 1.6s ease 1s;
+}
+@keyframes ribbonSway {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-1.4deg); }
+  50%       { transform: translate(-50%, -50%) rotate(1.4deg);  }
+}
+.wl-stage.open .wl-ribbon { animation: none; transform: translate(-50%, -50%); }
+.wl-stage.open .wl-ribbon .bow-loop.l { transform: translate(-22px, 10px) rotate(-28deg) scale(.35); opacity: 0; }
+.wl-stage.open .wl-ribbon .bow-loop.r { transform: translate( 22px, 10px) rotate( 28deg) scale(.35); opacity: 0; }
+.wl-stage.open .wl-ribbon .bow-knot   { transform: scale(.15); opacity: 0; }
+.wl-stage.open .wl-ribbon .knot       { transform: scaleY(.2); opacity: 0; }
+.wl-stage.open .wl-ribbon .tail-l     { transform: translate(-55vw, 22vh) rotate(-18deg); opacity: 0; }
+.wl-stage.open .wl-ribbon .tail-r     { transform: translate( 55vw, 22vh) rotate( 18deg); opacity: 0; }
+
+/* ── Content layers ── */
+.wl-content {
+  position: relative; z-index: 4;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh;
+  padding: 40px 16px 64px;
+}
+@media (min-width: 640px) {
+  .wl-content { padding: 64px 24px; }
+}
+
+.wl-crest {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; margin-bottom: 26px;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.wl-stage.content-in .wl-crest { opacity: 1; transform: translateY(0); }
+
+.wl-anim-card {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 1s ease 0.2s, transform 1s ease 0.2s;
+}
+.wl-stage.content-in .wl-anim-card { opacity: 1; transform: translateY(0); }
+
+.wl-footer-anim {
+  opacity: 0;
+  transition: opacity 1s ease 0.6s;
+}
+.wl-stage.content-in .wl-footer-anim { opacity: 1; }

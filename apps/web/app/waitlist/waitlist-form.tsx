@@ -32,65 +32,49 @@ export function WaitlistForm() {
 
   if (status === 'success') {
     return (
-      <div className="py-4 text-center">
-        <p style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: '1.1rem', fontStyle: 'italic', color: '#d4b87a', letterSpacing: '0.04em', marginBottom: '10px' }}>
-          You are on the list. We will be in touch.
+      <div className="py-5 text-center" role="status" aria-live="polite">
+        <p className="wl-success-headline">
+          You are on the list.
         </p>
-        <p style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: '0.82rem', color: 'rgba(200,190,158,0.6)', letterSpacing: '0.04em', fontStyle: 'italic' }}>
-          Don't see our email? Check your spam or promotions folder.
+        <p className="wl-success-body">
+          We will be in touch soon.
+        </p>
+        <p className="wl-success-note">
+          Don&apos;t see our email? Check your spam or promotions folder.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div
-        className="mb-2 flex transition-colors"
-        style={{ border: '1px solid rgba(184,154,90,0.45)', background: 'rgba(255,255,255,0.04)' }}
-      >
+    <form onSubmit={handleSubmit} className="w-full" noValidate>
+      <div className="mb-2 wl-form-row">
+        <label htmlFor="waitlist-email" className="sr-only">
+          Email address
+        </label>
         <input
+          id="waitlist-email"
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your email address"
-          style={{
-            flex: 1,
-            minWidth: 0,
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            padding: '13px 14px',
-            fontFamily: "'EB Garamond', Georgia, serif",
-            fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
-            color: '#f0ead8',
-            letterSpacing: '0.02em',
-          }}
+          aria-describedby={status === 'error' ? 'waitlist-error' : undefined}
+          aria-invalid={status === 'error'}
+          className="wl-input"
         />
         <button
           type="submit"
           disabled={status === 'loading'}
-          style={{
-            background: '#b89a5a',
-            border: 'none',
-            padding: '13px 16px',
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontWeight: 400,
-            fontSize: 'clamp(0.62rem, 1.6vw, 0.72rem)',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: '#0a1509',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            opacity: status === 'loading' ? 0.6 : 1,
-          }}
+          className="wl-btn"
         >
-          {status === 'loading' ? '…' : 'Enter the circle'}
+          {status === 'loading' ? 'Joining…' : 'Enter the circle'}
         </button>
       </div>
       {status === 'error' && (
-        <p className="text-center text-xs" style={{ color: 'rgba(255,100,100,0.7)', fontStyle: 'italic' }}>{message}</p>
+        <p id="waitlist-error" role="alert" className="wl-error-msg">
+          {message}
+        </p>
       )}
     </form>
   );
