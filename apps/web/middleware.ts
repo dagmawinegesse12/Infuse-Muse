@@ -9,8 +9,14 @@ const ALLOWED = [
   '/unsubscribe',
 ];
 
+// Set WAITLIST_MODE=off (see .env) to open the full site — used for local review
+// of the storefront while the public build stays gated.
+const GATE_ENABLED = process.env.WAITLIST_MODE !== 'off';
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (!GATE_ENABLED) return NextResponse.next();
 
   // Allow static assets, Next.js internals, and favicon
   if (

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import type { CartItem } from '@/lib/cart/cart-types';
+import { buildOrderMetadata } from '@/lib/orders';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
@@ -41,14 +42,12 @@ export async function POST(request: Request) {
     }
   }
 
-  // Compact order metadata for the webhook to use when sending the email.
-  // Stripe metadata values are limited to 500 chars; this format stays well under.
-  const orderItemsMeta = JSON.stringify(
-    items.map((i) => ({
-      name: i.name.slice(0, 60),
-      qty: i.quantity,
-      unit: i.price, // stored as cents
-    }))
+  // Convenience copy for the confirmation email. Stripe caps each metadata
+  // value at 500 characters and rejects the whole session if one overflows, so
+  // this is packed to fit; the webhook reads Stripe's line items as the source
+  // of truth and only falls back to this.
+  const orderItemsMeta = buildOrderMetadata(
+    items.map((i) => ({ name: i.name, qty: i.quantity, unit: i.price }))
   );
 
   try {
@@ -76,6 +75,7 @@ export async function POST(request: Request) {
       // Pass order details in metadata so the webhook can build the email.
       metadata: {
         orderItems: orderItemsMeta,
+        orderItemCount: String(items.length),
       },
 
       success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,

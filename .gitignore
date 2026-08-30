@@ -8,3 +8,10 @@ apps/**/.sanity
 apps/**/dist
 .DS_Store
 apps/web/data/
+
+# Build caches
+*.tsbuildinfo
+coverage/
+
+# Raw source assets (originals already processed into public/)
+Newfiles/

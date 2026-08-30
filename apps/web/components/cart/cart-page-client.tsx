@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useCart } from '@/lib/cart/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { QuietLink } from '@/components/system/quiet-link';
+import { QuantityStepper } from '@/components/cart/quantity-stepper';
 
 export function CartPageClient() {
   const { state, subtotal, setQuantity, removeItem, clearCart } = useCart();
@@ -26,7 +28,7 @@ export function CartPageClient() {
         setLoading(false);
         return;
       }
-      // Keep loading=true while Stripe redirects; browser will navigate away.
+      // Keep loading=true while Stripe redirects; the browser navigates away.
       window.location.href = data.url;
     } catch {
       setError('Something went wrong. Please check your connection and try again.');
@@ -36,57 +38,93 @@ export function CartPageClient() {
 
   if (state.items.length === 0) {
     return (
-      <div className="rounded-[2rem] border border-dashed border-emerald-950/15 bg-white/70 p-10 text-center">
-        <h1 className="font-serif text-3xl text-emerald-950">Your cart is still empty</h1>
-        <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-emerald-950/65">
-          Start with a featured blend, then return here to review your selections and move into checkout.
+      <div className="border-t py-20 text-center" style={{ borderColor: 'var(--rule)' }}>
+        <h2 className="t-head">Your bag is still empty</h2>
+        <p className="t-body mx-auto mt-6 max-w-measure">
+          Start with a featured blend, then come back to review before checkout.
         </p>
-        <Button href="/products" className="mt-6">Shop teas</Button>
+        <div className="mt-10">
+          <QuietLink href="/products">The blends</QuietLink>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
-      <div className="space-y-4">
+    <div className="grid gap-x-[clamp(2rem,6vw,6rem)] gap-y-16 lg:grid-cols-[1.5fr_0.7fr] lg:items-start">
+      <div>
         {state.items.map((item) => (
-          <div key={item.id} className="rounded-[2rem] border border-emerald-950/10 bg-white/80 p-5">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h2 className="font-serif text-2xl text-emerald-950">{item.name}</h2>
-                <p className="mt-1 text-sm text-emerald-950/60">{formatPrice(item.price)} per pouch</p>
+          <div
+            key={item.id}
+            className="grid gap-4 border-b py-8 sm:grid-cols-[1fr_auto] sm:items-end"
+            style={{ borderColor: 'var(--rule)' }}
+          >
+            <div>
+              <h2 className="t-sub">{item.name}</h2>
+              <p className="t-label mt-2">{formatPrice(item.price)} per pouch</p>
+              <div className="mt-5">
+                <QuantityStepper
+                  value={item.quantity}
+                  label={item.name}
+                  onChange={(next) => setQuantity(item.id, next)}
+                />
               </div>
-              <button onClick={() => removeItem(item.id)} className="text-sm text-emerald-950/50 hover:text-emerald-950">
+            </div>
+            <div className="flex items-center justify-between gap-8 sm:flex-col sm:items-end sm:gap-4">
+              <p className="t-price text-[1rem]">{formatPrice(item.quantity * item.price)}</p>
+              <button
+                type="button"
+                onClick={() => removeItem(item.id)}
+                className="hit t-label wipe-link"
+              >
                 Remove
               </button>
-            </div>
-            <div className="mt-5 flex items-center justify-between">
-              <div className="inline-flex items-center rounded-full border border-emerald-950/10 bg-white">
-                <button onClick={() => setQuantity(item.id, item.quantity - 1)} className="px-4 py-2">−</button>
-                <span className="min-w-12 text-center">{item.quantity}</span>
-                <button onClick={() => setQuantity(item.id, item.quantity + 1)} className="px-4 py-2">+</button>
-              </div>
-              <div className="font-medium text-emerald-950">{formatPrice(item.quantity * item.price)}</div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="h-fit rounded-[2rem] border border-emerald-950/10 bg-white/80 p-6">
-        <h2 className="font-serif text-2xl text-emerald-950">Order summary</h2>
-        <div className="mt-6 space-y-3 text-sm text-emerald-950/70">
-          <div className="flex justify-between"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
-          <div className="flex justify-between"><span>Shipping</span><span>Calculated at checkout</span></div>
-          <div className="border-t border-emerald-950/10 pt-3 text-base font-semibold text-emerald-950 flex justify-between"><span>Total</span><span>{formatPrice(subtotal)}</span></div>
+      <aside className="lg:sticky lg:top-28">
+        <h2 className="t-label t-label--accent">Summary</h2>
+        <dl className="mt-7">
+          <div
+            className="flex justify-between border-t py-4"
+            style={{ borderColor: 'var(--rule)' }}
+          >
+            <dt className="t-body">Subtotal</dt>
+            <dd className="t-price">{formatPrice(subtotal)}</dd>
+          </div>
+          <div
+            className="flex justify-between border-t py-4"
+            style={{ borderColor: 'var(--rule)' }}
+          >
+            <dt className="t-body">Shipping</dt>
+            <dd className="t-body">Calculated at checkout</dd>
+          </div>
+          <div
+            className="flex items-baseline justify-between border-t border-b py-5"
+            style={{ borderColor: 'var(--rule-strong)' }}
+          >
+            <dt className="t-sub">Total</dt>
+            <dd className="t-price text-[1.125rem]">{formatPrice(subtotal)}</dd>
+          </div>
+        </dl>
+
+        {error ? (
+          <p role="alert" className="t-body mt-5" style={{ color: '#e08a7a' }}>
+            {error}
+          </p>
+        ) : null}
+
+        <div className="mt-9 grid gap-6">
+          <Button onClick={handleCheckout} disabled={loading}>
+            {loading ? 'Redirecting…' : 'Checkout'}
+          </Button>
+          <button type="button" onClick={clearCart} className="quiet-link justify-self-start">
+            Empty the bag
+          </button>
         </div>
-        {error && (
-          <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
-        )}
-        <div className="mt-6 grid gap-3">
-          <Button onClick={handleCheckout} disabled={loading}>{loading ? 'Redirecting…' : 'Checkout with Stripe'}</Button>
-          <Button variant="secondary" onClick={clearCart}>Clear cart</Button>
-        </div>
-      </div>
+      </aside>
     </div>
   );
 }

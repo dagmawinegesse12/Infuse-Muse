@@ -1,52 +1,49 @@
-import { createMetadata } from "@/lib/metadata";
-import { getCategories, getProducts } from "@/lib/data";
-import { ProductCard } from "@/components/product-card";
-import { CategoryChip } from "@/components/category-chip";
+import { createMetadata } from '@/lib/metadata';
+import { getCategories, getProducts } from '@/lib/data';
+import { ProductCard } from '@/components/product-card';
+import { CategoryChip } from '@/components/category-chip';
+import { PageHeader } from '@/components/system/page-header';
+import { SearchField } from '@/components/search-field';
+import { searchProducts } from '@/lib/search';
+import { Reveal } from '@/components/system/reveal';
 
 export const metadata = createMetadata({
-  title: "Shop Tea Blends | Infuse & Muse",
+  title: 'Shop Tea Blends | Infuse & Muse',
   description:
-    "Browse premium tea blends from Infuse & Muse, including floral, fruity, and wellness teas in Mississauga.",
-  path: "/products",
+    'Browse premium tea blends from Infuse & Muse, including floral, fruity, and wellness teas in Mississauga.',
+  path: '/products',
 });
 
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams?: { category?: string };
+  searchParams?: { category?: string; q?: string };
 }) {
   const selectedCategory = searchParams?.category;
-  const [products, categories] = await Promise.all([
-    getProducts(),
-    getCategories(),
-  ]);
+  const query = searchParams?.q?.trim() ?? '';
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
 
-  const filteredProducts = selectedCategory
+  const byCategory = selectedCategory
     ? products.filter((product) => product.categorySlug === selectedCategory)
     : products;
+  const filtered = query ? searchProducts(byCategory, query) : byCategory;
 
   return (
-    <div className="space-y-10">
-      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#0f3d2e] px-8 py-14 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-16">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.07),transparent_30%)]" />
-        <div className="relative">
-          <p className="text-sm uppercase tracking-[0.28em] text-emerald-100/70">
-            Shop teas
-          </p>
-          <h1 className="mt-4 font-serif text-5xl leading-tight text-white sm:text-6xl">
-            Browse the full collection
-          </h1>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-emerald-50/80">
-            Signature blends and seasonal drops with clear tasting notes —
-            crafted for gifting, ritual, and everyday enjoyment.
-          </p>
+    <>
+      <PageHeader
+        eyebrow="The Blends"
+        title="Browse the full collection"
+        lede="Signature compositions and seasonal drops, each with its tasting notes stated plainly."
+      />
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <CategoryChip
-              href="/products"
-              label="All blends"
-              active={!selectedCategory}
-            />
+      <div className="shell pb-[var(--chapter)]">
+        <Reveal>
+          <SearchField defaultValue={query} category={selectedCategory} />
+        </Reveal>
+
+        <Reveal delay={60}>
+          <nav className="mt-10 flex flex-wrap gap-x-10 gap-y-6" aria-label="Filter by collection">
+            <CategoryChip href="/products" label="All blends" active={!selectedCategory} />
             {categories.map((category) => (
               <CategoryChip
                 key={category.slug}
@@ -55,15 +52,25 @@ export default async function ProductsPage({
                 active={selectedCategory === category.slug}
               />
             ))}
-          </div>
-        </div>
-      </section>
+          </nav>
+        </Reveal>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.slug} product={product} />
-        ))}
+        {filtered.length ? (
+          <div className="mt-16 grid gap-x-[clamp(1rem,2.4vw,2.5rem)] gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((product, i) => (
+              <Reveal key={product.slug} delay={(i % 3) * 80}>
+                <ProductCard product={product} priority={i < 3} />
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <p className="t-body mt-16">
+            {query
+              ? `Nothing matches “${query}”. Try a flavour, a botanical, or a mood.`
+              : 'Nothing in this collection yet.'}
+          </p>
+        )}
       </div>
-    </div>
+    </>
   );
 }

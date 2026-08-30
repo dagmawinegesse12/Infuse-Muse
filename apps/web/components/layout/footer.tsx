@@ -1,37 +1,77 @@
+import Image from 'next/image';
 import Link from 'next/link';
+
+const COLUMNS: Array<[string, Array<[string, string]>]> = [
+  [
+    'Shop',
+    [
+      ['All blends', '/products'],
+      ['Collections', '/collections'],
+      ['The Muses', '/muses'],
+      ['Gifting', '/contact'],
+    ],
+  ],
+  [
+    'The Maison',
+    [
+      ['Our story', '/about'],
+      ['The Muses', '/muses'],
+      ['Contact', '/contact'],
+      ['Waitlist', '/waitlist'],
+    ],
+  ],
+  [
+    'Service',
+    [
+      ['Shipping & returns', '/shipping-returns'],
+      ['Questions', '/faq'],
+      ['Privacy', '/privacy'],
+      ['Terms', '/terms'],
+    ],
+  ],
+];
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-white/10 bg-[#092516] text-emerald-50">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
-        <div className="space-y-4">
-          <h2 className="font-serif text-2xl">Infuse & Muse</h2>
-          <p className="max-w-md text-sm leading-7 text-emerald-50/70">
-            Boutique tea blends designed to make the everyday feel more intentional. Rooted in calm, crafted for ritual,
-            and proudly serving Mississauga, Canada.
+    <footer className="border-t" style={{ borderColor: 'var(--rule)' }}>
+      <div className="shell grid gap-14 py-[clamp(4rem,8vw,7rem)] lg:grid-cols-[1.1fr_0.7fr_0.7fr_0.7fr]">
+        <div className="max-w-sm">
+          <Image
+            src="/images/logo.png"
+            alt="Infuse &amp; Muse"
+            width={160}
+            height={152}
+            className="h-14 w-auto"
+          />
+          <p className="t-body mt-7">
+            Small-batch tea, blended in Mississauga. Made for the pause around the cup rather
+            than the cup itself.
           </p>
-          <div className="text-sm text-emerald-50/70">Mississauga, Ontario · Local pickup and seasonal drops</div>
+          <p className="t-label mt-8">Mississauga · Ontario · Canada</p>
         </div>
-        <div>
-          <h3 className="mb-4 text-sm uppercase tracking-[0.2em] text-emerald-100/60">Explore</h3>
-          <div className="grid gap-3 text-sm text-emerald-50/80">
-            <Link href="/products">Shop all teas</Link>
-            <Link href="/about">Our story</Link>
-            <Link href="/faq">FAQ</Link>
-            <Link href="/contact">Contact</Link>
-          </div>
-        </div>
-        <div>
-          <h3 className="mb-4 text-sm uppercase tracking-[0.2em] text-emerald-100/60">Why customers stay</h3>
-          <ul className="space-y-3 text-sm leading-7 text-emerald-50/70">
-            <li>Elegant blends with clear flavor profiles</li>
-            <li>Simple checkout flow built for small-batch shopping</li>
-            <li>Content-managed storefront ready for seasonal updates</li>
-          </ul>
-        </div>
+
+        {COLUMNS.map(([heading, links]) => (
+          <nav key={heading}>
+            <h2 className="t-label">{heading}</h2>
+            <ul className="mt-6 space-y-6">
+              {links.map(([label, href]) => (
+                <li key={label + href}>
+                  <Link href={href} className="hit wipe-link t-body text-ink">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
       </div>
-      <div className="border-t border-white/8 px-4 py-5 text-center text-xs text-emerald-50/50 sm:px-6 lg:px-8">
-        © 2026 Infuse & Muse. Crafted for calm, gifting, and everyday ritual.
+
+      <div
+        className="shell flex flex-col gap-4 border-t py-7 sm:flex-row sm:items-center sm:justify-between"
+        style={{ borderColor: 'var(--rule)' }}
+      >
+        <p className="t-label">© {new Date().getFullYear()} Infuse &amp; Muse</p>
+        <p className="t-label">Crafted for stillness</p>
       </div>
     </footer>
   );

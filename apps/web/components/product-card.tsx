@@ -4,85 +4,60 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { useCart } from '@/lib/cart/cart-context';
+import { formatPrice } from '@/lib/utils';
 
-function formatPrice(priceCents: number, currency = 'CAD') {
-  return new Intl.NumberFormat('en-CA', {
-    style: 'currency',
-    currency,
-  }).format(priceCents / 100);
-}
-
-export function ProductCard({ product }: { product: Product }) {
+/**
+ * Squared, unframed, shadowless. The photograph does the selling; the tile
+ * contributes a name, an origin note and a price. `Add` only appears on hover
+ * so a grid at rest reads as a wall of images rather than a row of buttons.
+ */
+export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
   const { addItem } = useCart();
 
   return (
-    <article className="group overflow-hidden rounded-[2rem] border border-emerald-950/10 bg-[#f3efe7] shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <article className="group">
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-[4/4.3] overflow-hidden bg-[#e8e2d7]">
+        <div className="plate plate--hover relative aspect-[3/4]">
           <Image
             src={product.image}
             alt={product.alt || product.title}
             fill
-            className="object-cover transition duration-500 group-hover:scale-[1.03]"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={priority}
+            sizes="(max-width: 768px) 88vw, (max-width: 1200px) 45vw, 30vw"
+            className="object-cover"
           />
         </div>
       </Link>
 
-      <div className="space-y-4 p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#c79f3d]">
-              {product.categoryTitle}
-            </p>
-            <h3 className="mt-2 font-serif text-2xl text-emerald-950">
+      <div className="flex items-baseline justify-between gap-6 pt-5">
+        <div className="min-w-0">
+          <h3 className="t-sub truncate">
+            <Link href={`/products/${product.slug}`} className="hit wipe-link">
               {product.title}
-            </h3>
-          </div>
-          <p className="text-sm font-medium text-emerald-950">
-            {formatPrice(product.priceCents, product.currency)}
-          </p>
+            </Link>
+          </h3>
+          <p className="t-label mt-2">{product.categoryTitle}</p>
         </div>
-
-        <p className="text-sm leading-7 text-emerald-950/70">
-          {product.shortDescription}
-        </p>
-
-        <div className="flex flex-wrap gap-2">
-          {product.tastingNotes?.slice(0, 3).map((note) => (
-            <span
-              key={note}
-              className="rounded-full bg-white/70 px-3 py-1 text-xs text-emerald-950/75 border border-emerald-950/8"
-            >
-              {note}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between gap-3 pt-2">
-          <button
-            onClick={() =>
-              addItem({
-                id: product._id,
-                slug: product.slug,
-                name: product.title,
-                image: product.image,
-                price: product.priceCents,
-              })
-            }
-            className="rounded-full bg-emerald-900 px-4 py-2 text-sm text-white transition hover:bg-emerald-800"
-          >
-            Add to cart
-          </button>
-
-          <Link
-            href={`/products/${product.slug}`}
-            className="text-sm font-medium text-emerald-950 underline-offset-4 hover:underline"
-          >
-            View details
-          </Link>
-        </div>
+        <p className="t-price shrink-0">{formatPrice(product.priceCents, product.currency)}</p>
       </div>
+
+      <p className="t-body mt-3 line-clamp-2">{product.shortDescription}</p>
+
+      <button
+        type="button"
+        onClick={() =>
+          addItem({
+            id: product._id,
+            slug: product.slug,
+            name: product.title,
+            image: product.image,
+            price: product.priceCents,
+          })
+        }
+        className="quiet-link mt-5 opacity-0 transition-opacity duration-700 ease-muse focus-visible:opacity-100 group-hover:opacity-100"
+      >
+        Add to bag
+      </button>
     </article>
   );
 }

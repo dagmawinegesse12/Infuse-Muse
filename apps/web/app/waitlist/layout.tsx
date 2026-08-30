@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import './waitlist.css';
 
 export default function WaitlistLayout({ children }: { children: ReactNode }) {
   return (

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { sendOrderConfirmation } from '@/lib/email/service';
+import { resolveOrderItems } from '@/lib/orders';
 import type Stripe from 'stripe';
 
 export async function POST(request: Request) {
@@ -48,15 +49,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true });
   }
 
-  // Parse compact order metadata written by the checkout route.
-  type MetaItem = { name: string; qty: number; unit: number };
-  let orderItems: MetaItem[] = [];
-  try {
-    const raw = session.metadata?.orderItems;
-    if (raw) orderItems = JSON.parse(raw) as MetaItem[];
-  } catch {
-    console.warn('[webhook] Could not parse orderItems metadata for session:', session.id);
-  }
+  // Stripe's line items are authoritative; metadata is only a fallback.
+  const orderItems = await resolveOrderItems(session);
 
   try {
     await sendOrderConfirmation({

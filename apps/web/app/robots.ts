@@ -6,7 +6,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/"
+      allow: "/",
+      // Transactional and internal routes have no business in search results.
+      disallow: ["/cart", "/checkout/", "/preview/", "/unsubscribe", "/api/"]
     },
     sitemap: `${siteUrl}/sitemap.xml`
   };

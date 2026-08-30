@@ -1,29 +1,38 @@
-import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/system/page-header';
+import { Reveal } from '@/components/system/reveal';
+import { ContactForm } from '@/components/contact-form';
+
+const DETAILS: Array<[string, string]> = [
+  ['Location', 'Mississauga, Ontario, Canada'],
+  ['Email', 'hello@infuseandmuse.com'],
+  ['Pickup', 'Available on select local orders'],
+];
 
 export default function ContactPage() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <section className="rounded-[2.5rem] bg-[#0f3d2e] p-10 text-white">
-        <p className="text-sm uppercase tracking-[0.24em] text-emerald-100/60">Contact</p>
-        <h1 className="mt-4 font-serif text-5xl">Questions, gifting, or local pickup?</h1>
-        <p className="mt-5 text-base leading-8 text-emerald-50/75">
-          Reach out for product questions, partnerships, event gifting, or pickup coordination in Mississauga.
-        </p>
-        <div className="mt-8 space-y-4 text-sm text-emerald-50/75">
-          <p><strong className="text-white">Location:</strong> Mississauga, Ontario, Canada</p>
-          <p><strong className="text-white">Email:</strong> hello@infuseandmuse.com</p>
-          <p><strong className="text-white">Pickup:</strong> Available on select local orders</p>
-        </div>
+    <>
+      <PageHeader
+        eyebrow="Contact"
+        title="Questions, gifting, or local pickup?"
+        lede="For product questions, partnerships, event gifting, or arranging a pickup in Mississauga."
+      />
+
+      <section className="shell grid gap-x-[clamp(2rem,6vw,6rem)] gap-y-16 pb-[var(--chapter)] lg:grid-cols-[0.8fr_1.2fr]">
+        <Reveal>
+          <dl>
+            {DETAILS.map(([label, value]) => (
+              <div key={label} className="border-t py-6" style={{ borderColor: 'var(--rule)' }}>
+                <dt className="t-label">{label}</dt>
+                <dd className="t-body mt-3">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+
+        <Reveal delay={110}>
+          <ContactForm />
+        </Reveal>
       </section>
-      <section className="rounded-[2.5rem] border border-emerald-950/10 bg-white/80 p-8">
-        <h2 className="font-serif text-3xl text-emerald-950">Send a note</h2>
-        <form className="mt-6 grid gap-4">
-          <input className="rounded-2xl border border-emerald-950/10 bg-white px-4 py-3 text-emerald-950 placeholder:text-emerald-950/40 focus:outline-none focus:ring-2 focus:ring-emerald-900/20" placeholder="Your name" />
-          <input className="rounded-2xl border border-emerald-950/10 bg-white px-4 py-3 text-emerald-950 placeholder:text-emerald-950/40 focus:outline-none focus:ring-2 focus:ring-emerald-900/20" placeholder="Email address" type="email" />
-          <textarea className="min-h-40 rounded-2xl border border-emerald-950/10 bg-white px-4 py-3 text-emerald-950 placeholder:text-emerald-950/40 focus:outline-none focus:ring-2 focus:ring-emerald-900/20" placeholder="How can we help?" />
-          <Button type="submit">Send inquiry</Button>
-        </form>
-      </section>
-    </div>
+    </>
   );
 }

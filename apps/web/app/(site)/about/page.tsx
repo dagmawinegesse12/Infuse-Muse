@@ -1,53 +1,71 @@
-import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/system/page-header';
+import { Reveal } from '@/components/system/reveal';
+import { QuietLink } from '@/components/system/quiet-link';
+
+const PILLARS: Array<[string, string]> = [
+  [
+    'Flavour, told plainly',
+    'Every blend carries a name, a mood and a stated set of notes. No mystery, no filler.',
+  ],
+  [
+    'Giftable by design',
+    'From the packaging to the writing, the whole object is built to be handed to someone.',
+  ],
+  [
+    'Rooted in Mississauga',
+    'A local house with local roots — made for discovery, pickup and the people nearby.',
+  ],
+];
 
 export default function AboutPage() {
   return (
-    <div className="space-y-10">
-      <section className="relative overflow-hidden rounded-[2.5rem] bg-[#0f3d2e] px-8 py-14 text-white shadow-2xl sm:px-10 lg:px-14 lg:py-16">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.07),transparent_30%)]" />
-        <div className="relative max-w-2xl">
-          <p className="text-sm uppercase tracking-[0.28em] text-emerald-100/70">About Infuse &amp; Muse</p>
-          <h1 className="mt-4 font-serif text-5xl leading-tight text-white sm:text-6xl">
-            A boutique tea brand built around calm, beauty, and everyday ritual.
-          </h1>
-          <p className="mt-4 text-base leading-8 text-emerald-50/80">
-            Rooted in Mississauga. Crafted for those who believe tea is more than a drink — it is a moment.
-          </p>
+    <>
+      <PageHeader
+        eyebrow="The Maison"
+        title="A tea house built around calm, beauty and everyday ritual."
+        lede="Rooted in Mississauga. Made for people who think tea is less a drink than a moment."
+      />
+
+      <section className="shell pb-[var(--chapter)]">
+        <div className="grid gap-x-[clamp(2rem,5vw,5rem)] gap-y-8 lg:grid-cols-2">
+          <Reveal>
+            <p className="t-body t-body--lead">
+              Infuse &amp; Muse was imagined as a boutique experience rather than a shelf of
+              commodities. The blends centre on mood and on the quiet luxury of a cup made
+              with intention.
+            </p>
+          </Reveal>
+          <Reveal delay={90}>
+            <p className="t-body t-body--lead">
+              Each composition is named with personality and presented with care, so that
+              gifting takes no effort at all — for a friend, for a ritual, or for yourself.
+            </p>
+          </Reveal>
         </div>
-      </section>
 
-      <section className="grid gap-8 rounded-[2.5rem] bg-white/65 p-8 lg:grid-cols-2 lg:p-12">
-        <p className="text-base leading-8 text-emerald-950/70">
-          Infuse &amp; Muse is designed to feel warm, giftable, and elevated. Instead of treating tea like a commodity catalog, the brand centers mood, visual identity, and the quiet luxury of a beautiful cup prepared with intention.
-        </p>
-        <p className="text-base leading-8 text-emerald-950/70">
-          Every blend is named with personality, presented with care, and designed to make gifting feel effortless — whether for a friend, a ritual, or yourself.
-        </p>
-      </section>
+        <div className="mt-[clamp(4rem,8vw,7rem)]">
+          {PILLARS.map(([title, copy], i) => (
+            <Reveal key={title} delay={i * 90}>
+              <div
+                className="grid gap-4 border-t py-10 lg:grid-cols-[6rem_20rem_1fr] lg:gap-10"
+                style={{ borderColor: 'var(--rule)' }}
+              >
+                <span className="t-numeral pt-1">{String(i + 1).padStart(2, '0')}</span>
+                <h2 className="t-sub">{title}</h2>
+                <p className="t-body max-w-measure">{copy}</p>
+              </div>
+            </Reveal>
+          ))}
+          <hr className="rule" />
+        </div>
 
-      <section className="grid gap-6 md:grid-cols-3">
-        {[
-          ['Elegant flavor storytelling', 'Each blend has a name, a mood, and a story. We want your first glance to feel as good as your first sip.'],
-          ['Giftable by design', 'From the visual identity to the product descriptions, everything is crafted to feel premium and easy to share.'],
-          ['Built for Mississauga', 'We are a local brand with local roots — designed for discovery, pickup, and community connection.']
-        ].map(([title, copy]) => (
-          <div key={title} className="rounded-[2rem] border border-emerald-950/10 bg-white/75 p-6">
-            <h2 className="font-serif text-2xl text-emerald-950">{title}</h2>
-            <p className="mt-3 text-sm leading-7 text-emerald-950/65">{copy}</p>
+        <Reveal>
+          <div className="mt-16 flex flex-wrap gap-x-12 gap-y-8">
+            <QuietLink href="/products">Browse the blends</QuietLink>
+            <QuietLink href="/contact">Get in touch</QuietLink>
           </div>
-        ))}
+        </Reveal>
       </section>
-
-      <section className="rounded-[2.5rem] bg-[#0f3d2e] p-10 text-white">
-        <h2 className="font-serif text-4xl">Ready to explore the blends?</h2>
-        <p className="mt-4 max-w-2xl text-base leading-8 text-emerald-50/75">
-          Browse signature and seasonal teas — each with clear tasting notes and a premium presentation designed for ritual and gifting.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button href="/products">Browse the shop</Button>
-          <Button href="/contact" variant="secondary">Get in touch</Button>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }

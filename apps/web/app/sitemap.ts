@@ -1,11 +1,23 @@
 import type { MetadataRoute } from "next";
 import { getCategories, getProducts } from "@/lib/data";
+import { MUSES } from "@/lib/muses";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const [products, categories] = await Promise.all([getProducts(), getCategories()]);
 
-  const staticRoutes = ["", "/products", "/collections", "/about", "/contact", "/faq", "/cart"].map((path) => ({
+  const staticRoutes = [
+    "",
+    "/products",
+    "/collections",
+    "/muses",
+    "/about",
+    "/contact",
+    "/faq",
+    "/shipping-returns",
+    "/privacy",
+    "/terms",
+  ].map((path) => ({
     url: `${siteUrl}${path}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
@@ -26,5 +38,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7
   }));
 
-  return [...staticRoutes, ...productRoutes, ...categoryRoutes];
+  const museRoutes = MUSES.map((muse) => ({
+    url: `${siteUrl}/muses/${muse.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6
+  }));
+
+  return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...museRoutes];
 }

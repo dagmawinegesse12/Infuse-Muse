@@ -1,28 +1,16 @@
-import Link from "next/link";
+import { QuietLink } from '@/components/system/quiet-link';
 
 export default function NotFound() {
   return (
-    <div className="py-24 text-center">
-      <div className="mx-auto max-w-2xl">
-        <p className="text-sm uppercase tracking-[0.22em] text-[#c79f3d]">404</p>
-        <h1 className="mt-4 font-serif text-5xl text-emerald-950">This page has steeped away.</h1>
-        <p className="mt-5 text-base leading-8 text-emerald-950/65">
-          The page you were looking for could not be found. Browse the tea collection or head back home.
-        </p>
-        <div className="mt-8 flex justify-center gap-3">
-          <Link
-            href="/"
-            className="rounded-full bg-emerald-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-emerald-800"
-          >
-            Home
-          </Link>
-          <Link
-            href="/products"
-            className="rounded-full border border-emerald-950/15 bg-white/70 px-6 py-3 text-sm font-medium text-emerald-950 transition hover:bg-white"
-          >
-            Shop teas
-          </Link>
-        </div>
+    <div className="shell flex min-h-[70vh] flex-col justify-center pb-[var(--chapter)] pt-[var(--header-clear)] text-center">
+      <p className="t-label t-label--accent">Not found</p>
+      <h1 className="t-display mx-auto mt-8 max-w-2xl">This page has steeped away.</h1>
+      <p className="t-body t-body--lead mx-auto mt-8 max-w-measure">
+        We could not find what you were looking for. The blends are still where you left them.
+      </p>
+      <div className="mt-12 flex flex-wrap justify-center gap-x-12 gap-y-6">
+        <QuietLink href="/">Home</QuietLink>
+        <QuietLink href="/products">The blends</QuietLink>
       </div>
     </div>
   );

@@ -1,6 +1,29 @@
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
 
-export function CategoryChip({ href, label, active }: { href: string; label: string; active?: boolean; }) {
-  return <Link href={href} className={cn("rounded-full border px-4 py-2 text-sm transition", active ? "border-gold-400 bg-gold-400/10 text-gold-300" : "border-white/10 bg-white/5 text-white/70 hover:text-white")}>{label}</Link>;
+/**
+ * Filter control. A word over a hairline — the active one carries the accent.
+ * No pills: the system has no rounded surfaces.
+ */
+export function CategoryChip({
+  href,
+  label,
+  active,
+}: {
+  href: string;
+  label: string;
+  active?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? 'page' : undefined}
+      className="hit t-label inline-block border-b pb-2 transition-colors duration-500 ease-muse"
+      style={{
+        borderColor: active ? 'var(--accent)' : 'transparent',
+        color: active ? 'var(--accent)' : 'var(--ink-mute)',
+      }}
+    >
+      {label}
+    </Link>
+  );
 }

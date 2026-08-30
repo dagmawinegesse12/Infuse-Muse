@@ -1,16 +1,11 @@
-import Link from 'next/link';
 import { stripe } from '@/lib/stripe';
+import { resolveOrderItems, type OrderItem } from '@/lib/orders';
+import { formatPrice } from '@/lib/utils';
+import { QuietLink } from '@/components/system/quiet-link';
 import { ClearCart } from './clear-cart';
 
 interface Props {
   searchParams: { session_id?: string };
-}
-
-function formatPrice(cents: number): string {
-  return new Intl.NumberFormat('en-CA', {
-    style: 'currency',
-    currency: 'CAD',
-  }).format(cents / 100);
 }
 
 export default async function CheckoutSuccessPage({ searchParams }: Props) {
@@ -19,7 +14,6 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
   let customerName: string | null = null;
   let amountTotal: number | null = null;
   let orderRef: string | null = null;
-  type OrderItem = { name: string; qty: number; unit: number };
   let orderItems: OrderItem[] = [];
 
   if (sessionId && process.env.STRIPE_SECRET_KEY) {
@@ -29,115 +23,72 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
       amountTotal = session.amount_total;
       orderRef = session.id.slice(-12).toUpperCase();
 
-      const raw = session.metadata?.orderItems;
-      if (raw) orderItems = JSON.parse(raw) as OrderItem[];
+      orderItems = await resolveOrderItems(session);
     } catch {
-      // Non-fatal — page still renders gracefully without session data.
+      // Non-fatal — the page still renders without session data.
     }
   }
 
   const firstName = customerName?.split(' ')[0];
-  const greeting = firstName ? `Thank you, ${firstName}.` : 'Thank you.';
 
   return (
     <>
       <ClearCart />
 
-      <div className="mx-auto max-w-xl px-4 py-16 sm:py-24">
-
-        {/* Header */}
-        <div className="rounded-[2.5rem] bg-[#0f3d2e] px-8 py-12 text-center text-white">
-          <div
-            className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full"
-            style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
-          >
-            <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <p className="text-xs uppercase tracking-[0.24em] text-emerald-100/60">
-            Infuse &amp; Muse
-          </p>
-          <h1 className="mt-3 font-serif text-4xl font-normal">
-            Order confirmed.
+      <div className="shell mx-auto max-w-2xl pb-[var(--chapter)] pt-[var(--header-clear)]">
+        <div className="text-center">
+          <p className="t-label t-label--accent">Order confirmed</p>
+          <h1 className="t-display mt-8">
+            {firstName ? `Thank you, ${firstName}.` : 'Thank you.'}
           </h1>
-          <p className="mt-3 text-sm text-white/55">
-            {greeting} Your confirmation email is on its way.
-          </p>
+          <p className="t-body t-body--lead mt-8">Your confirmation email is on its way.</p>
         </div>
 
-        {/* Order summary card */}
-        <div className="mt-4 rounded-[2rem] border border-emerald-950/10 bg-white/80 px-8 py-8">
+        {orderItems.length > 0 ? (
+          <div className="mt-[clamp(3rem,7vw,5rem)]">
+            <h2 className="t-label">Order summary</h2>
+            <dl className="mt-7">
+              {orderItems.map((item, i) => (
+                <div
+                  key={`${item.name}-${i}`}
+                  className="flex items-baseline justify-between gap-6 border-t py-5"
+                  style={{ borderColor: 'var(--rule)' }}
+                >
+                  <dt className="t-sub">
+                    {item.name}
+                    <span className="t-label ml-3">× {item.qty}</span>
+                  </dt>
+                  <dd className="t-price">{formatPrice(item.unit * item.qty)}</dd>
+                </div>
+              ))}
+              {amountTotal !== null ? (
+                <div
+                  className="flex items-baseline justify-between border-t border-b py-6"
+                  style={{ borderColor: 'var(--rule-strong)' }}
+                >
+                  <dt className="t-sub">Total paid</dt>
+                  <dd className="t-price text-[1.125rem]">{formatPrice(amountTotal)}</dd>
+                </div>
+              ) : null}
+            </dl>
+          </div>
+        ) : null}
 
-          {orderItems.length > 0 && (
-            <>
-              <p className="mb-4 text-[11px] uppercase tracking-[0.22em] text-[#c79f3d]">
-                Order Summary
-              </p>
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b-2 border-[#ede7dd]">
-                    <th className="pb-2 text-left text-[11px] font-normal uppercase tracking-[0.14em] text-[#9a8f83]">Blend</th>
-                    <th className="pb-2 text-center text-[11px] font-normal uppercase tracking-[0.14em] text-[#9a8f83]">Qty</th>
-                    <th className="pb-2 text-right text-[11px] font-normal uppercase tracking-[0.14em] text-[#9a8f83]">Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orderItems.map((item, i) => (
-                    <tr key={i} className="border-b border-[#ede7dd]">
-                      <td className="py-3 font-serif text-[15px] text-emerald-950">{item.name}</td>
-                      <td className="py-3 text-center text-[#7a6a56]">&times; {item.qty}</td>
-                      <td className="py-3 text-right text-emerald-950">{formatPrice(item.unit * item.qty)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-                {amountTotal !== null && (
-                  <tfoot>
-                    <tr>
-                      <td colSpan={2} className="pt-4 text-[12px] uppercase tracking-[0.14em] text-[#9a8f83]">Total paid</td>
-                      <td className="pt-4 text-right font-serif text-[22px] text-emerald-950">{formatPrice(amountTotal)}</td>
-                    </tr>
-                  </tfoot>
-                )}
-              </table>
-
-              <div className="my-6 border-t border-[#ede7dd]" />
-            </>
-          )}
-
-          <p className="text-[11px] uppercase tracking-[0.22em] text-[#c79f3d]">
-            What Happens Next
-          </p>
-          <p className="mt-3 text-sm leading-7 text-[#5a6e68]">
-            We&apos;ll reach out with pickup or shipping details. Questions?
-            Email us at{' '}
-            <a href="mailto:hello@infuseandmuse.com" className="text-[#0f3d2e] underline">
+        <div className="mt-[clamp(3rem,7vw,5rem)] border-t pt-8" style={{ borderColor: 'var(--rule)' }}>
+          <h2 className="t-label">What happens next</h2>
+          <p className="t-body mt-5 max-w-measure">
+            We will reach out with pickup or shipping details. Any questions, write to{' '}
+            <a href="mailto:hello@infuseandmuse.com" className="wipe-link text-ink">
               hello@infuseandmuse.com
             </a>
             .
           </p>
-
-          {orderRef && (
-            <p className="mt-4 text-[11px] text-[#a89e90]">
-              Order ref: {orderRef}
-            </p>
-          )}
+          {orderRef ? <p className="t-label mt-8">Order ref · {orderRef}</p> : null}
         </div>
 
-        {/* CTAs */}
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href="/products"
-            className="flex-1 rounded-full bg-[#0f3d2e] px-6 py-3.5 text-center font-serif text-sm text-white"
-          >
-            Explore more blends
-          </Link>
-          <Link
-            href="/"
-            className="flex-1 rounded-full border border-emerald-950/15 bg-white/80 px-6 py-3.5 text-center text-sm text-emerald-950"
-          >
-            Return home
-          </Link>
+        <div className="mt-14 flex flex-wrap gap-x-12 gap-y-6">
+          <QuietLink href="/products">Explore more blends</QuietLink>
+          <QuietLink href="/">Return home</QuietLink>
         </div>
       </div>
     </>
