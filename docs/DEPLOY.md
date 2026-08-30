@@ -63,12 +63,27 @@ Leave "Use existing Build Cache" unchecked.
 
 ## 4. Give the owner the link
 
-Copy the deployment URL. Then check **Settings → Deployment Protection**:
+**Vercel Authentication is ON** for this project (Settings → Deployment
+Protection → Require Log In, Standard Protection). Production is public;
+preview deployments are not. The bare preview URL therefore shows a login wall
+to anyone who is not a team member — and it will *not* look that way when you
+test it yourself, because your own browser is already signed in to Vercel.
 
-- *Vercel Authentication = Disabled* → the URL works for anyone.
-- *Vercel Authentication = Enabled* (default on Pro) → the owner hits a login
-  wall. Either set Preview protection to Disabled, or use the deployment's
-  **Share** button to mint a bypass link.
+Two ways to open it up:
+
+1. **Share link (preferred).** On the deployment: **Share** → change *Only
+   people with access* to **Anyone with the link** → **Copy Link**. This appends
+   a `?_vercel_share=…` token, leaves protection on for everything else, and
+   works for signed-out visitors. Verified from a browser with no Vercel
+   session. Note: Hobby allows **one** shareable link at a time across the whole
+   account, and generating a new one revokes the previous.
+
+2. **Disable protection.** Settings → Deployment Protection → turn off *Require
+   Log In*. Simpler, but makes every preview deployment public, not just this
+   one.
+
+The token grants access to whoever holds it, so treat the share URL as
+semi-private — it is not committed to this repo.
 
 ## 5. Node version
 
