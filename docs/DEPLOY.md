@@ -1,56 +1,96 @@
-# Deploying the owner demo to Vercel
+# Publishing the owner demo
 
-Nothing here has been pushed. These are the steps to run when you are ready.
+The production site (`infuseandmuse.com`) is already live and gated to
+`/waitlist`. The demo must not disturb it. This document is the procedure for
+that specific situation — an existing Vercel project, plus a preview branch.
 
-## 1. Import the repository
+## How the isolation works
 
-This is an npm workspaces monorepo. In Vercel:
+Vercel production-deploys **only** the production branch. Every other branch
+builds to its own Preview URL, on a `*.vercel.app` hostname, with
+`X-Robots-Tag: noindex` set automatically. The custom domain is never involved.
 
-- **Root Directory** — leave at the repository root (`vercel.json` builds
-  `apps/web` from there). Do *not* set it to `apps/web`; the lockfile lives at
-  the root and the install would fail.
-- **Framework Preset** — Next.js (detected).
-- **Node.js Version** — 22.x. The repo pins this in `.nvmrc`.
-  Next 14 refuses to build on Node 16, which is the machine default here.
+    main                     → production → infuseandmuse.com   (gated)
+    demo/storefront-revamp   → preview    → *.vercel.app        (open)
 
-## 2. Environment variables
+The gate itself is `WAITLIST_MODE` in `middleware.ts`: anything other than the
+exact string `off` redirects every route to `/waitlist`. Production leaves it
+unset, so production stays gated even if this branch is merged.
 
-Copy from `.env.example`. The demo needs, at minimum:
+## 1. Confirm the production branch (do this first)
 
-| Variable | Value for the demo | Why |
+**Settings → Git → Production Branch** must read `main`.
+
+If it reads anything else — or if "Automatically expose System Environment
+Variables" style branch rules have been changed — stop. Every assumption below
+depends on `main` being the only branch that can reach the live domain.
+
+## 2. Add environment variables, scoped to Preview
+
+**Settings → Environment Variables.** For each row below, tick **Preview**
+only. Leave Production and Development unchecked.
+
+| Variable | Preview value | Notes |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | the Vercel URL | canonical links, sitemap, Stripe redirects |
-| `WAITLIST_MODE` | `off` | **without this every route redirects to /waitlist and the owner sees nothing but the signup page** |
-| `STRIPE_SECRET_KEY` | `sk_test_…` | checkout; use test mode for the demo |
-| `RESEND_API_KEY` | `re_…` | waitlist, contact form, order email |
-| `EMAIL_FROM` | `onboarding@resend.dev` | fine for testing; a verified domain is needed for real sends |
-| `CONTACT_INBOX` | the owner's address | where the contact form delivers |
+| `WAITLIST_MODE` | `off` | Opens the storefront. **Never tick Production.** |
+| `NEXT_PUBLIC_SITE_URL` | the preview URL | canonical links, sitemap, Stripe redirects |
+| `STRIPE_SECRET_KEY` | `sk_test_…` | test mode, so demo checkouts cost nothing |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_…` | must match the secret key's mode |
+| `RESEND_API_KEY` | `re_…` | contact form and order email |
+| `EMAIL_FROM` | `onboarding@resend.dev` | fine for testing |
+| `CONTACT_INBOX` | your address | where the contact form delivers |
 
-Sanity variables can stay empty — the site falls back to `lib/demo-data.ts`,
-which is what the demo shows today.
+Leave `RESEND_AUDIENCE_ID` **unset on Preview**. If the preview inherits the
+production audience, anyone testing the demo signup writes a real contact into
+the live waitlist. With it unset the form returns a handled 503 instead.
 
-## 3. Stripe webhook (only if you want confirmation emails in the demo)
+Sanity variables can stay empty; the site falls back to `lib/demo-data.ts`,
+which is what the demo shows.
 
-1. Add an endpoint in the Stripe dashboard: `https://<vercel-url>/api/webhook`
+The build no longer fails when these are missing — Stripe and Resend clients
+construct lazily — but the demo will not function properly without them.
+
+## 3. Redeploy the branch
+
+Environment variables are read at build time, so a deployment made before you
+added them will not pick them up.
+
+**Deployments → filter to `demo/storefront-revamp` → ⋯ → Redeploy.**
+Leave "Use existing Build Cache" unchecked.
+
+## 4. Give the owner the link
+
+Copy the deployment URL. Then check **Settings → Deployment Protection**:
+
+- *Vercel Authentication = Disabled* → the URL works for anyone.
+- *Vercel Authentication = Enabled* (default on Pro) → the owner hits a login
+  wall. Either set Preview protection to Disabled, or use the deployment's
+  **Share** button to mint a bypass link.
+
+## 5. Node version
+
+**Settings → General → Node.js Version → 22.x.** The repo pins this in
+`.nvmrc`. Next 14 will not build on Node 16.
+
+## Optional: Stripe webhook
+
+Only needed if you want order confirmation emails in the demo.
+
+1. Stripe dashboard → add endpoint `https://<preview-url>/api/webhook`
 2. Subscribe to `checkout.session.completed`
-3. Copy the signing secret into `STRIPE_WEBHOOK_SECRET`
+3. Put the signing secret in `STRIPE_WEBHOOK_SECRET` (Preview only)
 
-Without it, checkout still works end to end; only the confirmation email is
-skipped. The success page reads line items directly from Stripe, so the order
-summary still renders.
+Without it, checkout still completes; only the confirmation email is skipped.
+The success page reads line items from Stripe directly, so the order summary
+still renders.
 
-## 4. Before making the site public
+## Before this ever becomes the real site
 
-`WAITLIST_MODE=off` exposes everything, including `/preview/parchment` (an
-internal design comparison). `robots.ts` already disallows it, but delete the
-route before a real launch.
-
-## Known gaps at time of writing
-
-- **Font licence.** `ErotiqueAlternateTrial-*.ttf` are trial files. Every digit
-  glyph is a "TRIAL ONLY / ZETAFONTS.COM" watermark. Nothing on the site
-  currently sets numerals in the display face, so nothing renders a watermark —
-  but the licence must be bought before launch, or the family swapped.
+- **Font licence.** `ErotiqueAlternateTrial-*.ttf` are trial files: every digit
+  glyph is a "TRIAL ONLY / ZETAFONTS.COM" watermark. Nothing currently sets
+  numerals in the display face, so nothing renders a watermark today — but the
+  family must be licensed or swapped before launch.
 - **Muse copy** in `lib/muses.ts` is placeholder text, not brand-approved.
-- **Contact form** needs `RESEND_API_KEY` + `CONTACT_INBOX` or it returns 503
-  and tells the visitor to email directly. It never silently drops a message.
+- **Delete `/preview/parchment`**, an internal design comparison. `robots.ts`
+  disallows it, but `WAITLIST_MODE=off` makes it reachable.
+- **Product content** is demo data until the owner returns the content form.
