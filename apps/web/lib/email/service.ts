@@ -11,11 +11,10 @@
  *   4. Set EMAIL_FROM in .env.local (use "onboarding@resend.dev" for testing,
  *      or a verified domain address for production)
  */
-import { Resend } from 'resend';
+import { getResend } from './client';
 import { generateOrderConfirmationHtml } from './templates/order-confirmation';
 import { generateWaitlistConfirmationHtml } from './templates/waitlist-confirmation';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export type OrderItem = {
   name: string;
@@ -41,7 +40,7 @@ export async function sendOrderConfirmation(
   const from =
     process.env.EMAIL_FROM || 'Infuse & Muse <onboarding@resend.dev>';
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from,
     to,
     subject: 'Your Infuse & Muse order is confirmed ✓',
@@ -62,7 +61,7 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
   const from =
     process.env.EMAIL_FROM || 'Infuse & Muse <onboarding@resend.dev>';
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from,
     to,
     subject: "You're on the Infuse & Muse waitlist",

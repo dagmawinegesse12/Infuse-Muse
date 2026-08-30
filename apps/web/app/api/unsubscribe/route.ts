@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -15,12 +14,12 @@ export async function GET(request: Request) {
 
   try {
     if (audienceId) {
-      const { data } = await resend.contacts.list({ audienceId });
+      const { data } = await getResend().contacts.list({ audienceId });
       const contact = (data?.data ?? []).find(
         (c: { email: string }) => c.email === email
       );
       if (contact) {
-        await resend.contacts.update({
+        await getResend().contacts.update({
           id: contact.id,
           audienceId,
           unsubscribed: true,

@@ -1,5 +1,5 @@
 import type Stripe from 'stripe';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 
 export type OrderItem = { name: string; qty: number; unit: number };
 
@@ -35,7 +35,7 @@ export function buildOrderMetadata(items: OrderItem[]): string {
  */
 export async function resolveOrderItems(session: Stripe.Checkout.Session): Promise<OrderItem[]> {
   try {
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
+    const lineItems = await getStripe().checkout.sessions.listLineItems(session.id, { limit: 100 });
     const resolved = lineItems.data.map((line) => ({
       name: line.description ?? 'Item',
       qty: line.quantity ?? 1,

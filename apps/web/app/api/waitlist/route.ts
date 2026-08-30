@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 import { sendWaitlistConfirmation } from '@/lib/email/service';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ── Local dev fallback (file-based) ──────────────────────────────────────────
 const DATA_FILE = path.join(process.cwd(), 'data', 'waitlist.json');
@@ -23,7 +22,7 @@ async function isAlreadyOnList(email: string): Promise<boolean> {
   const audienceId = process.env.RESEND_AUDIENCE_ID;
   if (audienceId) {
     try {
-      const { data } = await resend.contacts.list({ audienceId });
+      const { data } = await getResend().contacts.list({ audienceId });
       return (data?.data ?? []).some(
         (c: { email: string }) => c.email === email
       );
@@ -38,7 +37,7 @@ async function isAlreadyOnList(email: string): Promise<boolean> {
 async function addToList(email: string): Promise<void> {
   const audienceId = process.env.RESEND_AUDIENCE_ID;
   if (audienceId) {
-    await resend.contacts.create({ email, audienceId, unsubscribed: false });
+    await getResend().contacts.create({ email, audienceId, unsubscribed: false });
     return;
   }
   const entries = await loadEntries();
@@ -66,7 +65,18 @@ export async function POST(request: Request) {
     });
   }
 
-  await addToList(email);
+  try {
+    await addToList(email);
+  } catch (err) {
+    // Storage is either a Resend audience or, without RESEND_AUDIENCE_ID, a
+    // local JSON file — and the filesystem is read-only on Vercel. Never tell
+    // someone they are on the list when the write did not land.
+    console.error('[waitlist] failed to record signup:', err);
+    return NextResponse.json(
+      { error: 'We could not save your details just now. Please try again shortly.' },
+      { status: 503 }
+    );
+  }
 
   try {
     await sendWaitlistConfirmation(email);

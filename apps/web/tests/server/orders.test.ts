@@ -4,7 +4,7 @@ import type Stripe from 'stripe';
 // vi.mock is hoisted above ordinary consts, so the spy has to be hoisted too.
 const { listLineItems } = vi.hoisted(() => ({ listLineItems: vi.fn() }));
 vi.mock('@/lib/stripe', () => ({
-  stripe: { checkout: { sessions: { listLineItems } } },
+  getStripe: () => ({ checkout: { sessions: { listLineItems } } }),
 }));
 
 import {

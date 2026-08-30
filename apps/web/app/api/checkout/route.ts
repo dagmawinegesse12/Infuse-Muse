@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import type { CartItem } from '@/lib/cart/cart-types';
 import { buildOrderMetadata } from '@/lib/orders';
 
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   );
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'payment',
 
       line_items: items.map((item) => ({

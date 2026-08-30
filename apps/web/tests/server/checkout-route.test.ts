@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createSession = vi.fn();
 vi.mock('@/lib/stripe', () => ({
-  stripe: { checkout: { sessions: { create: createSession } } },
+  getStripe: () => ({ checkout: { sessions: { create: createSession } } }),
 }));
 
 const POST = async () => (await import('@/app/api/checkout/route')).POST;

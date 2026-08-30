@@ -1,4 +1,4 @@
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import { resolveOrderItems, type OrderItem } from '@/lib/orders';
 import { formatPrice } from '@/lib/utils';
 import { QuietLink } from '@/components/system/quiet-link';
@@ -18,7 +18,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
 
   if (sessionId && process.env.STRIPE_SECRET_KEY) {
     try {
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      const session = await getStripe().checkout.sessions.retrieve(sessionId);
       customerName = session.customer_details?.name ?? null;
       amountTotal = session.amount_total;
       orderRef = session.id.slice(-12).toUpperCase();
