@@ -35,10 +35,13 @@ only. Leave Production and Development unchecked.
 | `WAITLIST_MODE` | `off` | Opens the storefront. **Never tick Production.** |
 | `NEXT_PUBLIC_SITE_URL` | the preview URL | canonical links, sitemap, Stripe redirects |
 | `STRIPE_SECRET_KEY` | `sk_test_…` | test mode, so demo checkouts cost nothing |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | `pk_test_…` | must match the secret key's mode |
 | `RESEND_API_KEY` | `re_…` | contact form and order email |
 | `EMAIL_FROM` | `onboarding@resend.dev` | fine for testing |
 | `CONTACT_INBOX` | your address | where the contact form delivers |
+
+There is no publishable-key row: checkout creates the session server-side and
+redirects to `session.url`, so Stripe.js never runs in the browser and
+`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is unused.
 
 Leave `RESEND_AUDIENCE_ID` **unset on Preview**. If the preview inherits the
 production audience, anyone testing the demo signup writes a real contact into
