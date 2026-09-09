@@ -12,7 +12,9 @@ import { useRef, useState } from 'react';
  *
  * Under `prefers-reduced-motion` the video is removed entirely by globals.css
  * and the poster underneath is all that remains; the control hides with it,
- * since there would be nothing left to unmute.
+ * since there would be nothing left to unmute. That is the only case where it
+ * hides — a control carrying sound must never be unreachable on a phone, which
+ * is why this does not copy the scroll cue's `hidden sm:flex`.
  */
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -46,29 +48,41 @@ export function HeroVideo() {
         <source src="/video/hero.mp4" type="video/mp4" />
       </video>
 
-      <button
-        type="button"
-        onClick={toggleSound}
-        aria-pressed={!muted}
-        className="hero__sound hit t-label absolute bottom-8 right-[var(--gutter)] z-10 hidden items-center gap-3 sm:flex"
-        style={{ color: 'var(--on-media)' }}
-      >
-        {/* Three bars that stand up when the sound is on. */}
-        <span aria-hidden className="flex h-3 items-end gap-[3px]">
-          {[0.45, 1, 0.7].map((scale, i) => (
-            <span
-              key={i}
-              className="block w-px origin-bottom transition-transform duration-500 ease-muse"
-              style={{
-                height: '100%',
-                background: 'var(--on-media)',
-                transform: `scaleY(${muted ? 0.2 : scale})`,
-              }}
-            />
-          ))}
-        </span>
-        {muted ? 'Sound' : 'Mute'}
-      </button>
+      {/*
+        The wrapper carries the position, not the button. `.hit` sets
+        `position: relative` to hang its 44px tap target off, and that beats
+        Tailwind's `absolute` in the cascade — putting the two on one element
+        pins the control to the top-left corner instead of the bottom-right.
+      */}
+      <div className="hero__sound absolute bottom-6 right-[var(--gutter)] z-10 sm:bottom-8">
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-pressed={!muted}
+          className="hit t-label flex items-center gap-3 rounded-full border px-4 py-2 backdrop-blur-sm"
+          style={{
+            color: 'var(--on-media)',
+            borderColor: 'rgba(255, 255, 255, 0.22)',
+            background: 'rgba(9, 37, 22, 0.32)',
+          }}
+        >
+          {/* Three bars that stand up when the sound is on. */}
+          <span aria-hidden className="flex h-3 items-end gap-[3px]">
+            {[0.45, 1, 0.7].map((scale, i) => (
+              <span
+                key={i}
+                className="block w-px origin-bottom transition-transform duration-500 ease-muse"
+                style={{
+                  height: '100%',
+                  background: 'var(--on-media)',
+                  transform: `scaleY(${muted ? 0.2 : scale})`,
+                }}
+              />
+            ))}
+          </span>
+          {muted ? 'Sound' : 'Mute'}
+        </button>
+      </div>
     </>
   );
 }
