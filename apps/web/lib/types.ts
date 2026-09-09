@@ -15,6 +15,15 @@ export type Product = {
   alt: string;
   priceCents: number;
   currency: string;
+  /** Net weight as sold, e.g. "75 g". */
+  size: string;
+  /** Water temperature, steeping time and dose. */
+  brewing: { temperature: string; time: string; amount: string };
+  /**
+   * Allergen declaration. Empty until the owner supplies it — the product page
+   * renders a "not yet confirmed" note rather than implying there are none.
+   */
+  allergens: string;
   featured?: boolean;
   seasonal?: boolean;
   categorySlug: string;

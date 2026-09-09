@@ -33,7 +33,7 @@ export function Invitation() {
       style={{ borderColor: 'var(--rule)' }}
     >
       <div className="shell mx-auto max-w-measure text-center">
-        <p className="t-label t-label--accent">The list</p>
+        <p className="t-label t-label--accent">The Correspondence</p>
         <h2 className="t-head mt-6">Be told first, and quietly.</h2>
         <p className="t-body mt-6">
           New blends are made in small numbers. The list hears before the shop does —

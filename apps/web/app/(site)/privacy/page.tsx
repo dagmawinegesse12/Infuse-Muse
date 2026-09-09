@@ -3,13 +3,13 @@ import { PageHeader } from '@/components/system/page-header';
 import { ProseSection, P, List, LegalFooterNote } from '@/components/system/prose';
 
 export const metadata = createMetadata({
-  title: 'Privacy Policy | Infuse & Muse',
+  title: 'Privacy Policy',
   description: 'How Infuse & Muse collects, uses, and protects your personal information.',
   path: '/privacy',
 });
 
 const UPDATED = '29 August 2026';
-const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@infuseandmuse.ca';
+const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@infuseandmuse.com';
 
 export default function PrivacyPage() {
   return (

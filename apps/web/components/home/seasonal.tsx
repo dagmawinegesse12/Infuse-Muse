@@ -21,7 +21,7 @@ export function Seasonal({ products }: { products: Product[] }) {
               <p className="t-label t-label--accent">Limited</p>
               <h2 className="t-head mt-4 max-w-md">Seasonal drops, while the harvest lasts.</h2>
             </div>
-            <QuietLink href="/collections">The collections</QuietLink>
+            <QuietLink href="/muses">The Archetypes</QuietLink>
           </div>
         </Reveal>
       </div>

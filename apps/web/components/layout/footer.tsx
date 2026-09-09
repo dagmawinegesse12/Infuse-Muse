@@ -6,8 +6,7 @@ const COLUMNS: Array<[string, Array<[string, string]>]> = [
     'Shop',
     [
       ['All blends', '/products'],
-      ['Collections', '/collections'],
-      ['The Muses', '/muses'],
+      ['The Archetypes', '/muses'],
       ['Gifting', '/contact'],
     ],
   ],
@@ -15,7 +14,7 @@ const COLUMNS: Array<[string, Array<[string, string]>]> = [
     'The Maison',
     [
       ['Our story', '/about'],
-      ['The Muses', '/muses'],
+      ['Instagram', 'https://www.instagram.com/infuse_and_muse'],
       ['Contact', '/contact'],
       ['Waitlist', '/waitlist'],
     ],
@@ -44,10 +43,10 @@ export function Footer() {
             className="h-14 w-auto"
           />
           <p className="t-body mt-7">
-            Small-batch tea, blended in Mississauga. Made for the pause around the cup rather
-            than the cup itself.
+            Small batch, loose leaf, blended in Canada. Everything in service of a single
+            luxury: the stillness.
           </p>
-          <p className="t-label mt-8">Mississauga · Ontario · Canada</p>
+          <p className="t-label mt-8">Ontario · Canada</p>
         </div>
 
         {COLUMNS.map(([heading, links]) => (
@@ -56,9 +55,20 @@ export function Footer() {
             <ul className="mt-6 space-y-6">
               {links.map(([label, href]) => (
                 <li key={label + href}>
-                  <Link href={href} className="hit wipe-link t-body text-ink">
-                    {label}
-                  </Link>
+                  {href.startsWith('http') ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="hit wipe-link t-body text-ink"
+                    >
+                      {label}
+                    </a>
+                  ) : (
+                    <Link href={href} className="hit wipe-link t-body text-ink">
+                      {label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -70,8 +80,8 @@ export function Footer() {
         className="shell flex flex-col gap-4 border-t py-7 sm:flex-row sm:items-center sm:justify-between"
         style={{ borderColor: 'var(--rule)' }}
       >
-        <p className="t-label">© {new Date().getFullYear()} Infuse &amp; Muse</p>
-        <p className="t-label">Crafted for stillness</p>
+        <p className="t-label">© {new Date().getFullYear()} Infuse &amp; Muse Inc.</p>
+        <p className="t-label">Redefining stillness</p>
       </div>
     </footer>
   );

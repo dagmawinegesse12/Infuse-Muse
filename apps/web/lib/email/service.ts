@@ -90,7 +90,7 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
       'You received this because you joined the waitlist at infuseandmuse.com',
     ].join('\n'),
     headers: {
-      'List-Unsubscribe': '<mailto:hello@infuseandmuse.com?subject=unsubscribe>',
+      'List-Unsubscribe': '<mailto:contact@infuseandmuse.com?subject=unsubscribe>',
     },
   });
 

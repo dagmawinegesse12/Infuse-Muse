@@ -9,11 +9,8 @@ export function FeaturedBlends({ products }: { products: Product[] }) {
   return (
     <section className="shell pb-[var(--chapter)]">
       <Reveal>
-        <div className="flex flex-wrap items-end justify-between gap-6 border-t pt-8" style={{ borderColor: 'var(--rule)' }}>
-          <div>
-            <p className="t-label t-label--accent">The Blends</p>
-            <h2 className="t-head mt-4 max-w-xl">Five compositions, each for a different hour.</h2>
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-6 border-t pt-8" style={{ borderColor: 'var(--rule)' }}>
+          <p className="t-label t-label--accent">The Blends</p>
           <QuietLink href="/products">View all</QuietLink>
         </div>
       </Reveal>

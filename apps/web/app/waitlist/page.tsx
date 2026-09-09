@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { WaitlistForm } from './waitlist-form';
 
 export const metadata: Metadata = {
-  title: 'The Founding Circle | Infuse & Muse',
+  title: 'The Founding Circle',
   description: 'Something beautiful is steeping. Join the Infuse & Muse founding circle.',
 };
 

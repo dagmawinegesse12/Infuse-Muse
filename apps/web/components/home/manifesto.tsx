@@ -11,20 +11,18 @@ export function Manifesto() {
         </Reveal>
         <Reveal delay={90}>
           <h2 className="t-head mt-8">
-            Tea is the smallest possible ceremony. We build ours around the pause,
-            not the cup.
+            Tea is the last unhurried thing left to us. We built a house around it.
           </h2>
         </Reveal>
         <Reveal delay={180}>
           <p className="t-body t-body--lead mt-8">
-            Every blend is composed in small batches in Mississauga — leaf, petal and
-            root chosen for how a room feels once the water goes on. Nothing here is
-            in a hurry.
+            Small batch, loose leaf, asking nothing of you but attention. Every blend
+            exists to protect the pause that follows. Luxury, here, is time reclaimed.
           </p>
         </Reveal>
         <Reveal delay={260}>
           <div className="mt-12">
-            <QuietLink href="/about">Read our story</QuietLink>
+            <QuietLink href="/about">The Prologue</QuietLink>
           </div>
         </Reveal>
       </div>

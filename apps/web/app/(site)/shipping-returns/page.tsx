@@ -4,14 +4,14 @@ import { ProseSection, P, List, LegalFooterNote } from '@/components/system/pros
 import { QuietLink } from '@/components/system/quiet-link';
 
 export const metadata = createMetadata({
-  title: 'Shipping & Returns | Infuse & Muse',
+  title: 'Shipping & Returns',
   description:
-    'Delivery times, local pickup in Mississauga, and how returns and refunds work at Infuse & Muse.',
+    'Delivery times, and how returns and refunds work at Infuse & Muse.',
   path: '/shipping-returns',
 });
 
 const UPDATED = '29 August 2026';
-const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@infuseandmuse.ca';
+const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@infuseandmuse.com';
 
 export default function ShippingReturnsPage() {
   return (
@@ -45,14 +45,7 @@ export default function ShippingReturnsPage() {
           </P>
         </ProseSection>
 
-        <ProseSection index={2} heading="Local pickup">
-          <P>
-            Pickup can be arranged in Mississauga on select orders at no charge. Choose
-            it at checkout where offered, and we will write to arrange a time.
-          </P>
-        </ProseSection>
-
-        <ProseSection index={3} heading="Returns">
+        <ProseSection index={2} heading="Returns">
           <P>
             Tea is a consumable, so we cannot accept returns on opened pouches — a
             matter of food safety rather than preference. Unopened pouches in original
@@ -61,7 +54,7 @@ export default function ShippingReturnsPage() {
           </P>
         </ProseSection>
 
-        <ProseSection index={4} heading="If something is wrong">
+        <ProseSection index={3} heading="If something is wrong">
           <P>
             If your order arrives damaged, incorrect, or below the standard we intend,
             write to {CONTACT} within 14 days with your order reference and a photograph.
@@ -70,7 +63,7 @@ export default function ShippingReturnsPage() {
           </P>
         </ProseSection>
 
-        <ProseSection index={5} heading="Refunds">
+        <ProseSection index={4} heading="Refunds">
           <P>
             Approved refunds go back to the original payment method within 5 to 10
             business days of us receiving the return or agreeing the claim. Your bank may
@@ -78,7 +71,7 @@ export default function ShippingReturnsPage() {
           </P>
         </ProseSection>
 
-        <ProseSection index={6} heading="Cancelling">
+        <ProseSection index={5} heading="Cancelling">
           <P>
             An order can be cancelled for a full refund any time before it is dispatched.
             Write to us quickly and we will do our best.

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: '%s | Infuse & Muse',
   },
   description:
-    'Premium boutique tea blends from Mississauga. Crafted for calm, gifting, and everyday ritual.',
+    'Premium small-batch loose leaf tea. Crafted for calm, gifting, and everyday ritual.',
 };
 
 /**

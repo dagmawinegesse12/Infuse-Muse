@@ -11,7 +11,7 @@ export default async function FaqPage() {
       <PageHeader
         eyebrow="Questions"
         title="Helpful answers before your next cup."
-        lede="Ordering, storage, gifting and local pickup in Mississauga."
+        lede="Ordering, storage and gifting."
       />
 
       <section className="shell pb-[var(--chapter)]">

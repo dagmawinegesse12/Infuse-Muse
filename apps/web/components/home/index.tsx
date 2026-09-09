@@ -2,23 +2,23 @@ import { getProducts } from '@/lib/data';
 import { Hero } from '@/components/home/hero';
 import { Manifesto } from '@/components/home/manifesto';
 import { FeaturedBlends } from '@/components/home/featured-blends';
-import { ChapterPlate } from '@/components/home/chapter-plate';
 import { Muses } from '@/components/home/muses';
-import { Ritual } from '@/components/home/ritual';
-import { Seasonal } from '@/components/home/seasonal';
 import { Service } from '@/components/home/service';
-import { JournalRail } from '@/components/home/journal-rail';
 import { Invitation } from '@/components/home/invitation';
 
 /**
  * One homepage, rendered in whichever tonality the surrounding SiteShell sets.
  * Nothing below here reads the theme — it all resolves through CSS variables.
+ *
+ * The owner struck four sections on the content form of 9 September 2026:
+ * the feature panel (ChapterPlate), the brewing steps (Ritual), the seasonal
+ * band (Seasonal) and the journal rail (JournalRail). Their components are
+ * left in the tree rather than deleted — the journal was marked "remove, but
+ * we will bring it back" — so restoring any of them is an import away.
  */
 export async function Home() {
   const products = await getProducts();
-
   const featured = products.filter((p) => p.featured);
-  const seasonal = products.filter((p) => p.seasonal);
 
   return (
     <>
@@ -26,11 +26,7 @@ export async function Home() {
       <Manifesto />
       <FeaturedBlends products={(featured.length ? featured : products).slice(0, 3)} />
       <Muses />
-      <ChapterPlate />
-      <Ritual />
-      <Seasonal products={seasonal.length ? seasonal : products.slice(0, 2)} />
       <Service />
-      <JournalRail />
       <Invitation />
     </>
   );

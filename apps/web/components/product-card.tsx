@@ -8,7 +8,7 @@ import { formatPrice } from '@/lib/utils';
 
 /**
  * Squared, unframed, shadowless. The photograph does the selling; the tile
- * contributes a name, an origin note and a price. `Add` only appears on hover
+ * contributes a name, its archetype, a price and the pack size. `Add` only appears on hover
  * so a grid at rest reads as a wall of images rather than a row of buttons.
  */
 export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
@@ -38,7 +38,14 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           </h3>
           <p className="t-label mt-2">{product.categoryTitle}</p>
         </div>
-        <p className="t-price shrink-0">{formatPrice(product.priceCents, product.currency)}</p>
+        <div className="shrink-0 text-right">
+          <p className="t-price">{formatPrice(product.priceCents, product.currency)}</p>
+          {product.size ? (
+            <p className="t-label mt-1" style={{ opacity: 0.6 }}>
+              {product.size}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <p className="t-body mt-3 line-clamp-2">{product.shortDescription}</p>

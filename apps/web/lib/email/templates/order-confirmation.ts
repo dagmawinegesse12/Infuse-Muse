@@ -89,7 +89,7 @@ export function generateOrderConfirmationHtml({
                 ${greeting}
               </p>
               <p style="margin:0; font-size:15px; line-height:1.8; color:#5a6e68; font-family:Arial,sans-serif;">
-                Thank you for your order. Your tea blends are confirmed and we'll be in touch shortly with pickup or shipping details.
+                Thank you for your order. Your tea blends are confirmed and we'll be in touch shortly with shipping details.
               </p>
             </td>
           </tr>
@@ -145,8 +145,8 @@ export function generateOrderConfirmationHtml({
                 What Happens Next
               </p>
               <p style="margin:0; font-size:14px; line-height:1.85; color:#5a6e68; font-family:Arial,sans-serif;">
-                We'll reach out with pickup or fulfillment details. For questions about your order, gifting, or local pickup in Mississauga, email us at
-                <a href="mailto:hello@infuseandmuse.com" style="color:#0f3d2e; text-decoration:underline;">hello@infuseandmuse.com</a>
+                We'll reach out with fulfilment details. For questions about your order or gifting, email us at
+                <a href="mailto:contact@infuseandmuse.com" style="color:#0f3d2e; text-decoration:underline;">contact@infuseandmuse.com</a>
                 or visit our <a href="${siteUrl}/faq" style="color:#0f3d2e; text-decoration:underline;">FAQ page</a>.
               </p>
             </td>
@@ -166,7 +166,7 @@ export function generateOrderConfirmationHtml({
           <tr>
             <td style="background-color:#ffffff; border-radius:0 0 24px 24px; padding: 28px 44px 36px; text-align:center; border-top:1px solid #ede7dd; margin-top:28px;">
               <p style="margin:0 0 4px; font-size:12px; color:#a89e90; font-family:Arial,sans-serif;">
-                Infuse &amp; Muse &middot; Mississauga, Ontario, Canada
+                Infuse &amp; Muse Inc. &middot; Ontario, Canada
               </p>
               <p style="margin:0; font-size:11px; color:#c0b8ae; font-family:Arial,sans-serif; letter-spacing:0.06em;">
                 Order ref: ${orderRef}

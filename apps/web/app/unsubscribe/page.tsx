@@ -40,10 +40,10 @@ export default function UnsubscribePage({
             <p className="mt-4 text-sm text-white/50">
               Please try again or email us at{' '}
               <a
-                href="mailto:hello@infuseandmuse.com"
+                href="mailto:contact@infuseandmuse.com"
                 className="text-[#efcb80]/70 underline"
               >
-                hello@infuseandmuse.com
+                contact@infuseandmuse.com
               </a>
             </p>
           </>

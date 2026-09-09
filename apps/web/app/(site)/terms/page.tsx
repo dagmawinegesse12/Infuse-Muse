@@ -3,13 +3,13 @@ import { PageHeader } from '@/components/system/page-header';
 import { ProseSection, P, List, LegalFooterNote } from '@/components/system/prose';
 
 export const metadata = createMetadata({
-  title: 'Terms of Service | Infuse & Muse',
+  title: 'Terms of Service',
   description: 'The terms that apply when you buy from Infuse & Muse.',
   path: '/terms',
 });
 
 const UPDATED = '29 August 2026';
-const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@infuseandmuse.ca';
+const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@infuseandmuse.com';
 
 export default function TermsPage() {
   return (

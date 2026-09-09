@@ -1,85 +1,131 @@
 import type { Category, FAQItem, HomepageContent, Product, SiteSettings } from "./types";
 
+/**
+ * Content supplied by the owner on the returned content form, 9 September 2026.
+ * See docs/CONTENT-INTAKE.md for the full transcription and the open questions.
+ *
+ * Collections were replaced by Archetypes: the five named works are now the
+ * category system rather than a separate Floral / Fruity / Wellness taxonomy.
+ */
 export const demoCategories: Category[] = [
-  { _id: "cat-floral", title: "Floral Blends", slug: "floral-blends", description: "Soft, aromatic blends designed for slow evenings and reflective mornings." },
-  { _id: "cat-fruity", title: "Fruity Blends", slug: "fruity-blends", description: "Bright fruit-forward teas with layered sweetness and a clean finish." },
-  { _id: "cat-wellness", title: "Wellness Blends", slug: "wellness-blends", description: "Comforting botanical blends for rest, focus, and daily ritual." }
+  { _id: "arch-romantic", title: "The Romantic", slug: "the-romantic", description: "Unhurried devotion. Not the performance of love, but the architecture of it." },
+  { _id: "arch-dreamer", title: "The Dreamer", slug: "the-dreamer", description: "The threshold between waking and sleep, kept open on purpose." },
+  { _id: "arch-free-spirit", title: "The Free Spirit", slug: "the-free-spirit", description: "Attention with nothing holding it down." },
+  { _id: "arch-poet", title: "The Poet", slug: "the-poet", description: "Language as excavation — reaching past the obvious word for the true one." },
+  { _id: "arch-old-soul", title: "The Old-Soul", slug: "the-old-soul", description: "Loyalty extended toward whatever has already proven itself worth keeping." }
 ];
 
+/**
+ * ALLERGENS: the owner left this blank for every blend on the content form.
+ * These are food products containing cardamom, clove, cacao and vanilla, so the
+ * declaration cannot be guessed. The product page shows an explicit "not yet
+ * confirmed" note while these are empty. Do not invent values.
+ */
 export const demoProducts: Product[] = [
   {
     _id: "prod-rose", title: "Rose VitaliTea", slug: "rose-vitalitea",
-    shortDescription: "A romantic floral blend with rose petals and full-bodied black tea.",
-    description: "Rose VitaliTea is a fragrant black tea blend layered with rose petals for a luxurious cup that feels both uplifting and intimate. Crafted for slow mornings, gifting, and elegant afternoon rituals.",
+    shortDescription: "A romantic floral blend.",
+    description: "Rose VitaliTea is a fragrant herbal blend with floral notes, crafted for slow mornings and elegant afternoons.",
     image: "/images/products/rose-vitalitea.png", alt: "Glass cup of rose tea with petals beside a teapot on a dark green background",
-    priceCents: 1800, currency: "CAD", featured: true, seasonal: false,
-    categorySlug: "floral-blends", categoryTitle: "Floral Blends",
-    tastingNotes: ["Rose petal", "Velvety black tea", "Soft floral finish"],
-    ingredients: ["Black tea", "Rose petals", "Botanical garnish"], caffeineLevel: "Medium",
-    seoTitle: "Rose VitaliTea | Floral Tea Blend in Mississauga",
-    seoDescription: "Shop Rose VitaliTea, a premium floral black tea blend from Infuse & Muse in Mississauga."
-  },
-  {
-    _id: "prod-peach", title: "Peach Me Green", slug: "peach-me-green",
-    shortDescription: "A green tea blend with peach notes and a bright, juicy finish.",
-    description: "Peach Me Green balances crisp green tea with ripe peach character and floral aromatics. It is designed for refreshment and a lighter everyday tea experience.",
-    image: "/images/products/peach-me-green.png", alt: "Glass cup of peach green tea with peach slices and loose leaves on a dark green background",
-    priceCents: 1700, currency: "CAD", featured: true, seasonal: false,
-    categorySlug: "fruity-blends", categoryTitle: "Fruity Blends",
-    tastingNotes: ["Ripe peach", "Fresh green tea", "Clean finish"],
-    ingredients: ["Green tea", "Peach essence", "Botanical petals"], caffeineLevel: "Medium"
+    priceCents: 2552, currency: "CAD", size: "75 g",
+    brewing: { temperature: "95–100 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
+    allergens: "",
+    featured: true, seasonal: false,
+    categorySlug: "the-romantic", categoryTitle: "The Romantic",
+    tastingNotes: ["Soft floral", "Velvety", "Sweet"],
+    ingredients: ["Rooibos", "Horsetail herb", "Rose petals", "Hibiscus", "Cardamom", "Cinnamon", "Dried apples", "Vanilla"],
+    caffeineLevel: "Herbal",
+    seoTitle: "Rose VitaliTea | Floral Herbal Tea Blend",
+    seoDescription: "Shop Rose VitaliTea, a caffeine-free rooibos and rose blend from Infuse & Muse."
   },
   {
     _id: "prod-lavender", title: "Lavender Lullaby", slug: "lavender-lullaby",
-    shortDescription: "A calming evening blend with lavender and floral botanicals.",
-    description: "Lavender Lullaby is crafted for stillness. The cup is soft, aromatic, and soothing, making it an ideal bedtime or wind-down ritual tea.",
+    shortDescription: "A calming evening blend.",
+    description: "An evening blend for winding down the day and waking the imagination.",
     image: "/images/products/lavender-lullaby.png", alt: "Blue-toned lavender tea in a glass cup with dried petals on a dark green background",
-    priceCents: 1900, currency: "CAD", featured: true, seasonal: true,
-    categorySlug: "wellness-blends", categoryTitle: "Wellness Blends",
-    tastingNotes: ["Lavender", "Botanical sweetness", "Cooling floral aroma"],
-    ingredients: ["Herbal blend", "Lavender", "Dried flowers"], caffeineLevel: "Herbal"
+    priceCents: 3360, currency: "CAD", size: "75 g",
+    brewing: { temperature: "95–100 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
+    allergens: "",
+    featured: true, seasonal: false,
+    categorySlug: "the-dreamer", categoryTitle: "The Dreamer",
+    tastingNotes: ["Floral", "Honeyed", "Velvety"],
+    ingredients: ["Butterfly pea flower", "Chamomile", "Lavender buds", "Rose buds", "Cardamom", "Orange peel", "Clove", "Vanilla"],
+    caffeineLevel: "Herbal",
+    seoTitle: "Lavender Lullaby | Caffeine-Free Evening Tea",
+    seoDescription: "Shop Lavender Lullaby, a caffeine-free evening blend from Infuse & Muse."
+  },
+  {
+    _id: "prod-peach", title: "Peach Me Green", slug: "peach-me-green",
+    shortDescription: "A fruity tropical blend.",
+    description: "Peach Me Green balances crisp green tea with ripe peach character and floral aromatics.",
+    image: "/images/products/peach-me-green.png", alt: "Glass cup of peach green tea with peach slices and loose leaves on a dark green background",
+    priceCents: 2881, currency: "CAD", size: "75 g",
+    brewing: { temperature: "60–70 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
+    allergens: "",
+    featured: false, seasonal: false,
+    categorySlug: "the-free-spirit", categoryTitle: "The Free Spirit",
+    tastingNotes: ["Fruity"],
+    ingredients: ["Gyokuro green tea", "Rose hip", "Dried apples", "Calendula petals", "Cornflower petals", "Natural peach flavour"],
+    caffeineLevel: "High",
+    seoTitle: "Peach Me Green | Peach Green Tea Blend",
+    seoDescription: "Shop Peach Me Green, a gyokuro green tea blend with peach from Infuse & Muse."
   },
   {
     _id: "prod-coco", title: "Coco Breeze", slug: "coco-breeze",
-    shortDescription: "A warm comfort blend with spiced depth and creamy character.",
-    description: "Coco Breeze brings together cozy spice, dark tea structure, and dessert-like roundness. It is built for colder weather, gifting, and indulgent tea moments.",
+    shortDescription: "A cool, cacao-rich blend.",
+    description: "Coco Breeze is a mint cacao blend with an earthy undertone.",
     image: "/images/products/coco-breeze.png", alt: "Spiced tea with cinnamon and herbs in a glass cup beside a teapot",
-    priceCents: 2100, currency: "CAD", featured: false, seasonal: true,
-    categorySlug: "wellness-blends", categoryTitle: "Wellness Blends",
-    tastingNotes: ["Warm spice", "Toasted sweetness", "Rich finish"],
-    ingredients: ["Black tea", "Cinnamon", "Botanical herbs"], caffeineLevel: "Medium"
+    priceCents: 2995, currency: "CAD", size: "75 g",
+    brewing: { temperature: "95–100 °C", time: "5–7 minutes", amount: "1 tsp per 250 ml" },
+    allergens: "",
+    featured: false, seasonal: false,
+    categorySlug: "the-poet", categoryTitle: "The Poet",
+    tastingNotes: ["Mint", "Chocolate", "Earthy"],
+    ingredients: ["Dried mint", "Cacao nibs", "Orange peel", "Nettle leaf", "Calendula petals", "Saffron threads"],
+    caffeineLevel: "Herbal",
+    seoTitle: "Coco Breeze | Mint and Cacao Tea Blend",
+    seoDescription: "Shop Coco Breeze, a caffeine-free mint and cacao blend from Infuse & Muse."
   },
   {
-    _id: "prod-minted", title: "Minted Stillness", slug: "minted-stillness",
-    shortDescription: "A cooling mint-forward blend designed for clarity and reset.",
-    description: "Minted Stillness is a bright and grounding tea with fresh mint character and a clean, smooth finish. It fits perfectly into a mid-day pause or post-meal ritual.",
-    image: "/images/products/minted-stillness.png", alt: "Fresh mint tea in a glass cup with mint leaves and teapot on a dark green background",
-    priceCents: 1650, currency: "CAD", featured: false, seasonal: false,
-    categorySlug: "wellness-blends", categoryTitle: "Wellness Blends",
-    tastingNotes: ["Fresh mint", "Gentle sweetness", "Clean finish"],
-    ingredients: ["Green tea", "Mint leaves", "Botanical petals"], caffeineLevel: "Low"
+    // PHOTOGRAPH PENDING — no image was supplied for this new product. The file
+    // below is the retired Minted Stillness shot, standing in so the grid and
+    // the product page render. It shows the wrong blend. Replace before launch.
+    _id: "prod-thyme", title: "Classic Thyme", slug: "classic-thyme",
+    shortDescription: "An Earl Grey blend layered with spice and wisdom.",
+    description: "Classic Thyme is a rich, creamy Earl Grey, layered with a spice combination used in East Africa for centuries.",
+    image: "/images/products/minted-stillness.png", alt: "Loose leaf tea in a glass cup on a dark green background",
+    priceCents: 3303, currency: "CAD", size: "100 g",
+    brewing: { temperature: "95–100 °C", time: "3–4 minutes", amount: "1 tsp per 250 ml" },
+    allergens: "",
+    featured: true, seasonal: false,
+    categorySlug: "the-old-soul", categoryTitle: "The Old-Soul",
+    tastingNotes: ["Spiced", "Bergamot", "Velvety"],
+    ingredients: ["Earl Grey crème", "Clove", "Cardamom", "Cinnamon", "Dried thyme", "Star anise"],
+    caffeineLevel: "High",
+    seoTitle: "Classic Thyme | Spiced Earl Grey Blend",
+    seoDescription: "Shop Classic Thyme, a spiced Earl Grey crème blend from Infuse & Muse."
   }
 ];
 
 export const demoHomepage: HomepageContent = {
-  eyebrow: "Small-batch tea rituals from Mississauga",
-  headline: "Tea for your soul and your scroll.",
-  subheadline: "Infuse & Muse creates premium blends that feel calming, artistic, and intentional — designed for daily stillness, gifting, and shared moments.",
-  ctaPrimary: "Shop blends",
-  ctaSecondary: "Our story",
-  featuredSlugs: ["rose-vitalitea", "peach-me-green", "lavender-lullaby"],
-  seasonalSlugs: ["lavender-lullaby", "coco-breeze"],
-  announcement: "New seasonal blends available now. Local pickup in Mississauga."
+  eyebrow: "",
+  headline: "Redefining Stillness",
+  subheadline: "Tea is the last unhurried thing left to us. We built a house around it.",
+  ctaPrimary: "The Blends",
+  ctaSecondary: "The Archetypes",
+  featuredSlugs: ["rose-vitalitea", "lavender-lullaby", "classic-thyme"],
+  seasonalSlugs: [],
+  announcement: ""
 };
 
 export const demoFaqs: FAQItem[] = [
-  { _id: "faq-1", question: "Do you offer local pickup in Mississauga?", answer: "Yes. Local pickup can be arranged in Mississauga. Add pickup instructions to the homepage banner or checkout notes as your process evolves." },
-  { _id: "faq-2", question: "Are your teas available for gifting?", answer: "Yes. Infuse & Muse blends are positioned for premium gifting, small occasions, and tea tasting moments." },
-  { _id: "faq-3", question: "How should I store the teas?", answer: "Store tea in a cool, dry place away from direct light and moisture. Airtight storage is best for preserving aroma." },
-  { _id: "faq-4", question: "Can seasonal blends be updated easily?", answer: "Yes. Seasonal and featured product flags are modeled in the CMS so the owner can update them without changing code." }
+  { _id: "faq-1", question: "Do you offer local pickup?", answer: "Not at the moment. Every order is shipped." },
+  { _id: "faq-2", question: "Are your teas available for gifting?", answer: "Yes. Infuse & Muse blends are positioned for premium gifting, small occasions, and tea tasting moments. Gift wrapping is hand-tied and comes with a written card." },
+  { _id: "faq-3", question: "How should I store the teas?", answer: "Store tea in a cool, dry place away from direct light and moisture. Airtight storage is best for preserving aroma." }
 ];
 
 export const demoSiteSettings: SiteSettings = {
-  businessName: "Infuse & Muse", tagline: "Redefining Stillness", city: "Mississauga", region: "ON", country: "CA",
-  address: "Mississauga, Ontario, Canada", email: "hello@infuseandmuse.com", phone: "+1 905-555-0189", instagramUrl: "https://www.tiktok.com/@infuseandmuse"
+  businessName: "Infuse & Muse Inc.", tagline: "Redefining Stillness", city: "", region: "ON", country: "CA",
+  // Business address was left blank on the content form; the legal pages need one.
+  address: "Ontario, Canada", email: "contact@infuseandmuse.com", phone: "", instagramUrl: "https://www.instagram.com/infuse_and_muse"
 };

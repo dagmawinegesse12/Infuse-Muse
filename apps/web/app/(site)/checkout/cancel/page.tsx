@@ -14,8 +14,8 @@ export default function CheckoutCancelPage() {
       </div>
       <p className="t-body mt-14">
         Having trouble?{' '}
-        <a href="mailto:hello@infuseandmuse.com" className="wipe-link text-ink">
-          hello@infuseandmuse.com
+        <a href="mailto:contact@infuseandmuse.com" className="wipe-link text-ink">
+          contact@infuseandmuse.com
         </a>
       </p>
     </div>

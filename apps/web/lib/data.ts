@@ -24,6 +24,9 @@ const productProjection = `
   "alt": coalesce(image.alt, title),
   priceCents,
   currency,
+  size,
+  brewing,
+  allergens,
   featured,
   seasonal,
   "categorySlug": category->slug.current,
@@ -55,6 +58,10 @@ export async function getProducts(): Promise<Product[]> {
           fallback?.image ||
           "/images/products/rose-vitalitea.png",
         alt: product.alt || fallback?.alt || product.title,
+        size: product.size || fallback?.size || "",
+        brewing: product.brewing ||
+          fallback?.brewing || { temperature: "", time: "", amount: "" },
+        allergens: product.allergens || "",
       };
     });
   } catch {
@@ -79,6 +86,10 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
       ...product,
       image: product.image || fallback?.image || "/images/products/rose-vitalitea.png",
       alt: product.alt || fallback?.alt || product.title,
+      size: product.size || fallback?.size || "",
+      brewing: product.brewing ||
+        fallback?.brewing || { temperature: "", time: "", amount: "" },
+      allergens: product.allergens || "",
     };
   } catch {
     return fallback;

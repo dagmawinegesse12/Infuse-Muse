@@ -77,9 +77,9 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
         <div className="mt-[clamp(3rem,7vw,5rem)] border-t pt-8" style={{ borderColor: 'var(--rule)' }}>
           <h2 className="t-label">What happens next</h2>
           <p className="t-body mt-5 max-w-measure">
-            We will reach out with pickup or shipping details. Any questions, write to{' '}
-            <a href="mailto:hello@infuseandmuse.com" className="wipe-link text-ink">
-              hello@infuseandmuse.com
+            We will reach out with shipping details. Any questions, write to{' '}
+            <a href="mailto:contact@infuseandmuse.com" className="wipe-link text-ink">
+              contact@infuseandmuse.com
             </a>
             .
           </p>

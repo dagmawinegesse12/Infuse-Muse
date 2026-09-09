@@ -8,9 +8,9 @@ import { searchProducts } from '@/lib/search';
 import { Reveal } from '@/components/system/reveal';
 
 export const metadata = createMetadata({
-  title: 'Shop Tea Blends | Infuse & Muse',
+  title: 'Shop Tea Blends',
   description:
-    'Browse premium tea blends from Infuse & Muse, including floral, fruity, and wellness teas in Mississauga.',
+    'Browse premium loose leaf tea blends from Infuse & Muse.',
   path: '/products',
 });
 

@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { createMetadata } from '@/lib/metadata';
 import { MUSES, getMuse } from '@/lib/muses';
 import { getProductBySlug } from '@/lib/data';
+import { MusePlate } from '@/components/muse-plate';
 import { Reveal } from '@/components/system/reveal';
 import { QuietLink } from '@/components/system/quiet-link';
 
@@ -14,16 +14,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const muse = getMuse(params.slug);
   if (!muse) {
     return createMetadata({
-      title: 'Not found | Infuse & Muse',
+      title: 'Not found',
       description: 'This work could not be found.',
       path: `/muses/${params.slug}`,
     });
   }
   return createMetadata({
-    title: `${muse.name} | The Muses`,
+    title: `${muse.name} — The Archetypes`,
     description: muse.blurb,
     path: `/muses/${muse.slug}`,
-    image: muse.image,
+    image: muse.image ?? undefined,
   });
 }
 
@@ -36,20 +36,13 @@ export default async function MusePage({ params }: { params: { slug: string } })
   return (
     <div className="grid lg:grid-cols-2">
       <div className="plate relative min-h-[80vw] lg:sticky lg:top-0 lg:h-screen lg:min-h-0">
-        <Image
-          src={muse.image}
-          alt={muse.alt}
-          fill
-          priority
-          sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-cover"
-        />
+        <MusePlate muse={muse} sizes="(max-width: 1024px) 100vw, 50vw" priority />
       </div>
 
       <div className="px-[var(--gutter)] pb-[clamp(5rem,9vw,8rem)] pt-[clamp(3rem,7vw,8rem)] lg:pt-[var(--header-clear)]">
         <div className="max-w-measure">
           <Reveal>
-            <p className="t-label t-label--accent">The Muses</p>
+            <p className="t-label t-label--accent">The Archetypes</p>
           </Reveal>
           <Reveal delay={70}>
             <h1 className="t-display mt-6">{muse.name}</h1>
@@ -73,7 +66,7 @@ export default async function MusePage({ params }: { params: { slug: string } })
 
           <Reveal delay={260}>
             <div className="mt-14">
-              <QuietLink href="/muses">All four works</QuietLink>
+              <QuietLink href="/muses">All five archetypes</QuietLink>
             </div>
           </Reveal>
         </div>

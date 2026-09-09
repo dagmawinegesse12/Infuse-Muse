@@ -10,9 +10,8 @@ import { ThemeToggle } from '@/components/system/theme-toggle';
 
 const PRIMARY = [
   ['Blends', '/products'],
-  ['Collections', '/collections'],
+  ['The Archetypes', '/muses'],
   ['The Maison', '/about'],
-  ['The Muses', '/muses'],
 ] as const;
 
 const SECONDARY = [

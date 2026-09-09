@@ -50,11 +50,8 @@ export function Hero() {
             className="w-full max-w-[22rem] px-8 py-10 text-center"
             style={{ background: 'var(--plate)', color: 'var(--plate-ink)' }}
           >
-            <p className="t-label" style={{ color: 'var(--plate-ink)', opacity: 0.62 }}>
-              Autumn · Winter 2026
-            </p>
             <h1
-              className="mt-5 font-serif text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.14]"
+              className="font-serif text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.14]"
               style={{ color: 'var(--plate-ink)' }}
             >
               Redefining Stillness
@@ -72,11 +69,11 @@ export function Hero() {
                 The Blends
               </Link>
               <Link
-                href="/about"
+                href="/muses"
                 className="wipe-link t-label mx-auto"
                 style={{ color: 'var(--plate-ink)' }}
               >
-                The Maison
+                The Archetypes
               </Link>
             </div>
           </div>

@@ -1,20 +1,34 @@
+import { createMetadata } from '@/lib/metadata';
 import { PageHeader } from '@/components/system/page-header';
 import { Reveal } from '@/components/system/reveal';
 import { QuietLink } from '@/components/system/quiet-link';
 
-const PILLARS: Array<[string, string]> = [
-  [
-    'Flavour, told plainly',
-    'Every blend carries a name, a mood and a stated set of notes. No mystery, no filler.',
-  ],
-  [
-    'Giftable by design',
-    'From the packaging to the writing, the whole object is built to be handed to someone.',
-  ],
-  [
-    'Rooted in Mississauga',
-    'A local house with local roots — made for discovery, pickup and the people nearby.',
-  ],
+export const metadata = createMetadata({
+  title: 'The Maison',
+  description:
+    'How Infuse & Muse began — a granddaughter, a slow winter, and a cup made with intention.',
+  path: '/about',
+});
+
+/**
+ * The owner struck both opening paragraphs and all three pillars on the content
+ * form, and supplied a founder story in their place. That story is now the page.
+ *
+ * It is set as one narrow column of narrative with a single line lifted out of
+ * it — the turn the whole story rests on — rather than broken into cards. The
+ * writing is personal and first-person; cards would flatten it.
+ */
+const STORY: string[] = [
+  'When my mother and grandmother came to visit me in Toronto from Ethiopia, the winter slowed everything down. My grandmother, who has always loved tea, would drink three to five cups a day. I found myself preparing it for her daily — at first using tea bags, out of habit. But something about that did not feel right.',
+  'As I learned more about what we consume so routinely, I began to question the quality of something as simple as tea. So I made a small shift: I started brewing loose leaf instead.',
+  'What began as a simple change turned into something more intentional.',
+  'Because she was not moving as much during the colder months, I wanted her tea to do more than comfort her — I wanted it to support her. I experimented. I replaced what did not resonate. I adapted to her preferences. When she did not enjoy green tea, I softened it. I added hibiscus to help her body release excess fluid. When she grew tired of eating bananas daily, I introduced goji berries for their natural richness in potassium.',
+  'One blend turned into another. Ingredients became expressions.',
+];
+
+const CLOSING: string[] = [
+  'And somewhere in that process, tea became more than tea. It became a space — an oasis where time slows down, where intention matters, and where every cup holds both function and feeling.',
+  'Infuse & Muse is an extension of that experience.',
 ];
 
 export default function AboutPage() {
@@ -27,41 +41,44 @@ export default function AboutPage() {
       />
 
       <section className="shell pb-[var(--chapter)]">
-        <div className="grid gap-x-[clamp(2rem,5vw,5rem)] gap-y-8 lg:grid-cols-2">
+        <div className="mx-auto max-w-measure">
           <Reveal>
-            <p className="t-body t-body--lead">
-              Infuse &amp; Muse was imagined as a boutique experience rather than a shelf of
-              commodities. The blends centre on mood and on the quiet luxury of a cup made
-              with intention.
-            </p>
+            <p className="t-head">Infuse &amp; Muse was born in a quiet moment of care.</p>
           </Reveal>
-          <Reveal delay={90}>
-            <p className="t-body t-body--lead">
-              Each composition is named with personality and presented with care, so that
-              gifting takes no effort at all — for a friend, for a ritual, or for yourself.
-            </p>
-          </Reveal>
+
+          <div className="mt-12 space-y-7">
+            {STORY.map((paragraph, i) => (
+              <Reveal key={i} delay={60 + i * 50}>
+                <p className="t-body">{paragraph}</p>
+              </Reveal>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-[clamp(4rem,8vw,7rem)]">
-          {PILLARS.map(([title, copy], i) => (
-            <Reveal key={title} delay={i * 90}>
-              <div
-                className="grid gap-4 border-t py-10 lg:grid-cols-[6rem_20rem_1fr] lg:gap-10"
-                style={{ borderColor: 'var(--rule)' }}
-              >
-                <span className="t-numeral pt-1">{String(i + 1).padStart(2, '0')}</span>
-                <h2 className="t-sub">{title}</h2>
-                <p className="t-body max-w-measure">{copy}</p>
-              </div>
+        {/* The hinge of the story, given its own air. */}
+        <Reveal delay={120}>
+          <figure
+            className="mx-auto mt-[clamp(3.5rem,7vw,6rem)] max-w-3xl border-y py-[clamp(3rem,6vw,5rem)] text-center"
+            style={{ borderColor: 'var(--rule)' }}
+          >
+            <blockquote className="font-serif text-[clamp(1.75rem,4vw,3rem)] leading-[1.12]">
+              Care became ritual.
+            </blockquote>
+          </figure>
+        </Reveal>
+
+        <div className="mx-auto mt-[clamp(3.5rem,7vw,6rem)] max-w-measure space-y-7">
+          {CLOSING.map((paragraph, i) => (
+            <Reveal key={i} delay={i * 70}>
+              <p className="t-body t-body--lead">{paragraph}</p>
             </Reveal>
           ))}
-          <hr className="rule" />
         </div>
 
         <Reveal>
-          <div className="mt-16 flex flex-wrap gap-x-12 gap-y-8">
+          <div className="mx-auto mt-16 flex max-w-measure flex-wrap gap-x-12 gap-y-8">
             <QuietLink href="/products">Browse the blends</QuietLink>
+            <QuietLink href="/muses">The Archetypes</QuietLink>
             <QuietLink href="/contact">Get in touch</QuietLink>
           </div>
         </Reveal>

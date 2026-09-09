@@ -1,14 +1,23 @@
 /**
- * The four named works.
+ * The named works — now five, and no longer purely decorative.
  *
- * NOTE — `blurb` is placeholder copy written to keep the pages from reading as
- * empty. It is not brand-approved. Replace each line (and `pairsWith`, which is
- * a guess at the tonal match) with the real story before launch.
+ * On the returned content form the owner redefined these as "the Archetypes …
+ * essentially a category for tea blends", so they double as the site's
+ * taxonomy: every product carries the slug of the archetype it belongs to.
+ * The pages themselves stay editorial by request — they link to the blend
+ * rather than listing products.
+ *
+ * Descriptions and pairings below are the owner's own words.
  */
 export type Muse = {
   slug: string;
   name: string;
-  image: string;
+  /**
+   * Null where no artwork exists yet. The Old-Soul was added on the content
+   * form without a painting; those plates render typographically instead of
+   * showing a photograph.
+   */
+  image: string | null;
   alt: string;
   blurb: string;
   /** Slug of the blend this work is shown alongside. */
@@ -22,7 +31,7 @@ export const MUSES: Muse[] = [
     image: '/images/muses/the-free-spirit.jpg',
     alt: 'A deep green horse in profile, mane streaming, painted against warm peach',
     blurb:
-      'Movement held still. Painted in the house green against a warm ground, for the part of a morning that refuses to be scheduled.',
+      'The Free Spirit moves by instinct — toward the coast no one recommended, the conversation that runs too long, the plan abandoned the moment something better appears. Freedom is not rebellion. It is simply the shape attention takes when nothing is holding it down.',
     pairsWith: 'peach-me-green',
   },
   {
@@ -31,8 +40,8 @@ export const MUSES: Muse[] = [
     image: '/images/muses/the-poet.jpg',
     alt: 'Two hands writing a letter in a bound journal with a fountain pen',
     blurb:
-      'A letter mid-sentence. The quietest of the four, and the one that most needs a cup going cold beside it.',
-    pairsWith: 'rose-vitalitea',
+      'Language, for the Poet, is not decoration but excavation — reaching past the obvious word for the true one, willing to sit in silence until it arrives. It is simply how thought looks before it is ready to be read.',
+    pairsWith: 'coco-breeze',
   },
   {
     slug: 'the-dreamer',
@@ -40,17 +49,27 @@ export const MUSES: Muse[] = [
     image: '/images/muses/the-dreamer.jpg',
     alt: 'A woman with a full amber halo of hair, face lifted, eyes closed',
     blurb:
-      'Head tilted back, eyes closed, hair caught like late light. Painted for the pause rather than the plan.',
+      'The Dreamer occupies the threshold between waking and sleep — a territory the practical dismiss as distraction, but which functions in fact as a kind of fidelity: to a life still being drafted, to a self not yet finished arriving. This is not escapism. It is preparation conducted in a register most people have stopped listening to.',
     pairsWith: 'lavender-lullaby',
   },
   {
-    slug: 'romance',
-    name: 'Romance',
+    slug: 'the-romantic',
+    name: 'The Romantic',
     image: '/images/muses/romance.jpg',
     alt: 'Two clasped hands in deep red against burnt orange, a ring catching the light',
     blurb:
-      'Two hands and a single point of gold. The warmest of the set, and the least willing to explain itself.',
-    pairsWith: 'coco-breeze',
+      'The Romantic is a study in unhurried devotion. Not the performance of love — the architecture of it. A letter drafted and reconsidered, a window left open through winter, a preference for one rose over an arrangement of many. Where others move toward conquest, the Romantic moves toward attention, treating tenderness as a discipline rather than a mood.',
+    pairsWith: 'rose-vitalitea',
+  },
+  {
+    // ARTWORK PENDING — added on the content form with no painting supplied.
+    slug: 'the-old-soul',
+    name: 'The Old-Soul',
+    image: null,
+    alt: '',
+    blurb:
+      'The Old-Soul carries a gravity that seems borrowed from an earlier century — a preference for letters over messages, for rooms with history in their walls. This is not nostalgia. It is loyalty extended toward whatever has already proven itself worth keeping.',
+    pairsWith: 'classic-thyme',
   },
 ];
 
