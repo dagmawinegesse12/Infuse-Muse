@@ -501,7 +501,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__video {
+  .hero__video,
+  .hero__sound {
     display: none;
   }
 }

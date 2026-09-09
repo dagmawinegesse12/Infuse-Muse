@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { HeroVideo } from '@/components/home/hero-video';
 
 /**
  * Full-bleed film, near-silent chrome, and one small plate floating at centre —
  * the device the reference uses to open its season.
  *
- * The video is decorative: muted, looping, inline, and never the sole carrier of
- * meaning. `hero__still` sits underneath as the poster and is the only thing
- * shown when the viewer has asked for reduced motion (see globals.css).
+ * The film starts muted so it is allowed to autoplay, and offers a sound
+ * control — see HeroVideo. It is never the sole carrier of meaning.
+ * `hero__still` sits underneath as the poster and is the only thing shown when
+ * the viewer has asked for reduced motion (see globals.css).
  *
  * On `parchment` the media is inset rather than full-height, because a dark
  * frame bled edge to edge on a pale ground reads as a hole in the page.
@@ -19,7 +21,7 @@ export function Hero() {
         {/* Poster, and the only media shown under reduced motion. */}
         <Image
           src="/video/hero-poster.jpg"
-          alt="Tea steeping in a glass pot, filmed in close detail"
+          alt="A figure at the shoreline under a full moon, filmed at night"
           fill
           priority
           sizes="100vw"
@@ -27,20 +29,7 @@ export function Hero() {
           style={{ objectPosition: '50% 55%' }}
         />
 
-        <video
-          className="hero__video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/video/hero-poster.jpg"
-          aria-hidden="true"
-          tabIndex={-1}
-        >
-          <source src="/video/hero.webm" type="video/webm" />
-          <source src="/video/hero.mp4" type="video/mp4" />
-        </video>
+        <HeroVideo />
 
         <div className="absolute inset-0" style={{ background: 'var(--hero-veil)' }} />
 
