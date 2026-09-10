@@ -1,5 +1,11 @@
 import { sanityClient, sanityEnabled } from "./sanity";
 import {
+  fetchShopifyProduct,
+  fetchShopifyProducts,
+  mapShopifyProduct,
+  shopifyEnabled,
+} from "./shopify";
+import {
   demoCategories,
   demoFaqs,
   demoHomepage,
@@ -38,7 +44,40 @@ const productProjection = `
   seoDescription
 `;
 
+/**
+ * Shopify is the source of truth for products once it is configured. An empty
+ * result (nothing Active and published to Headless yet) or an error falls
+ * through to Sanity, then the local data, so the site never renders blank.
+ */
+async function getShopifyProducts(): Promise<Product[] | null> {
+  if (!shopifyEnabled) return null;
+  try {
+    const nodes = await fetchShopifyProducts();
+    if (nodes.length === 0) return null;
+    return nodes.map((node) =>
+      mapShopifyProduct(node, demoProducts.find((p) => p.slug === node.handle))
+    );
+  } catch (error) {
+    console.error("[data] Shopify products failed, falling back:", error);
+    return null;
+  }
+}
+
+async function getShopifyProduct(slug: string, fallback: Product | null): Promise<Product | null> {
+  if (!shopifyEnabled) return null;
+  try {
+    const node = await fetchShopifyProduct(slug);
+    return node ? mapShopifyProduct(node, fallback) : null;
+  } catch (error) {
+    console.error(`[data] Shopify product "${slug}" failed, falling back:`, error);
+    return null;
+  }
+}
+
 export async function getProducts(): Promise<Product[]> {
+  const fromShopify = await getShopifyProducts();
+  if (fromShopify) return fromShopify;
+
   if (!sanityEnabled || !sanityClient) return demoProducts;
 
   try {
@@ -56,7 +95,7 @@ export async function getProducts(): Promise<Product[]> {
         image:
           product.image ||
           fallback?.image ||
-          "/images/products/rose-vitalitea.png",
+          "/images/products/rose-vitalitea.jpg",
         alt: product.alt || fallback?.alt || product.title,
         size: product.size || fallback?.size || "",
         brewing: product.brewing ||
@@ -72,6 +111,9 @@ export async function getProducts(): Promise<Product[]> {
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const fallback = demoProducts.find((product) => product.slug === slug) ?? null;
 
+  const fromShopify = await getShopifyProduct(slug, fallback);
+  if (fromShopify) return fromShopify;
+
   if (!sanityEnabled || !sanityClient) return fallback;
 
   try {
@@ -84,7 +126,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
     return {
       ...product,
-      image: product.image || fallback?.image || "/images/products/rose-vitalitea.png",
+      image: product.image || fallback?.image || "/images/products/rose-vitalitea.jpg",
       alt: product.alt || fallback?.alt || product.title,
       size: product.size || fallback?.size || "",
       brewing: product.brewing ||

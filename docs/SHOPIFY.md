@@ -1,6 +1,13 @@
 # Shopify Integration — Assessment & Costs
 
-Status: **proposal, nothing built.** Prepared 9 September 2026 for the owner meeting.
+Status: prepared 9 September 2026 for the owner meeting. **Updated 10 September:**
+the account exists (Basic, $1/mo until 31 Oct 2026, then $49; card rate
+2.8% + $0.30). Metafields, five archetype collections and five products are in
+the admin, Active and published to the Headless channel only. The Headless app
+is installed and the site reads products through `apps/web/lib/shopify.ts`
+(Storefront API, falls back to Sanity then local data). Still open: Shopify
+Payments, domain, stock counts, photos in Shopify, and the cart/checkout
+migration below.
 
 ## Why this came up
 
