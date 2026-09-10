@@ -18,19 +18,31 @@ const PRICES: Record<string, { name: string; price: number }> = {
  */
 function fakeCartServer() {
   const carts = new Map<string, CartItem[]>();
+  const codes = new Map<string, string>();
   let nextLine = 1;
   const snapshot = (id: string): CartSnapshot => {
     const lines = carts.get(id) ?? [];
+    const subtotal = lines.reduce((s, l) => s + l.price * l.quantity, 0);
+    const code = codes.get(id);
+    // The only real code is FAMILY, worth 30%.
+    const discount = code === 'FAMILY' ? Math.round(subtotal * 0.3) : 0;
     return {
       id,
       checkoutUrl: `https://shop.example/checkout/${id}`,
       currency: 'CAD',
-      subtotal: lines.reduce((s, l) => s + l.price * l.quantity, 0),
+      subtotal,
+      discount,
+      total: subtotal - discount,
+      discountCodes: code ? [{ code, applicable: code === 'FAMILY' }] : [],
       lines,
     };
   };
   const handle = (req: CartRequest): CartSnapshot | null => {
     switch (req.op) {
+      case 'discount':
+        if (req.code) codes.set(req.cartId, req.code);
+        else codes.delete(req.cartId);
+        return snapshot(req.cartId);
       case 'get':
         return carts.has(req.cartId) ? snapshot(req.cartId) : null;
       case 'add': {
@@ -62,10 +74,13 @@ function fakeCartServer() {
     if (req.op === 'add' && req.variantId === 'gid://shopify/ProductVariant/sold-out') {
       return new Response(JSON.stringify({ error: 'This product is sold out.' }), { status: 400 });
     }
+    if (req.op === 'discount' && req.code && req.code !== 'FAMILY') {
+      return new Response(JSON.stringify({ error: 'That code is not valid for this bag.' }), { status: 400 });
+    }
     return new Response(JSON.stringify({ cart: handle(req) }));
   });
   vi.stubGlobal('fetch', fetchMock);
-  return { carts, fetchMock };
+  return { carts, codes, fetchMock };
 }
 
 const wrapper = ({ children }: PropsWithChildren) => <CartProvider>{children}</CartProvider>;
@@ -180,6 +195,47 @@ describe('cart', () => {
     const { result } = await mountCart();
     expect(result.current.state.items).toEqual([]);
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
+  });
+
+  it('applies a code to the bag and shows the saving', async () => {
+    const { result } = await mountCart();
+    await act(() => result.current.addItem({ variantId: ROSE }));
+    await act(() => result.current.applyDiscount('family'));
+    expect(result.current.state.discountCode).toBe('FAMILY');
+    expect(result.current.state.discount).toBe(540);
+    expect(result.current.state.total).toBe(1260);
+    await act(() => result.current.removeDiscount());
+    expect(result.current.state.discountCode).toBeNull();
+    expect(result.current.state.total).toBe(1800);
+  });
+
+  it('tells the customer when a code is refused and keeps the bag', async () => {
+    const { result } = await mountCart();
+    await act(() => result.current.addItem({ variantId: ROSE }));
+    await act(() => result.current.applyDiscount('NOPE'));
+    expect(result.current.state.error).toMatch(/not valid/);
+    expect(result.current.state.discountCode).toBeNull();
+    expect(result.current.itemCount).toBe(1);
+  });
+
+  it('holds a code entered before there is a bag and applies it on the first add', async () => {
+    const { result } = await mountCart();
+    await act(() => result.current.applyDiscount('FAMILY'));
+    expect(server.fetchMock).not.toHaveBeenCalled();
+    await act(() => result.current.addItem({ variantId: ROSE }));
+    expect(result.current.state.discountCode).toBe('FAMILY');
+    expect(result.current.state.total).toBe(1260);
+  });
+
+  it('takes a code from a ?discount= share link and cleans the address bar', async () => {
+    window.history.replaceState(null, '', '/?discount=family&x=1');
+    const { result } = await mountCart();
+    expect(window.location.search).toBe('?x=1');
+    await act(() => result.current.addItem({ variantId: MINT }));
+    expect(result.current.state.discountCode).toBe('FAMILY');
+    // Used once; a later visit without the link must not re-apply it.
+    expect(window.localStorage.getItem('infuse-and-muse-discount')).toBeNull();
+    window.history.replaceState(null, '', '/');
   });
 
   it('survives an unreachable server on load', async () => {

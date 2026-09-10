@@ -16,10 +16,13 @@ const CART_FIELDS = `
   checkoutUrl
   totalQuantity
   cost { subtotalAmount { amount currencyCode } }
+  discountCodes { code applicable }
+  discountAllocations { discountedAmount { amount } }
   lines(first: 50) {
     nodes {
       id
       quantity
+      discountAllocations { discountedAmount { amount } }
       merchandise {
         ... on ProductVariant {
           id
@@ -36,10 +39,13 @@ export type CartNode = {
   checkoutUrl: string;
   totalQuantity: number;
   cost: { subtotalAmount: { amount: string; currencyCode: string } };
+  discountCodes: { code: string; applicable: boolean }[];
+  discountAllocations: { discountedAmount: { amount: string } }[];
   lines: {
     nodes: {
       id: string;
       quantity: number;
+      discountAllocations: { discountedAmount: { amount: string } }[];
       merchandise: {
         id: string;
         price: { amount: string; currencyCode: string };
@@ -69,11 +75,23 @@ export function mapCart(cart: CartNode): CartSnapshot {
     };
   });
 
+  // An order-level code is allocated across the lines; a cart-level one sits
+  // on the cart. Summing both gives what the customer actually saves.
+  const sumAllocations = (a: { discountedAmount: { amount: string } }[]) =>
+    a.reduce((sum, d) => sum + toCents(d.discountedAmount.amount), 0);
+  const discount =
+    sumAllocations(cart.discountAllocations) +
+    cart.lines.nodes.reduce((sum, l) => sum + sumAllocations(l.discountAllocations), 0);
+  const subtotal = toCents(cart.cost.subtotalAmount.amount);
+
   return {
     id: cart.id,
     checkoutUrl: cart.checkoutUrl,
     currency: cart.cost.subtotalAmount.currencyCode,
-    subtotal: toCents(cart.cost.subtotalAmount.amount),
+    subtotal,
+    discount,
+    total: Math.max(0, subtotal - discount),
+    discountCodes: cart.discountCodes.map((d) => ({ code: d.code, applicable: d.applicable })),
     lines,
   };
 }
@@ -139,6 +157,22 @@ export function updateLine(
       cartLinesUpdate(cartId: $cartId, lines: $lines) { cart { ${CART_FIELDS} } userErrors { message } }
     }`,
     { cartId, lines: [{ id: lineId, quantity }] }
+  );
+}
+
+/**
+ * Replaces the cart's discount codes. Pass [] to clear. Shopify does not
+ * error on an unknown code; it comes back with `applicable: false`.
+ */
+export function updateDiscountCodes(cartId: string, codes: string[]): Promise<CartSnapshot | null> {
+  return mutate(
+    "cartDiscountCodesUpdate",
+    `mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]!) {
+      cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+        cart { ${CART_FIELDS} } userErrors { message }
+      }
+    }`,
+    { cartId, discountCodes: codes }
   );
 }
 

@@ -6,6 +6,7 @@ import {
   createCart,
   getCart,
   removeLines,
+  updateDiscountCodes,
   updateLine,
 } from '@/lib/shopify-cart';
 import type { CartRequest } from '@/lib/cart/cart-types';
@@ -20,6 +21,8 @@ const VARIANT_PREFIX = 'gid://shopify/ProductVariant/';
 const CART_PREFIX = 'gid://shopify/Cart/';
 const LINE_PREFIX = 'gid://shopify/CartLine/';
 const MAX_QUANTITY = 50;
+// Shopify codes are letters, digits and a few separators; anything else is noise.
+const CODE_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 
 const bad = (error: string, status = 400) => NextResponse.json({ error }, { status });
 
@@ -49,6 +52,12 @@ function parse(body: unknown): CartRequest | null {
       return { op: 'update', cartId, lineId, quantity };
     case 'remove':
       return cartId && lineId ? { op: 'remove', cartId, lineId } : null;
+    case 'discount': {
+      if (!cartId || typeof b.code !== 'string') return null;
+      const code = b.code.trim().toUpperCase();
+      if (code !== '' && !CODE_PATTERN.test(code)) return null;
+      return { op: 'discount', cartId, code };
+    }
     default:
       return null;
   }
@@ -89,6 +98,17 @@ export async function POST(request: Request) {
         return NextResponse.json({ cart: await updateLine(req.cartId, req.lineId, req.quantity) });
       case 'remove':
         return NextResponse.json({ cart: await removeLines(req.cartId, [req.lineId]) });
+      case 'discount': {
+        const cart = await updateDiscountCodes(req.cartId, req.code ? [req.code] : []);
+        // Shopify keeps an unknown code on the cart flagged inapplicable.
+        // Take it off again and tell the customer, rather than showing a
+        // code that does nothing.
+        if (cart && req.code && !cart.discountCodes.some((d) => d.applicable)) {
+          await updateDiscountCodes(req.cartId, []);
+          return bad('That code is not valid for this bag.');
+        }
+        return NextResponse.json({ cart });
+      }
     }
   } catch (error) {
     if (error instanceof CartError) return bad(error.message);

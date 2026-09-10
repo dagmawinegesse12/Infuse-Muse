@@ -10,11 +10,14 @@ const cartNode = (over: Partial<CartNode> = {}): CartNode => ({
   checkoutUrl: 'https://example.myshopify.com/cart/c/abc',
   totalQuantity: 2,
   cost: { subtotalAmount: { amount: '59.90', currencyCode: 'CAD' } },
+  discountCodes: [],
+  discountAllocations: [],
   lines: {
     nodes: [
       {
         id: LINE,
         quantity: 2,
+        discountAllocations: [],
         merchandise: {
           id: VARIANT,
           price: { amount: '29.95', currencyCode: 'CAD' },
@@ -128,6 +131,48 @@ describe('POST /api/cart', () => {
 
     expect(res.status).toBe(400);
     expect((await res.json()).error).toMatch(/sold out/);
+  });
+
+  it('applies a code and reports the saving from the line allocations', async () => {
+    const discounted = cartNode({
+      discountCodes: [{ code: 'INFUSEFAMILY', applicable: true }],
+      lines: {
+        nodes: [{ ...cartNode().lines.nodes[0], discountAllocations: [{ discountedAmount: { amount: '17.97' } }] }],
+      },
+    });
+    const calls = fakeShopify({ cartDiscountCodesUpdate: () => ({ cart: discounted, userErrors: [] }) });
+    const res = await post({ op: 'discount', cartId: CART, code: ' infusefamily ' });
+    const { cart } = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(calls[0].variables).toEqual({ cartId: CART, discountCodes: ['INFUSEFAMILY'] });
+    expect(cart.discountCodes).toEqual([{ code: 'INFUSEFAMILY', applicable: true }]);
+    expect(cart.discount).toBe(1797);
+    expect(cart.total).toBe(5990 - 1797);
+  });
+
+  it('rejects a code Shopify marks inapplicable and clears it again', async () => {
+    const calls = fakeShopify({
+      cartDiscountCodesUpdate: (vars) => ({
+        cart: cartNode({
+          discountCodes: (vars.discountCodes as string[]).map((code) => ({ code, applicable: false })),
+        }),
+        userErrors: [],
+      }),
+    });
+    const res = await post({ op: 'discount', cartId: CART, code: 'NOPE' });
+
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toMatch(/not valid/);
+    expect(calls.map((c) => c.variables.discountCodes)).toEqual([['NOPE'], []]);
+  });
+
+  it('clears codes when given an empty one, and rejects junk', async () => {
+    const calls = fakeShopify({ cartDiscountCodesUpdate: () => ({ cart: cartNode(), userErrors: [] }) });
+    expect((await post({ op: 'discount', cartId: CART, code: '' })).status).toBe(200);
+    expect(calls[0].variables.discountCodes).toEqual([]);
+    expect((await post({ op: 'discount', cartId: CART, code: 'bad code!' })).status).toBe(400);
+    expect((await post({ op: 'discount', code: 'X' })).status).toBe(400);
   });
 
   it('answers null for a cart Shopify no longer has', async () => {

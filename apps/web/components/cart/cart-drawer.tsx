@@ -115,10 +115,16 @@ export function CartDrawer() {
               {state.error}
             </p>
           ) : null}
+          {state.discountCode ? (
+            <div className="mb-3 flex items-baseline justify-between">
+              <span className="t-label">Code {state.discountCode}</span>
+              <span className="t-price">−{formatPrice(state.discount, state.currency)}</span>
+            </div>
+          ) : null}
           <div className="mb-6 flex items-baseline justify-between">
             <span className="t-label">Subtotal</span>
             <span className="t-price text-[1.0625rem]">
-              {formatPrice(subtotal, state.currency)}
+              {formatPrice(state.discountCode ? state.total : subtotal, state.currency)}
             </span>
           </div>
           <Button href="/cart" className="w-full">

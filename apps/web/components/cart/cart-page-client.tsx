@@ -6,6 +6,7 @@ import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { QuietLink } from '@/components/system/quiet-link';
 import { QuantityStepper } from '@/components/cart/quantity-stepper';
+import { DiscountField } from '@/components/cart/discount-field';
 
 export function CartPageClient() {
   const { state, subtotal, checkoutUrl, setQuantity, removeItem, clearCart } = useCart();
@@ -98,6 +99,9 @@ export function CartPageClient() {
             <dt className="t-body">Subtotal</dt>
             <dd className="t-price">{formatPrice(subtotal, state.currency)}</dd>
           </div>
+        </dl>
+        <DiscountField />
+        <dl>
           <div
             className="flex justify-between border-t py-4"
             style={{ borderColor: 'var(--rule)' }}
@@ -110,7 +114,7 @@ export function CartPageClient() {
             style={{ borderColor: 'var(--rule-strong)' }}
           >
             <dt className="t-sub">Total before shipping</dt>
-            <dd className="t-price text-[1.125rem]">{formatPrice(subtotal, state.currency)}</dd>
+            <dd className="t-price text-[1.125rem]">{formatPrice(state.total, state.currency)}</dd>
           </div>
         </dl>
 

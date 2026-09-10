@@ -35,7 +35,7 @@ function stubCartApi() {
         ? [{ id: 'gid://shopify/CartLine/1', variantId: VARIANT, slug: 'rose-vitalitea', name: 'Rose VitaliTea', image: '', price: 1800, quantity }]
         : [];
       return new Response(
-        JSON.stringify({ cart: { id: 'gid://shopify/Cart/1', checkoutUrl: 'https://x/c', currency: 'CAD', subtotal: 1800 * quantity, lines } })
+        JSON.stringify({ cart: { id: 'gid://shopify/Cart/1', checkoutUrl: 'https://x/c', currency: 'CAD', subtotal: 1800 * quantity, discount: 0, total: 1800 * quantity, discountCodes: [], lines } })
       );
     })
   );
