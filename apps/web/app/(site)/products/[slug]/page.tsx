@@ -54,15 +54,25 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       <SchemaScript data={schema} />
 
       <div className="grid lg:grid-cols-2">
-        {/* The photograph runs to the edge and holds its own column. */}
-        <div className="plate relative min-h-[70vw] lg:sticky lg:top-0 lg:h-screen lg:min-h-0">
+        {/* The photograph holds its own column and is never cropped: a blurred
+            copy of itself fills whatever the column's shape leaves over. On
+            large screens it sits below the fixed header, not under it. */}
+        <div className="plate relative mt-[var(--header-h)] aspect-[4/5] lg:sticky lg:top-[var(--header-h)] lg:mt-0 lg:aspect-auto lg:h-[calc(100svh-var(--header-h))]">
+          <Image
+            src={product.image}
+            alt=""
+            aria-hidden
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="scale-110 object-cover opacity-70 blur-2xl"
+          />
           <Image
             src={product.image}
             alt={product.alt}
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="object-contain"
           />
         </div>
 

@@ -514,10 +514,6 @@ body {
 [data-muse='parchment'] .hero__frame {
   padding: clamp(5.5rem, 8vw, 7rem) var(--gutter) 0;
 }
-/* The cue belongs to a full-height hero; the inset plate does not have one. */
-[data-muse='parchment'] .hero__cue {
-  display: none;
-}
 [data-muse='parchment'] .hero__media {
   height: min(76vh, 780px);
 }

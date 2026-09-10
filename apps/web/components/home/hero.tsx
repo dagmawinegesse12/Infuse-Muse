@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { HeroVideo } from '@/components/home/hero-video';
 
 /**
- * Full-bleed film, near-silent chrome, and one small plate floating at centre —
- * the device the reference uses to open its season.
+ * Full-bleed film, near-silent chrome, and one small plate held low in the
+ * frame so the film itself is what greets the viewer.
  *
  * The film starts muted so it is allowed to autoplay, and offers a sound
  * control — see HeroVideo. It is never the sole carrier of meaning.
@@ -33,8 +33,9 @@ export function Hero() {
 
         <div className="absolute inset-0" style={{ background: 'var(--hero-veil)' }} />
 
-        {/* Centre plate */}
-        <div className="absolute inset-0 flex items-center justify-center px-[var(--gutter)]">
+        {/* Plate, low in the frame so the film's subject stays clear of it.
+            Extra clearance on phones keeps it above the sound control. */}
+        <div className="absolute inset-0 flex items-end justify-center px-[var(--gutter)] pb-[calc(var(--gutter)+4.25rem)] sm:pb-[clamp(2.5rem,7vh,4.5rem)]">
           <div
             className="w-full max-w-[22rem] px-8 py-10 text-center"
             style={{ background: 'var(--plate)', color: 'var(--plate-ink)' }}
@@ -66,17 +67,6 @@ export function Hero() {
               </Link>
             </div>
           </div>
-        </div>
-
-        {/* Scroll cue — a hairline that breathes. */}
-        <div className="hero__cue absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 sm:flex">
-          <span className="t-label" style={{ color: 'var(--on-media-mute)' }}>
-            Scroll
-          </span>
-          <span
-            className="block h-10 w-px origin-top"
-            style={{ background: 'var(--on-media)', opacity: 0.35 }}
-          />
         </div>
       </div>
     </section>
