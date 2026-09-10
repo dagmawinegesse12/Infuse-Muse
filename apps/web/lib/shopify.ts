@@ -21,9 +21,15 @@ export const shopifyEnabled = Boolean(domain && (privateToken || publicToken));
 /** Seconds a product read is cached before Next refetches it. */
 const REVALIDATE_SECONDS = 60;
 
+/**
+ * Product reads are cached and tagged so a Shopify webhook can purge them
+ * (see app/api/revalidate). Cart calls must never be cached: pass
+ * `{ cache: "no-store" }`.
+ */
 export async function storefrontFetch<T>(
   query: string,
-  variables: Record<string, unknown> = {}
+  variables: Record<string, unknown> = {},
+  options: { cache?: "no-store" } = {}
 ): Promise<T> {
   if (!shopifyEnabled) throw new Error("Shopify is not configured.");
 
@@ -35,7 +41,9 @@ export async function storefrontFetch<T>(
     method: "POST",
     headers,
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: REVALIDATE_SECONDS, tags: ["shopify"] },
+    ...(options.cache === "no-store"
+      ? { cache: "no-store" as const }
+      : { next: { revalidate: REVALIDATE_SECONDS, tags: ["shopify"] } }),
   });
 
   if (!res.ok) throw new Error(`Shopify responded ${res.status}.`);
@@ -70,6 +78,8 @@ const PRODUCT_FIELDS = `
   collections(first: 10) { nodes { handle title } }
   variants(first: 1) {
     nodes {
+      id
+      availableForSale
       price { amount currencyCode }
       selectedOptions { name value }
     }
@@ -89,6 +99,8 @@ export type ShopifyProductNode = {
   collections: { nodes: { handle: string; title: string }[] };
   variants: {
     nodes: {
+      id: string;
+      availableForSale: boolean;
       price: { amount: string; currencyCode: string };
       selectedOptions: { name: string; value: string }[];
     }[];
@@ -139,6 +151,8 @@ export function mapShopifyProduct(node: ShopifyProductNode, fallback?: Product |
     alt: node.featuredImage?.altText || fallback?.alt || node.title,
     priceCents: variant ? Math.round(Number(variant.price.amount) * 100) : fallback?.priceCents ?? 0,
     currency: variant?.price.currencyCode || fallback?.currency || "CAD",
+    variantId: variant?.id,
+    availableForSale: variant?.availableForSale,
     size: size || fallback?.size || "",
     brewing: {
       temperature: fields.get("brew_temperature") || fallback?.brewing.temperature || "",

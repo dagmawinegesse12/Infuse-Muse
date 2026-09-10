@@ -41,7 +41,7 @@ export default function TermsPage() {
         <ProseSection index={2} heading="Prices and payment">
           <P>
             All prices are in Canadian dollars and exclude applicable taxes, which are
-            calculated at checkout. Payment is processed by Stripe. We may change prices
+            calculated at checkout. Payment is processed by Shopify. We may change prices
             at any time, but never after an order is confirmed.
           </P>
           <P>

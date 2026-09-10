@@ -41,8 +41,8 @@ export default function PrivacyPage() {
             ]}
           />
           <P>
-            We do not see or store your card number. Payments are handled entirely by
-            Stripe, and card details never reach our servers.
+            We do not see or store your card number. Checkout and payment are handled
+            entirely by Shopify, and card details never reach our servers.
           </P>
         </ProseSection>
 
@@ -64,9 +64,9 @@ export default function PrivacyPage() {
         <ProseSection index={3} heading="Who processes it for us">
           <P>
             A small number of service providers handle data on our behalf, each bound to
-            use it only for that purpose: Stripe for payments, Resend for transactional
-            email, Vercel for hosting, and Sanity for content. Each maintains its own
-            privacy commitments.
+            use it only for that purpose: Shopify for orders, payment and shipping,
+            Resend for transactional email, Vercel for hosting, and Sanity for content.
+            Each maintains its own privacy commitments.
           </P>
         </ProseSection>
 

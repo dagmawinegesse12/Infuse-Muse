@@ -77,9 +77,13 @@ export function CartDrawer() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="t-sub">{item.name}</h3>
-                    <p className="t-label mt-2">{formatPrice(item.price)} each</p>
+                    <p className="t-label mt-2">
+                      {formatPrice(item.price, state.currency)} each
+                    </p>
                   </div>
-                  <p className="t-price">{formatPrice(item.price * item.quantity)}</p>
+                  <p className="t-price">
+                    {formatPrice(item.price * item.quantity, state.currency)}
+                  </p>
                 </div>
                 <div className="mt-5 flex items-center justify-between">
                   <QuantityStepper
@@ -104,10 +108,18 @@ export function CartDrawer() {
         <div
           className="border-t px-[clamp(1.25rem,4vw,2rem)] py-6"
           style={{ borderColor: 'var(--rule)' }}
+          aria-busy={state.pending}
         >
+          {state.error ? (
+            <p role="alert" className="t-body mb-5" style={{ color: '#e08a7a' }}>
+              {state.error}
+            </p>
+          ) : null}
           <div className="mb-6 flex items-baseline justify-between">
             <span className="t-label">Subtotal</span>
-            <span className="t-price text-[1.0625rem]">{formatPrice(subtotal)}</span>
+            <span className="t-price text-[1.0625rem]">
+              {formatPrice(subtotal, state.currency)}
+            </span>
           </div>
           <Button href="/cart" className="w-full">
             Review bag

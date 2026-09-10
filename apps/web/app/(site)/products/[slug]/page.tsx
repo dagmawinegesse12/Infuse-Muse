@@ -41,7 +41,10 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       '@type': 'Offer',
       priceCurrency: product.currency,
       price: (product.priceCents / 100).toFixed(2),
-      availability: 'https://schema.org/InStock',
+      availability:
+        product.availableForSale === false
+          ? 'https://schema.org/OutOfStock'
+          : 'https://schema.org/InStock',
       url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/products/${product.slug}`,
     },
   };

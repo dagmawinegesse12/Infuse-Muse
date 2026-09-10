@@ -15,6 +15,13 @@ export type Product = {
   alt: string;
   priceCents: number;
   currency: string;
+  /**
+   * Shopify variant GID the cart adds. Absent on local fallback data, in
+   * which case nothing can be bought and the add controls say so.
+   */
+  variantId?: string;
+  /** False once Shopify reports the variant sold out. Absent means unknown. */
+  availableForSale?: boolean;
   /** Net weight as sold, e.g. "75 g". */
   size: string;
   /** Water temperature, steeping time and dose. */

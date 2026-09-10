@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '@/lib/cart/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -8,32 +8,31 @@ import { QuietLink } from '@/components/system/quiet-link';
 import { QuantityStepper } from '@/components/cart/quantity-stepper';
 
 export function CartPageClient() {
-  const { state, subtotal, setQuantity, removeItem, clearCart } = useCart();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { state, subtotal, checkoutUrl, setQuantity, removeItem, clearCart } = useCart();
+  const [leaving, setLeaving] = useState(false);
 
-  async function handleCheckout() {
-    if (loading) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: state.items }),
-      });
-      const data = await response.json();
-      if (!response.ok || !data.url) {
-        setError(data.error ?? 'Unable to start checkout. Please try again.');
-        setLoading(false);
-        return;
-      }
-      // Keep loading=true while Stripe redirects; the browser navigates away.
-      window.location.href = data.url;
-    } catch {
-      setError('Something went wrong. Please check your connection and try again.');
-      setLoading(false);
-    }
+  // Coming back from Shopify with the Back button can restore this page from
+  // the bfcache with `leaving` still true; let the button work again.
+  useEffect(() => {
+    const reset = () => setLeaving(false);
+    window.addEventListener('pageshow', reset);
+    return () => window.removeEventListener('pageshow', reset);
+  }, []);
+
+  function handleCheckout() {
+    if (!checkoutUrl || leaving) return;
+    // Shopify hosts payment, shipping and tax. Keep the button quiet while
+    // the browser navigates away.
+    setLeaving(true);
+    window.location.assign(checkoutUrl);
+  }
+
+  if (!state.hydrated) {
+    return (
+      <div className="border-t py-20 text-center" style={{ borderColor: 'var(--rule)' }}>
+        <p className="t-label">Loading your bag…</p>
+      </div>
+    );
   }
 
   if (state.items.length === 0) {
@@ -51,7 +50,10 @@ export function CartPageClient() {
   }
 
   return (
-    <div className="grid gap-x-[clamp(2rem,6vw,6rem)] gap-y-16 lg:grid-cols-[1.5fr_0.7fr] lg:items-start">
+    <div
+      className="grid gap-x-[clamp(2rem,6vw,6rem)] gap-y-16 lg:grid-cols-[1.5fr_0.7fr] lg:items-start"
+      aria-busy={state.pending}
+    >
       <div>
         {state.items.map((item) => (
           <div
@@ -61,7 +63,7 @@ export function CartPageClient() {
           >
             <div>
               <h2 className="t-sub">{item.name}</h2>
-              <p className="t-label mt-2">{formatPrice(item.price)} per pouch</p>
+              <p className="t-label mt-2">{formatPrice(item.price, state.currency)} per tin</p>
               <div className="mt-5">
                 <QuantityStepper
                   value={item.quantity}
@@ -71,7 +73,9 @@ export function CartPageClient() {
               </div>
             </div>
             <div className="flex items-center justify-between gap-8 sm:flex-col sm:items-end sm:gap-4">
-              <p className="t-price text-[1rem]">{formatPrice(item.quantity * item.price)}</p>
+              <p className="t-price text-[1rem]">
+                {formatPrice(item.quantity * item.price, state.currency)}
+              </p>
               <button
                 type="button"
                 onClick={() => removeItem(item.id)}
@@ -92,33 +96,33 @@ export function CartPageClient() {
             style={{ borderColor: 'var(--rule)' }}
           >
             <dt className="t-body">Subtotal</dt>
-            <dd className="t-price">{formatPrice(subtotal)}</dd>
+            <dd className="t-price">{formatPrice(subtotal, state.currency)}</dd>
           </div>
           <div
             className="flex justify-between border-t py-4"
             style={{ borderColor: 'var(--rule)' }}
           >
-            <dt className="t-body">Shipping</dt>
+            <dt className="t-body">Shipping and tax</dt>
             <dd className="t-body">Calculated at checkout</dd>
           </div>
           <div
             className="flex items-baseline justify-between border-t border-b py-5"
             style={{ borderColor: 'var(--rule-strong)' }}
           >
-            <dt className="t-sub">Total</dt>
-            <dd className="t-price text-[1.125rem]">{formatPrice(subtotal)}</dd>
+            <dt className="t-sub">Total before shipping</dt>
+            <dd className="t-price text-[1.125rem]">{formatPrice(subtotal, state.currency)}</dd>
           </div>
         </dl>
 
-        {error ? (
+        {state.error ? (
           <p role="alert" className="t-body mt-5" style={{ color: '#e08a7a' }}>
-            {error}
+            {state.error}
           </p>
         ) : null}
 
         <div className="mt-9 grid gap-6">
-          <Button onClick={handleCheckout} disabled={loading}>
-            {loading ? 'Redirecting…' : 'Checkout'}
+          <Button onClick={handleCheckout} disabled={!checkoutUrl || state.pending || leaving}>
+            {leaving ? 'Opening checkout…' : 'Checkout'}
           </Button>
           <button type="button" onClick={clearCart} className="quiet-link justify-self-start">
             Empty the bag

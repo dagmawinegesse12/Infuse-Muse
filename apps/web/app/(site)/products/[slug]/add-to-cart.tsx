@@ -5,22 +5,25 @@ import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 
 export function AddToCartButton({ product }: { product: Product }) {
-  const { addItem, openCart } = useCart();
+  const { addItem, state } = useCart();
+  const soldOut = product.availableForSale === false;
+  // Local fallback data has no variant, so there is nothing to sell.
+  const unavailable = !product.variantId;
+
+  if (soldOut || unavailable) {
+    return (
+      <Button disabled aria-disabled="true" style={{ opacity: 0.5 }}>
+        {soldOut ? 'Sold out' : 'Unavailable'}
+      </Button>
+    );
+  }
 
   return (
     <Button
-      onClick={() => {
-        addItem({
-          id: product._id,
-          slug: product.slug,
-          name: product.title,
-          image: product.image,
-          price: product.priceCents,
-        });
-        openCart();
-      }}
+      disabled={state.pending}
+      onClick={() => addItem({ variantId: product.variantId as string })}
     >
-      Add to bag
+      {state.pending ? 'Adding…' : 'Add to bag'}
     </Button>
   );
 }

@@ -50,21 +50,19 @@ export function ProductCard({ product, priority = false }: { product: Product; p
 
       <p className="t-body mt-3 line-clamp-2">{product.shortDescription}</p>
 
-      <button
-        type="button"
-        onClick={() =>
-          addItem({
-            id: product._id,
-            slug: product.slug,
-            name: product.title,
-            image: product.image,
-            price: product.priceCents,
-          })
-        }
-        className="quiet-link mt-5 opacity-0 transition-opacity duration-700 ease-muse focus-visible:opacity-100 group-hover:opacity-100"
-      >
-        Add to bag
-      </button>
+      {product.availableForSale === false ? (
+        <p className="t-label mt-5" style={{ opacity: 0.6 }}>
+          Sold out
+        </p>
+      ) : product.variantId ? (
+        <button
+          type="button"
+          onClick={() => addItem({ variantId: product.variantId as string })}
+          className="quiet-link mt-5 opacity-0 transition-opacity duration-700 ease-muse focus-visible:opacity-100 group-hover:opacity-100"
+        >
+          Add to bag
+        </button>
+      ) : null}
     </article>
   );
 }

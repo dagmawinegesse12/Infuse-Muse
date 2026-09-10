@@ -33,15 +33,19 @@ only. Leave Production and Development unchecked.
 | Variable | Preview value | Notes |
 |---|---|---|
 | `WAITLIST_MODE` | `off` | Opens the storefront. **Never tick Production.** |
-| `NEXT_PUBLIC_SITE_URL` | the preview URL | canonical links, sitemap, Stripe redirects |
-| `STRIPE_SECRET_KEY` | `sk_test_…` | test mode, so demo checkouts cost nothing |
-| `RESEND_API_KEY` | `re_…` | contact form and order email |
+| `NEXT_PUBLIC_SITE_URL` | the preview URL | canonical links, sitemap |
+| `SHOPIFY_STORE_DOMAIN` | `ymkz13-jq.myshopify.com` | the owner's store |
+| `SHOPIFY_STOREFRONT_PRIVATE_TOKEN` | `shpat_…` | server-side reads and cart; from Headless → Storefront API |
+| `SHOPIFY_STOREFRONT_PUBLIC_TOKEN` | the public token | fallback if the private one is unset |
+| `SHOPIFY_STOREFRONT_API_VERSION` | `2026-04` | pin; bump deliberately |
+| `SHOPIFY_WEBHOOK_SECRET` | signing secret | optional, see below |
+| `RESEND_API_KEY` | `re_…` | contact form and waitlist email |
 | `EMAIL_FROM` | `onboarding@resend.dev` | fine for testing |
 | `CONTACT_INBOX` | your address | where the contact form delivers |
 
-There is no publishable-key row: checkout creates the session server-side and
-redirects to `session.url`, so Stripe.js never runs in the browser and
-`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is unused.
+No Shopify token reaches the browser: the bag talks to `/api/cart`, which
+holds the token server-side, and Checkout is a redirect to Shopify's hosted
+checkout URL.
 
 Leave `RESEND_AUDIENCE_ID` **unset on Preview**. If the preview inherits the
 production audience, anyone testing the demo signup writes a real contact into
@@ -50,8 +54,9 @@ the live waitlist. With it unset the form returns a handled 503 instead.
 Sanity variables can stay empty; the site falls back to `lib/demo-data.ts`,
 which is what the demo shows.
 
-The build no longer fails when these are missing — Stripe and Resend clients
-construct lazily — but the demo will not function properly without them.
+The build does not fail when these are missing — the Resend client
+constructs lazily and the product layer falls back to local data — but
+without the Shopify variables nothing can be added to the bag.
 
 ## 3. Redeploy the branch
 
@@ -90,17 +95,20 @@ semi-private — it is not committed to this repo.
 **Settings → General → Node.js Version → 22.x.** The repo pins this in
 `.nvmrc`. Next 14 will not build on Node 16.
 
-## Optional: Stripe webhook
+## Optional: Shopify webhook for instant updates
 
-Only needed if you want order confirmation emails in the demo.
+Product pages cache Shopify reads for 60 seconds. To have a price or stock
+edit show at once:
 
-1. Stripe dashboard → add endpoint `https://<preview-url>/api/webhook`
-2. Subscribe to `checkout.session.completed`
-3. Put the signing secret in `STRIPE_WEBHOOK_SECRET` (Preview only)
+1. Shopify admin → Settings → Notifications → Webhooks → Create webhook
+2. Event `Product update` (repeat for `Product create`, `Product delete`,
+   `Collection update`), format JSON, URL `https://<site>/api/revalidate`
+3. Copy the signing secret shown on that page into `SHOPIFY_WEBHOOK_SECRET`
 
-Without it, checkout still completes; only the confirmation email is skipped.
-The success page reads line items from Stripe directly, so the order summary
-still renders.
+Without it everything still works; changes just take up to a minute.
+
+Order confirmation emails come from Shopify (Settings → Notifications),
+not from this site.
 
 ## Before this ever becomes the real site
 

@@ -12,50 +12,10 @@
  *      or a verified domain address for production)
  */
 import { getResend } from './client';
-import { generateOrderConfirmationHtml } from './templates/order-confirmation';
 import { generateWaitlistConfirmationHtml } from './templates/waitlist-confirmation';
 
-
-export type OrderItem = {
-  name: string;
-  qty: number;
-  unit: number; // price in cents
-};
-
-export type OrderConfirmationParams = {
-  to: string;
-  customerName?: string;
-  orderItems: OrderItem[];
-  amountTotal: number; // in cents
-  sessionId: string;
-};
-
-export async function sendOrderConfirmation(
-  params: OrderConfirmationParams
-): Promise<void> {
-  const { to, customerName, orderItems, amountTotal, sessionId } = params;
-
-  // Default from address works for Resend test sends.
-  // For production, set EMAIL_FROM to a verified domain address.
-  const from =
-    process.env.EMAIL_FROM || 'Infuse & Muse <onboarding@resend.dev>';
-
-  const { error } = await getResend().emails.send({
-    from,
-    to,
-    subject: 'Your Infuse & Muse order is confirmed ✓',
-    html: generateOrderConfirmationHtml({
-      customerName,
-      orderItems,
-      amountTotal,
-      sessionId,
-    }),
-  });
-
-  if (error) {
-    throw new Error(`Resend send failed: ${JSON.stringify(error)}`);
-  }
-}
+// Order confirmations are sent by Shopify since checkout moved there; this
+// service now covers only the emails the site itself originates.
 
 export async function sendWaitlistConfirmation(to: string): Promise<void> {
   const from =

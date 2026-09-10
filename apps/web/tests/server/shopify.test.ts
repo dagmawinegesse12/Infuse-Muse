@@ -11,7 +11,12 @@ const node = (over: Partial<ShopifyProductNode> = {}): ShopifyProductNode => ({
   seo: { title: 'Coco Breeze | Mint and Cacao Tea Blend', description: null },
   collections: { nodes: [{ handle: 'frontpage', title: 'Home page' }, { handle: 'the-poet', title: 'The Poet' }] },
   variants: {
-    nodes: [{ price: { amount: '29.95', currencyCode: 'CAD' }, selectedOptions: [{ name: 'Size', value: '75 g' }] }],
+    nodes: [{
+      id: 'gid://shopify/ProductVariant/11',
+      availableForSale: true,
+      price: { amount: '29.95', currencyCode: 'CAD' },
+      selectedOptions: [{ name: 'Size', value: '75 g' }],
+    }],
   },
   metafields: [
     { key: 'short_description', value: 'A cool, cacao-rich blend.' },
@@ -36,6 +41,8 @@ describe('mapShopifyProduct', () => {
       slug: 'coco-breeze',
       priceCents: 2995,
       currency: 'CAD',
+      variantId: 'gid://shopify/ProductVariant/11',
+      availableForSale: true,
       size: '75 g',
       shortDescription: 'A cool, cacao-rich blend.',
       tastingNotes: ['Mint', 'Chocolate', 'Earthy'],
@@ -51,9 +58,19 @@ describe('mapShopifyProduct', () => {
   it('rounds prices to whole cents', async () => {
     const { mapShopifyProduct } = await import('@/lib/shopify');
     const p = mapShopifyProduct(
-      node({ variants: { nodes: [{ price: { amount: '33.03', currencyCode: 'CAD' }, selectedOptions: [] }] } })
+      node({
+        variants: {
+          nodes: [{
+            id: 'gid://shopify/ProductVariant/12',
+            availableForSale: false,
+            price: { amount: '33.03', currencyCode: 'CAD' },
+            selectedOptions: [],
+          }],
+        },
+      })
     );
     expect(p.priceCents).toBe(3303);
+    expect(p.availableForSale).toBe(false);
   });
 
   it('borrows photo and featured flag from the local record, never allergens', async () => {
