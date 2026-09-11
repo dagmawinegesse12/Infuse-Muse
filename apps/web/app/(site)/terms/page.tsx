@@ -40,9 +40,9 @@ export default function TermsPage() {
 
         <ProseSection index={2} heading="Prices and payment">
           <P>
-            All prices are in Canadian dollars and exclude applicable taxes, which are
-            calculated at checkout. Payment is processed by Shopify. We may change prices
-            at any time, but never after an order is confirmed.
+            All prices are in Canadian dollars. Any taxes that apply are shown at
+            checkout, before you pay. Payment is processed by Shopify. We may change
+            prices at any time, but never after an order is confirmed.
           </P>
           <P>
             If an item is mispriced through obvious error, we may cancel the order and

@@ -172,9 +172,12 @@ font licence and Vercel Pro.
 
 1. Shopify account, plan chosen. Store currency CAD.
 2. Legal business name — **`Infuse & Muse Inc.`** per the content form.
-3. **CRA Business Number / GST-HST registration.** Shopify cannot charge tax
-   correctly without it. **Still blank on the content form** — and the owner's
-   prices are all quoted "+ HST", so they intend to charge it. Chase this.
+3. **GST/HST — decided 11 Sept 2026: not registering yet.** The owner is a new
+   business under the $30,000 small-supplier threshold, so the shop charges no
+   tax. The site's "plus HST" label was removed and the Terms now say taxes
+   "that apply are shown at checkout". When Shopify's tax liability insights
+   flag the threshold: register with the CRA, add the number under Taxes and
+   duties → Canada, and restore tax-exclusive wording on the product page.
 4. Bank account + ID for Shopify Payments (KYC — start early).
 5. Countries shipped to. Canada only, or US as well? **Blank on the form.**
 6. **Package weights.** Products are 75 g and 100 g net; we need gross packed
