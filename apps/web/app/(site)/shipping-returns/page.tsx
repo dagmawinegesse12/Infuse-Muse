@@ -10,7 +10,7 @@ export const metadata = createMetadata({
   path: '/shipping-returns',
 });
 
-const UPDATED = '29 August 2026';
+const UPDATED = '11 September 2026';
 const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@infuseandmuse.com';
 
 export default function ShippingReturnsPage() {
@@ -31,26 +31,29 @@ export default function ShippingReturnsPage() {
           </P>
         </ProseSection>
 
+        {/* Rates mirror Settings → Shipping and delivery in the Shopify admin.
+            Change them there first; checkout charges what Shopify says. */}
         <ProseSection index={1} heading="Delivery">
           <List
             items={[
-              'Within Ontario — 2 to 4 business days.',
-              'Rest of Canada — 4 to 8 business days.',
-              'Shipping is calculated at checkout, before you pay.',
+              'Standard — $12, 3 to 5 business days. Free on orders of $75 or more.',
+              'Express — $20, 1 to 2 business days.',
+              'We ship within Canada only for now.',
             ]}
           />
           <P>
-            Once a parcel is with the carrier its timing is outside our control, though
-            we will always help you chase it.
+            You will see the options and their cost at checkout, before you pay. Once a
+            parcel is with the carrier its timing is outside our control, though we will
+            always help you chase it.
           </P>
         </ProseSection>
 
         <ProseSection index={2} heading="Returns">
           <P>
-            Tea is a consumable, so we cannot accept returns on opened pouches — a
-            matter of food safety rather than preference. Unopened pouches in original
-            condition may be returned within 14 days of delivery. Return postage is
-            yours unless the fault is ours.
+            Tea is a consumable, so we cannot accept returns on opened tins — a matter
+            of food safety rather than preference. Unopened tins in original condition
+            may be returned within 14 days of delivery. Return postage is yours unless
+            the fault is ours.
           </P>
         </ProseSection>
 

@@ -8,7 +8,7 @@ export const metadata = createMetadata({
   path: '/terms',
 });
 
-const UPDATED = '29 August 2026';
+const UPDATED = '11 September 2026';
 const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@infuseandmuse.com';
 
 export default function TermsPage() {
@@ -23,7 +23,7 @@ export default function TermsPage() {
       <div className="shell pb-[var(--chapter)]">
         <ProseSection index={0} heading="Using this site">
           <P>
-            By browsing or ordering from infuseandmuse.ca you accept these terms. If you
+            By browsing or ordering from infuseandmuse.com you accept these terms. If you
             do not accept them, please do not use the site. You must be the age of
             majority in your province to place an order.
           </P>
