@@ -54,19 +54,11 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       <SchemaScript data={schema} />
 
       <div className="grid lg:grid-cols-2">
-        {/* The photograph holds its own column and is never cropped: a blurred
-            copy of itself fills whatever the column's shape leaves over. On
+        {/* The photograph fills its column edge to edge. The source shots are
+            square with the tin centred and room around it, so covering a
+            roughly square column only trims background, never the lid. On
             large screens it sits below the fixed header, not under it. */}
         <div className="plate relative mt-[var(--header-h)] aspect-[4/5] lg:sticky lg:top-[var(--header-h)] lg:mt-0 lg:aspect-auto lg:h-[calc(100svh-var(--header-h))]">
-          <ThemedImage
-            src={product.image}
-            srcLight={product.imageLight}
-            alt=""
-            aria-hidden
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="scale-110 object-cover opacity-70 blur-2xl"
-          />
           <ThemedImage
             src={product.image}
             srcLight={product.imageLight}
@@ -74,7 +66,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-contain"
+            className="object-cover"
           />
         </div>
 
