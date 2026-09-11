@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
+import { ThemedImage } from '@/components/system/themed-image';
 import type { Product } from '@/lib/types';
 import { useCart } from '@/lib/cart/cart-context';
 import { formatPrice } from '@/lib/utils';
@@ -18,8 +18,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
     <article className="group">
       <Link href={`/products/${product.slug}`} className="block">
         <div className="plate plate--hover relative aspect-[3/4]">
-          <Image
+          <ThemedImage
             src={product.image}
+            srcLight={product.imageLight}
             alt={product.alt || product.title}
             fill
             priority={priority}

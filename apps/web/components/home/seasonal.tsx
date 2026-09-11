@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import { ThemedImage } from '@/components/system/themed-image';
 import { Reveal } from '@/components/system/reveal';
 import { QuietLink } from '@/components/system/quiet-link';
 import type { Product } from '@/lib/types';
@@ -31,8 +31,9 @@ export function Seasonal({ products }: { products: Product[] }) {
           <Reveal key={product._id} delay={i * 110} className={i === 1 ? 'lg:mt-28' : ''}>
             <Link href={`/products/${product.slug}`} className="group block">
               <div className="plate plate--hover relative aspect-[4/5]">
-                <Image
+                <ThemedImage
                   src={product.image}
+                  srcLight={product.imageLight}
                   alt={product.alt || product.title}
                   fill
                   sizes="(max-width: 1024px) 92vw, 46vw"

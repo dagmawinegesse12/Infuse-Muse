@@ -11,7 +11,10 @@ export type Product = {
   slug: string;
   shortDescription: string;
   description: string;
+  /** Photograph for the night theme (the default). */
   image: string;
+  /** Same product shot for the light theme. Absent means `image` serves both. */
+  imageLight?: string;
   alt: string;
   priceCents: number;
   currency: string;

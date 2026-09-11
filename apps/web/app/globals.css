@@ -456,6 +456,20 @@ body {
   transform: scale(1.045);
 }
 
+/* One photograph per theme (see ThemedImage). Night is the default; the light
+   and parchment grounds get the product shot taken on a pale background. */
+.muse-img--light {
+  display: none;
+}
+[data-muse='light'] .muse-img--light,
+[data-muse='parchment'] .muse-img--light {
+  display: block;
+}
+[data-muse='light'] .muse-img--night,
+[data-muse='parchment'] .muse-img--night {
+  display: none;
+}
+
 .plate__veil {
   position: absolute;
   inset: 0;

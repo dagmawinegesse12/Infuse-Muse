@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { ThemedImage } from '@/components/system/themed-image';
 import { SchemaScript } from '@/components/schema-script';
 import { getProductBySlug } from '@/lib/data';
 import { createMetadata } from '@/lib/metadata';
@@ -58,16 +58,18 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             copy of itself fills whatever the column's shape leaves over. On
             large screens it sits below the fixed header, not under it. */}
         <div className="plate relative mt-[var(--header-h)] aspect-[4/5] lg:sticky lg:top-[var(--header-h)] lg:mt-0 lg:aspect-auto lg:h-[calc(100svh-var(--header-h))]">
-          <Image
+          <ThemedImage
             src={product.image}
+            srcLight={product.imageLight}
             alt=""
             aria-hidden
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="scale-110 object-cover opacity-70 blur-2xl"
           />
-          <Image
+          <ThemedImage
             src={product.image}
+            srcLight={product.imageLight}
             alt={product.alt}
             fill
             priority

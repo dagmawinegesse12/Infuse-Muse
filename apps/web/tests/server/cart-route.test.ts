@@ -88,7 +88,7 @@ describe('POST /api/cart', () => {
     expect(cart.subtotal).toBe(5990);
     expect(cart.lines[0]).toMatchObject({ id: LINE, price: 2995, quantity: 2, slug: 'coco-breeze' });
     // Shopify has no photo, so the line borrows the site's own image.
-    expect(cart.lines[0].image).toBe('/images/products/coco-breeze.jpg');
+    expect(cart.lines[0].image).toBe('/images/products/coco-breeze-emerald.jpg');
   });
 
   it('adds to an existing cart, and starts over if that cart is gone', async () => {

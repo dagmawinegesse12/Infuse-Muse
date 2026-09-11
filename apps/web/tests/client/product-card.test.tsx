@@ -11,7 +11,7 @@ const VARIANT = 'gid://shopify/ProductVariant/1';
 const product = {
   _id: 'p1', title: 'Rose VitaliTea', slug: 'rose-vitalitea',
   shortDescription: 'A romantic floral blend.', description: 'Longer copy.',
-  image: '/images/products/rose-vitalitea.jpg', alt: 'Rose tea',
+  image: '/images/products/rose-vitalitea-emerald.jpg', alt: 'Rose tea',
   priceCents: 1800, currency: 'CAD', variantId: VARIANT, availableForSale: true,
   featured: true, seasonal: false,
   categorySlug: 'floral-blends', categoryTitle: 'Floral Blends',

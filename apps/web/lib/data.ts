@@ -95,7 +95,7 @@ export async function getProducts(): Promise<Product[]> {
         image:
           product.image ||
           fallback?.image ||
-          "/images/products/rose-vitalitea.jpg",
+          "/images/products/rose-vitalitea-emerald.jpg",
         alt: product.alt || fallback?.alt || product.title,
         size: product.size || fallback?.size || "",
         brewing: product.brewing ||
@@ -126,7 +126,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
     return {
       ...product,
-      image: product.image || fallback?.image || "/images/products/rose-vitalitea.jpg",
+      image: product.image || fallback?.image || "/images/products/rose-vitalitea-emerald.jpg",
       alt: product.alt || fallback?.alt || product.title,
       size: product.size || fallback?.size || "",
       brewing: product.brewing ||

@@ -147,7 +147,10 @@ export function mapShopifyProduct(node: ShopifyProductNode, fallback?: Product |
     slug: node.handle,
     shortDescription: fields.get("short_description") || fallback?.shortDescription || "",
     description: node.description || fallback?.description || "",
-    image: node.featuredImage?.url || fallback?.image || "/images/products/rose-vitalitea.jpg",
+    image: node.featuredImage?.url || fallback?.image || "/images/products/rose-vitalitea-emerald.jpg",
+    // A photo uploaded in Shopify is used for both themes; only our own
+    // pair of shots carries a separate light version.
+    imageLight: node.featuredImage ? undefined : fallback?.imageLight,
     alt: node.featuredImage?.altText || fallback?.alt || node.title,
     priceCents: variant ? Math.round(Number(variant.price.amount) * 100) : fallback?.priceCents ?? 0,
     currency: variant?.price.currencyCode || fallback?.currency || "CAD",
