@@ -140,6 +140,11 @@ export function mapShopifyProduct(node: ShopifyProductNode, fallback?: Product |
   const collection =
     node.collections.nodes.find((c) => c.handle.startsWith("the-")) ?? node.collections.nodes[0];
   const caffeine = fields.get("caffeine_level") as Product["caffeineLevel"] | undefined;
+  // Launch workflow: a blend with our own pair of photos (one per theme)
+  // keeps it even once the owner uploads photos in Shopify — those serve
+  // checkout, order emails and the admin. A Shopify photo shows on the site
+  // only for products without a local pair, such as accessories.
+  const ownPair = Boolean(fallback?.imageLight);
 
   return {
     _id: node.id,
@@ -147,11 +152,12 @@ export function mapShopifyProduct(node: ShopifyProductNode, fallback?: Product |
     slug: node.handle,
     shortDescription: fields.get("short_description") || fallback?.shortDescription || "",
     description: node.description || fallback?.description || "",
-    image: node.featuredImage?.url || fallback?.image || "/images/products/rose-vitalitea-emerald.jpg",
-    // A photo uploaded in Shopify is used for both themes; only our own
-    // pair of shots carries a separate light version.
-    imageLight: node.featuredImage ? undefined : fallback?.imageLight,
-    alt: node.featuredImage?.altText || fallback?.alt || node.title,
+    image:
+      (ownPair ? fallback?.image : node.featuredImage?.url) ||
+      fallback?.image ||
+      "/images/products/rose-vitalitea-emerald.jpg",
+    imageLight: ownPair ? fallback?.imageLight : undefined,
+    alt: (ownPair ? fallback?.alt : node.featuredImage?.altText) || fallback?.alt || node.title,
     priceCents: variant ? Math.round(Number(variant.price.amount) * 100) : fallback?.priceCents ?? 0,
     currency: variant?.price.currencyCode || fallback?.currency || "CAD",
     variantId: variant?.id,

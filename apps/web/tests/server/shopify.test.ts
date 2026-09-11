@@ -83,6 +83,30 @@ describe('mapShopifyProduct', () => {
     expect(p.allergens).toBe('');
   });
 
+  it('keeps our own photo pair even when Shopify has a photo', async () => {
+    const { mapShopifyProduct } = await import('@/lib/shopify');
+    const local = demoProducts.find((d) => d.slug === 'coco-breeze')!;
+    const p = mapShopifyProduct(
+      node({ featuredImage: { url: 'https://cdn.shopify.com/coco.jpg', altText: 'Shopify alt' } }),
+      local
+    );
+
+    expect(p.image).toBe(local.image);
+    expect(p.imageLight).toBe(local.imageLight);
+    expect(p.alt).toBe(local.alt);
+  });
+
+  it('uses the Shopify photo for a product with no local pair', async () => {
+    const { mapShopifyProduct } = await import('@/lib/shopify');
+    const p = mapShopifyProduct(
+      node({ handle: 'tea-strainer', featuredImage: { url: 'https://cdn.shopify.com/strainer.jpg', altText: 'Brass strainer' } })
+    );
+
+    expect(p.image).toBe('https://cdn.shopify.com/strainer.jpg');
+    expect(p.imageLight).toBeUndefined();
+    expect(p.alt).toBe('Brass strainer');
+  });
+
   it('ignores an unknown caffeine value and malformed lists', async () => {
     const { mapShopifyProduct } = await import('@/lib/shopify');
     const p = mapShopifyProduct(
@@ -98,7 +122,9 @@ describe('mapShopifyProduct', () => {
   });
 });
 
-describe('getProducts with Shopify configured', () => {
+// The first test here cold-loads lib/data (Sanity client and all), which can
+// pass five seconds on a busy machine; give the group room.
+describe('getProducts with Shopify configured', { timeout: 15_000 }, () => {
   beforeEach(() => {
     vi.resetModules();
     vi.stubEnv('SHOPIFY_STORE_DOMAIN', 'example.myshopify.com');

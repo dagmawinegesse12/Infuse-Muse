@@ -62,14 +62,15 @@ const toCents = (amount: string) => Math.round(Number(amount) * 100);
 export function mapCart(cart: CartNode): CartSnapshot {
   const lines: CartItem[] = cart.lines.nodes.map((line) => {
     const { merchandise } = line;
-    // Shopify has no photos yet, so borrow the site's own image by handle.
+    // Same rule as the product pages: our own photo for the blends that have
+    // one, Shopify's for anything else.
     const local = demoProducts.find((p) => p.slug === merchandise.product.handle);
     return {
       id: line.id,
       variantId: merchandise.id,
       slug: merchandise.product.handle,
       name: merchandise.product.title,
-      image: merchandise.product.featuredImage?.url || local?.image || "",
+      image: local?.image || merchandise.product.featuredImage?.url || "",
       price: toCents(merchandise.price.amount),
       quantity: line.quantity,
     };
