@@ -93,6 +93,11 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                     <p className="t-price mt-2 text-[1.125rem]">
                       {formatPrice(product.priceCents, product.currency)}
                     </p>
+                    {/* GST/HST is added at checkout. "Tax", not "HST": outside
+                        the harmonized provinces the customer pays GST. */}
+                    <p className="t-label mt-2" style={{ opacity: 0.6 }}>
+                      plus tax
+                    </p>
                   </div>
                   <div>
                     <p className="t-label">Size</p>
