@@ -33,9 +33,9 @@ export function Hero() {
 
         <div className="absolute inset-0" style={{ background: 'var(--hero-veil)' }} />
 
-        {/* Plate, low in the frame so the film's subject stays clear of it.
-            Extra clearance on phones keeps it above the sound control. */}
-        <div className="absolute inset-0 flex items-end justify-center px-[var(--gutter)] pb-[calc(var(--gutter)+4.25rem)] sm:pb-[clamp(2.5rem,7vh,4.5rem)]">
+        {/* Plate, seated on the foot of the frame so the film's subject stays
+            clear of it and it reads as anchored rather than floating. */}
+        <div className="absolute inset-0 flex items-end justify-center px-[var(--gutter)]">
           <div
             className="w-full max-w-[22rem] px-8 py-10 text-center"
             style={{ background: 'var(--plate)', color: 'var(--plate-ink)' }}

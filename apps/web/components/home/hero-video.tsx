@@ -13,8 +13,11 @@ import { useRef, useState } from 'react';
  * Under `prefers-reduced-motion` the video is removed entirely by globals.css
  * and the poster underneath is all that remains; the control hides with it,
  * since there would be nothing left to unmute. That is the only case where it
- * hides — a control carrying sound must never be unreachable on a phone, which
- * is why this does not copy the scroll cue's `hidden sm:flex`.
+ * hides — a control carrying sound must never be unreachable on a phone.
+ *
+ * The plate sits on the foot of the frame. On a phone it spans nearly the full
+ * width, so the control moves to the top-right, under the header; from `sm` up
+ * the plate is narrow and the control sits bottom-right beside it.
  */
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -54,7 +57,7 @@ export function HeroVideo() {
         Tailwind's `absolute` in the cascade — putting the two on one element
         pins the control to the top-left corner instead of the bottom-right.
       */}
-      <div className="hero__sound absolute bottom-6 right-[var(--gutter)] z-10 sm:bottom-8">
+      <div className="hero__sound absolute right-[var(--gutter)] top-[calc(var(--header-h)+0.75rem)] z-10 sm:bottom-8 sm:top-auto">
         <button
           type="button"
           onClick={toggleSound}
