@@ -5,6 +5,7 @@ import {
   fullSetSlides,
   fullSetTitleFor,
   isFullSet,
+  previewFullSets,
 } from '@/lib/full-sets';
 
 /**
@@ -62,5 +63,42 @@ describe('boxed set photographs', () => {
 
   it('has nothing to show for a blend it does not know', () => {
     expect(fullSetSlides('a-blend-that-does-not-exist')).toEqual([]);
+  });
+});
+
+/**
+ * The dev-server stand-ins. The one thing that must never slip is that they
+ * cannot be bought: no variantId means AddToCartButton renders "Unavailable"
+ * instead of putting a product that does not exist in Shopify into a cart.
+ */
+describe('preview sets for a dev server', () => {
+  const preview = previewFullSets(demoProducts);
+
+  it('cannot be added to a cart', () => {
+    for (const set of preview) {
+      expect(set.variantId).toBeUndefined();
+    }
+  });
+
+  it('stands in for every blend, named and slugged as a set', () => {
+    expect(preview).toHaveLength(demoProducts.length);
+    for (const set of preview) {
+      expect(isFullSet(set)).toBe(true);
+      expect(set.slug.endsWith('-full-set')).toBe(true);
+    }
+  });
+
+  it("carries the owner's prices, which are dearer than the tin alone", () => {
+    for (const blend of demoProducts) {
+      const set = preview.find((s) => s.title === fullSetTitleFor(blend.title));
+      expect(set).toBeDefined();
+      // The gift box is not sold separately, so a set costs more than its
+      // parts. If this ever inverts, the prices have been mixed up.
+      expect(set!.priceCents).toBeGreaterThan(blend.priceCents);
+    }
+  });
+
+  it('leaves alone anything it has no price for', () => {
+    expect(previewFullSets([{ title: 'Something Else', slug: 'something-else' }])).toEqual([]);
   });
 });

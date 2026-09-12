@@ -87,3 +87,42 @@ export function fullSetSlides(blendSlug: string): Slide[] {
 /** What the customer is being sold, in plain words. */
 export const FULL_SET_CONTENTS =
   "The tin, a strainer, a spoon and an infuser ball, in the gift box.";
+
+/**
+ * The owner's prices, from the Full Set table in content form three. Shopify
+ * is the source of truth once the sets are Active; these exist only so the
+ * page can be looked at on a dev server before that happens, and are never
+ * read in production. If the two ever disagree, Shopify is right.
+ */
+const PREVIEW_PRICE_CENTS: Record<string, number> = {
+  "rose-vitalitea": 7083,
+  "peach-me-green": 7157,
+  "classic-thyme": 7490,
+  "coco-breeze": 7717,
+  "lavender-lullaby": 8001,
+};
+
+/**
+ * Stand-in records for a dev server, so the boxed-set control can be reviewed
+ * before the products go Active in Shopify. `getFullSets` reaches for these
+ * only when Shopify returned no sets AND this is a development build.
+ *
+ * Deliberately carries no `variantId`: nothing here can reach a real cart, so
+ * the button reads "Unavailable" rather than pretending to sell a product that
+ * does not exist yet. That is the tell that you are looking at a preview.
+ */
+export function previewFullSets<T extends { title: string; slug: string }>(
+  blends: T[]
+): T[] {
+  return blends
+    .filter((blend) => blend.slug in PREVIEW_PRICE_CENTS)
+    .map((blend) => ({
+      ...blend,
+      _id: `preview-full-set-${blend.slug}`,
+      title: fullSetTitleFor(blend.title),
+      slug: `${blend.slug}-full-set`,
+      priceCents: PREVIEW_PRICE_CENTS[blend.slug],
+      variantId: undefined,
+      availableForSale: true,
+    }));
+}

@@ -1,4 +1,4 @@
-import { isFullSet } from "./full-sets";
+import { isFullSet, previewFullSets } from "./full-sets";
 import { sanityClient, sanityEnabled } from "./sanity";
 import {
   fetchShopifyProduct,
@@ -128,7 +128,17 @@ export async function getProducts(): Promise<Product[]> {
  * the product page ship before they are published: no set found, no control.
  */
 export async function getFullSets(): Promise<Product[]> {
-  return (await getEveryProduct()).filter(isFullSet);
+  const published = (await getEveryProduct()).filter(isFullSet);
+  if (published.length > 0) return published;
+
+  /*
+    Nothing Active in Shopify yet. On a dev server, stand in local records so
+    the control can be reviewed before the products go live; production keeps
+    returning nothing, which is exactly what keeps the control hidden there.
+    The stand-ins carry no variantId, so the button reads "Unavailable".
+  */
+  if (process.env.NODE_ENV !== "development") return [];
+  return previewFullSets(await getProducts());
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
