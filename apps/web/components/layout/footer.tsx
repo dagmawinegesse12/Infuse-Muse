@@ -13,7 +13,7 @@ const COLUMNS: Array<[string, Array<[string, string]>]> = [
   [
     'The Prologue',
     [
-      ['Our story', '/about'],
+      ['The Muse', '/about'],
       ['Instagram', 'https://www.instagram.com/infuse_and_muse'],
       ['Contact', '/contact'],
       ['Waitlist', '/waitlist'],

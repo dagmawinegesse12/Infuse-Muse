@@ -33,6 +33,44 @@ export function Hero() {
 
         <div className="absolute inset-0" style={{ background: 'var(--hero-veil)' }} />
 
+        {/*
+          A direct way into the shop from the film. The plate below also links
+          to the blends, but that reads as editorial; this reads as a way to
+          buy, and sits on the opposite edge to the sound control so the two
+          balance.
+
+          The wrapper carries the position, not the link: `.hit` sets
+          `position: relative` for its 44px tap target, which beats Tailwind's
+          `absolute` in the cascade. Same reason as HeroVideo's control.
+        */}
+        <div className="absolute left-[var(--gutter)] top-[calc(var(--header-h)+0.75rem)] z-10 sm:bottom-8 sm:top-auto">
+          <Link
+            href="/products"
+            className="hit t-label flex items-center gap-2.5 rounded-full border px-4 py-2 backdrop-blur-sm"
+            style={{
+              color: 'var(--on-media)',
+              borderColor: 'rgba(255, 255, 255, 0.22)',
+              background: 'rgba(9, 37, 22, 0.32)',
+            }}
+          >
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M6 7h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8L6 7z" />
+              <path d="M9 7V5.5a3 3 0 0 1 6 0V7" />
+            </svg>
+            Order now
+          </Link>
+        </div>
+
         {/* Plate, seated on the foot of the frame so the film's subject stays
             clear of it and it reads as anchored rather than floating. */}
         <div className="absolute inset-0 flex items-end justify-center px-[var(--gutter)]">

@@ -118,7 +118,10 @@ export default function AboutPage() {
             <div className="space-y-7">
               {CLOSING.map((paragraph, i) => (
                 <Reveal key={i} delay={i * 70}>
-                  <p className="t-body t-body--lead">{paragraph}</p>
+                  {/* Plain t-body like the paragraphs above it: t-body--lead
+                      carries a different ink as well as a larger size, and this
+                      page reads in one colour throughout. */}
+                  <p className="t-body">{paragraph}</p>
                 </Reveal>
               ))}
             </div>
@@ -137,9 +140,9 @@ export default function AboutPage() {
         <div className="mt-10 max-w-measure space-y-8">
           {PROLOGUE.map((stanza, i) => (
             <Reveal key={i} delay={60 + i * 40}>
-              <p className={`whitespace-pre-line ${i === 0 ? 't-body t-body--lead' : 't-body'}`}>
-                {stanza}
-              </p>
+              {/* Every stanza takes the same ink; the opening one no longer
+                  leads in a heavier colour. */}
+              <p className="t-body whitespace-pre-line">{stanza}</p>
             </Reveal>
           ))}
         </div>
