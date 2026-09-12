@@ -24,7 +24,7 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
   const { error } = await getResend().emails.send({
     from,
     to,
-    subject: "You're on the Infuse & Muse waitlist",
+    subject: "You're on the Infuse & Muse list",
     html: generateWaitlistConfirmationHtml(to),
     text: [
       'Infuse & Muse · Luxury Tea, Toronto',
@@ -37,9 +37,9 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
       '',
       'Each blend is more than a drink. It is a moment.',
       '',
-      'You will be among the first to enter.',
+      'You will be among the first to know.',
       '',
-      'Until then, stay close.',
+      'Until the next blend, stay close.',
       '',
       'Mar',
       '',
@@ -47,7 +47,7 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
       'Instagram: https://www.instagram.com/infuseandmuse',
       'Pinterest: https://www.pinterest.com/infuseandmuse',
       '',
-      'You received this because you joined the waitlist at infuseandmuse.com',
+      'You received this because you subscribed at infuseandmuse.com',
     ].join('\n'),
     headers: {
       'List-Unsubscribe': '<mailto:contact@infuseandmuse.com?subject=unsubscribe>',

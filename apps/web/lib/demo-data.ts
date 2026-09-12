@@ -100,9 +100,9 @@ export const demoProducts: Product[] = [
     seoDescription: "Shop Coco Breeze, a caffeine-free mint and cacao blend from Infuse & Muse."
   },
   {
-    // PHOTOGRAPH PENDING — no image was supplied for this new product. The file
-    // below is the retired Minted Stillness shot, standing in so the grid and
-    // the product page render. It shows the wrong blend. Replace before launch.
+    // The tin pair is real and correct. Still outstanding is the third photo
+    // the other four have: the brew-and-leaf still that fills `gallery`, so
+    // this is the one blend whose page shows a single image and no arrows.
     _id: "prod-thyme", title: "Classic Thyme", slug: "classic-thyme",
     shortDescription: "An Earl Grey blend layered with spice and wisdom.",
     description: "Classic Thyme is a rich, creamy Earl Grey, layered with a spice combination used in East Africa for centuries.",

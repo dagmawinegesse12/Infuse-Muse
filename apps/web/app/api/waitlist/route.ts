@@ -4,6 +4,14 @@ import path from 'path';
 import { getResend } from '@/lib/email/client';
 import { sendWaitlistConfirmation } from '@/lib/email/service';
 
+/*
+  Named for the launch waitlist it began as. The /waitlist page is retired now
+  the shop is open (see middleware.ts), but this endpoint lives on as the
+  mailing list behind "The Correspondence" on the homepage, so the path and the
+  Resend audience stay as they are rather than being renamed under a live site.
+  The copy it returns is post-launch: nothing here should promise a launch.
+*/
+
 
 // ── Local dev fallback (file-based) ──────────────────────────────────────────
 const DATA_FILE = path.join(process.cwd(), 'data', 'waitlist.json');
@@ -61,7 +69,7 @@ export async function POST(request: Request) {
 
   if (await isAlreadyOnList(email)) {
     return NextResponse.json({
-      message: "You're already on the list. We'll be in touch before launch.",
+      message: "You're already on the list. We'll be in touch when there is something new.",
     });
   }
 
@@ -85,6 +93,6 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({
-    message: "Welcome to the list! You'll hear from us before we launch.",
+    message: "Welcome to the list. You'll hear from us when a new blend arrives.",
   });
 }

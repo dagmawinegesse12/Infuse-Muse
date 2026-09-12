@@ -18,6 +18,10 @@ const ALLOWED = [
     the homepage, which outlives the launch.
   - /api/unsubscribe and /unsubscribe are linked from every confirmation email
     already sent, and must work for as long as those sit in people's inboxes.
+
+  app/waitlist/ itself stays on disk. Redirected is not deleted: raising the
+  gate again sends every path to /waitlist, so removing the page would turn
+  that into a 404 loop instead of a holding page.
 */
 const RETIRED = ['/waitlist'];
 

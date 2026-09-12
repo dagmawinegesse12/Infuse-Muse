@@ -50,9 +50,9 @@ export function generateWaitlistConfirmationHtml(email: string): string {
                 It is a moment.
               </p>
               <p style="margin:0; font-size:14px; color:#4a6259; font-family:Georgia,'Times New Roman',serif; line-height:1.65;">
-                You will be among the first to enter.<br />
+                You will be among the first to know.<br />
                 <br />
-                Until then,<br />
+                Until the next blend,<br />
                 stay close.
               </p>
               <p style="margin:28px 0 0; font-family:Georgia,'Times New Roman',serif; font-size:14px; color:#0f3d2e;">
@@ -81,7 +81,7 @@ export function generateWaitlistConfirmationHtml(email: string): string {
           <tr>
             <td style="padding: 16px 0; text-align:center;">
               <p style="margin:0; font-size:10px; color:#c8bfb5; font-family:Arial,sans-serif;">
-                You received this because you joined the waitlist at infuseandmuse.com
+                You received this because you subscribed at infuseandmuse.com
                 &nbsp;&middot;&nbsp;
                 <a href="${unsubscribeUrl}" style="color:#c8bfb5; text-decoration:underline;">Unsubscribe</a>
               </p>
