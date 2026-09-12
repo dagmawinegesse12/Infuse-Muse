@@ -1,12 +1,11 @@
 import { notFound } from 'next/navigation';
-import { ProductGallery } from '@/components/product/product-gallery';
+import { PurchaseGallery, PurchasePanel, PurchaseProvider } from '@/components/product/purchase';
 import { SchemaScript } from '@/components/schema-script';
-import { getProductBySlug } from '@/lib/data';
+import { getFullSets, getProductBySlug } from '@/lib/data';
+import { fullSetSlides, fullSetTitleFor, isFullSet } from '@/lib/full-sets';
 import { createMetadata } from '@/lib/metadata';
-import { formatPrice } from '@/lib/utils';
 import { QuietLink } from '@/components/system/quiet-link';
 import { Reveal } from '@/components/system/reveal';
-import { AddToCartButton } from './add-to-cart';
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const product = await getProductBySlug(params.slug);
@@ -28,6 +27,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = await getProductBySlug(params.slug);
   if (!product) notFound();
+
+  /*
+    The boxed set for this blend, if Shopify is publishing one. Paired by title
+    rather than handle (see lib/full-sets.ts), and absent while the sets are
+    Draft — in which case the page sells the tin exactly as it did before.
+
+    A set's own page asks for no set, or it would offer to sell itself a box.
+  */
+  const fullSet = isFullSet(product)
+    ? null
+    : (await getFullSets()).find((s) => s.title === fullSetTitleFor(product.title)) ?? null;
 
   const schema = {
     '@context': 'https://schema.org',
@@ -53,6 +63,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     <>
       <SchemaScript data={schema} />
 
+      <PurchaseProvider tin={product} set={fullSet}>
       <div className="grid lg:grid-cols-2">
         {/* The photographs. Square, because the tins are square and the wider
             stills only lose their outer edges at that ratio; a portrait frame
@@ -60,11 +71,12 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             the tins. Sticky on large screens so the image stays alongside the
             copy, and self-start so the grid does not stretch it. */}
         <div className="mt-[var(--header-h)] lg:sticky lg:top-[var(--header-h)] lg:mt-0 lg:self-start">
-          <ProductGallery
-            slides={[
+          <PurchaseGallery
+            tinSlides={[
               { src: product.image, srcLight: product.imageLight, alt: product.alt },
               ...(product.gallery ?? []),
             ]}
+            setSlides={fullSetSlides(product.slug)}
           />
         </div>
 
@@ -81,28 +93,8 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             </Reveal>
 
             <Reveal delay={200}>
-              <div
-                className="mt-12 flex flex-wrap items-center justify-between gap-6 border-y py-7"
-                style={{ borderColor: 'var(--rule)' }}
-              >
-                <div className="flex flex-wrap gap-x-12 gap-y-6">
-                  <div>
-                    <p className="t-label">Price</p>
-                    <p className="t-price mt-2 text-[1.125rem]">
-                      {formatPrice(product.priceCents, product.currency)}
-                    </p>
-                    {/* GST/HST is added at checkout. "Tax", not "HST": outside
-                        the harmonized provinces the customer pays GST. */}
-                    <p className="t-label mt-2" style={{ opacity: 0.6 }}>
-                      plus tax
-                    </p>
-                  </div>
-                  <div>
-                    <p className="t-label">Size</p>
-                    <p className="t-price mt-2 text-[1.125rem]">{product.size}</p>
-                  </div>
-                </div>
-                <AddToCartButton product={product} />
+              <div className="mt-12">
+                <PurchasePanel size={product.size} />
               </div>
             </Reveal>
 
@@ -200,6 +192,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
           </div>
         </div>
       </div>
+      </PurchaseProvider>
     </>
   );
 }

@@ -1,0 +1,89 @@
+/**
+ * The boxed sets: a blend's tin packed with a strainer, a spoon and an infuser
+ * ball in the gift box.
+ *
+ * Each one is its own Shopify product rather than a variant of the blend, for
+ * two reasons that are easy to undo by accident. Shopify sets the tax Category
+ * per product, and the CRA zero-rates a mixed basket only when 90% or more of
+ * its value is zero-rated — the accessories are over half the value here, so
+ * the whole box is taxable while a tin on its own is not. A variant hanging off
+ * a blend would inherit the tea category and ship untaxed. Separate products
+ * also cost nothing in the cart, which reads one variant per product.
+ *
+ * The link between a blend and its set is the TITLE, not the handle: the
+ * products were created by duplication and their handles are not uniformly
+ * derived. If a title is ever edited in Shopify the pairing simply stops being
+ * found, and the page falls back to selling the tin alone — see
+ * `components/product/purchase.tsx`, which renders no control without a set.
+ */
+export const FULL_SET_SUFFIX = " Full Set";
+
+/** True for the boxed sets, which are kept out of the blends listing. */
+export function isFullSet(product: { title: string }): boolean {
+  return product.title.endsWith(FULL_SET_SUFFIX);
+}
+
+/** The Shopify title of the set that belongs to a blend. */
+export function fullSetTitleFor(blendTitle: string): string {
+  return `${blendTitle}${FULL_SET_SUFFIX}`;
+}
+
+export type Slide = { src: string; alt: string };
+
+/**
+ * The three pieces, shot on the same dark velvet as the boxes. They are the
+ * same in every set, so they are shared rather than repeated per blend.
+ */
+const PIECES: Slide[] = [
+  {
+    src: "/images/accessories/tea-strainer.jpg",
+    alt: "A gold tea strainer beside its resting bowl on dark green velvet",
+  },
+  {
+    src: "/images/accessories/tea-spoon.jpg",
+    alt: "A gold tea spoon with a patterned handle on dark green velvet",
+  },
+  {
+    src: "/images/accessories/infuser-ball.jpg",
+    alt: "A gold mesh infuser ball on its chain, beside a lidded rest, on dark green velvet",
+  },
+];
+
+/** The boxed set photographed with each blend's own tin. */
+const BOXES: Record<string, Slide> = {
+  "rose-vitalitea": {
+    src: "/images/accessories/full-set-rose-vitalitea.jpg",
+    alt: "The open gift box with the pink Rose VitaliTea tin, a strainer, a spoon and an infuser ball in a fitted tray",
+  },
+  "lavender-lullaby": {
+    src: "/images/accessories/full-set-lavender-lullaby.jpg",
+    alt: "The open gift box with the violet Lavender Lullaby tin, a strainer, a spoon and an infuser ball in a fitted tray",
+  },
+  "peach-me-green": {
+    src: "/images/accessories/full-set-peach-me-green.jpg",
+    alt: "The open gift box with the coral Peach Me Green tin, a strainer, a spoon and an infuser ball in a fitted tray",
+  },
+  "coco-breeze": {
+    src: "/images/accessories/full-set-coco-breeze.jpg",
+    alt: "The open gift box with the dark brown Coco Breeze tin, a strainer, a spoon and an infuser ball in a fitted tray",
+  },
+  "classic-thyme": {
+    src: "/images/accessories/full-set-classic-thyme.jpg",
+    alt: "The open gift box with the oxblood Classic Thyme tin, a strainer, a spoon and an infuser ball in a fitted tray",
+  },
+};
+
+/**
+ * Slides for a blend's boxed set: its own box first, then the three pieces.
+ * These photographs are ours, like the brew stills, so they live here rather
+ * than being read back from Shopify — the Storefront query asks only for a
+ * featured image.
+ */
+export function fullSetSlides(blendSlug: string): Slide[] {
+  const box = BOXES[blendSlug];
+  return box ? [box, ...PIECES] : [];
+}
+
+/** What the customer is being sold, in plain words. */
+export const FULL_SET_CONTENTS =
+  "The tin, a strainer, a spoon and an infuser ball, in the gift box.";

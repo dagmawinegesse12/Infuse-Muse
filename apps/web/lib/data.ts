@@ -1,3 +1,4 @@
+import { isFullSet } from "./full-sets";
 import { sanityClient, sanityEnabled } from "./sanity";
 import {
   fetchShopifyProduct,
@@ -74,7 +75,12 @@ async function getShopifyProduct(slug: string, fallback: Product | null): Promis
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+/**
+ * Everything the shop sells, blends and boxed sets together. Callers almost
+ * always want `getProducts` or `getFullSets` instead: both are drawn from this
+ * one list, so a set can never be missing from one and present in the other.
+ */
+async function getEveryProduct(): Promise<Product[]> {
   const fromShopify = await getShopifyProducts();
   if (fromShopify) return fromShopify;
 
@@ -106,6 +112,23 @@ export async function getProducts(): Promise<Product[]> {
   } catch {
     return demoProducts;
   }
+}
+
+/**
+ * The blends. Boxed sets are deliberately excluded: they are sold from the
+ * blend they belong to, and listing them here would show the same tea twice,
+ * once in a tin and once in a box.
+ */
+export async function getProducts(): Promise<Product[]> {
+  return (await getEveryProduct()).filter((product) => !isFullSet(product));
+}
+
+/**
+ * The boxed sets. Empty until they are Active in Shopify, which is what lets
+ * the product page ship before they are published: no set found, no control.
+ */
+export async function getFullSets(): Promise<Product[]> {
+  return (await getEveryProduct()).filter(isFullSet);
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
