@@ -172,8 +172,14 @@ export function mapShopifyProduct(node: ShopifyProductNode, fallback?: Product |
       time: fields.get("brew_time") || fallback?.brewing.time || "",
       amount: fields.get("brew_amount") || fallback?.brewing.amount || "",
     },
-    // Never fall back for allergens: an empty value renders "not yet confirmed".
-    allergens: fields.get("allergens") || "",
+    // Allergens: the store wins, our record fills a gap, and silence on both
+    // renders "not yet confirmed" rather than "none". The rule used to forbid
+    // the fallback entirely, because the owner had declared nothing and any
+    // local value could only have been our guess. She has since declared for
+    // some blends, so the fallback carries her words, never ours — see the
+    // note above demoProducts. If she sets the metafield in Shopify, that is
+    // the newer statement and it takes precedence.
+    allergens: fields.get("allergens") || fallback?.allergens || "",
     featured: fallback?.featured ?? false,
     seasonal: fallback?.seasonal ?? false,
     categorySlug: collection?.handle || fallback?.categorySlug || "",

@@ -16,10 +16,15 @@ export const demoCategories: Category[] = [
 ];
 
 /**
- * ALLERGENS: the owner left this blank for every blend on the content form.
- * These are food products containing cardamom, clove, cacao and vanilla, so the
- * declaration cannot be guessed. The product page shows an explicit "not yet
- * confirmed" note while these are empty. Do not invent values.
+ * ALLERGENS: the owner left this blank for every blend on the content form,
+ * and on 11 September 2026 declared "May contain dairy" for Rose VitaliTea and
+ * Peach Me Green. Those are her words for her two blends; the other three stay
+ * empty and the product page shows an explicit "not yet confirmed" note in
+ * their place. Never write a value here that she has not given, and never
+ * render an absent declaration as "none" — this is food.
+ *
+ * Worth resolving with her: Classic Thyme lists "Earl Grey crème" and reads as
+ * "a rich, creamy Earl Grey", yet it is not among the two she named.
  */
 export const demoProducts: Product[] = [
   {
@@ -31,7 +36,7 @@ export const demoProducts: Product[] = [
     gallery: [{ src: "/images/products/rose-vitalitea-detail.jpg", alt: "A glass bowl of brewed amber tea beside a bowl of dried pink rose petals on a wooden board, with a gold spoon" }],
     priceCents: 2552, currency: "CAD", size: "75 g",
     brewing: { temperature: "95–100 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
-    allergens: "",
+    allergens: "May contain dairy",
     featured: true, seasonal: false,
     categorySlug: "the-romantic", categoryTitle: "The Romantic",
     tastingNotes: ["Soft floral", "Velvety", "Sweet"],
@@ -67,7 +72,7 @@ export const demoProducts: Product[] = [
     gallery: [{ src: "/images/products/peach-me-green-detail.jpg", alt: "A glass bowl of brewed amber tea beside a bowl of green tea leaves, blue cornflower petals and dried peach on a wooden board" }],
     priceCents: 2881, currency: "CAD", size: "75 g",
     brewing: { temperature: "60–70 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
-    allergens: "",
+    allergens: "May contain dairy",
     featured: false, seasonal: false,
     categorySlug: "the-free-spirit", categoryTitle: "The Free Spirit",
     tastingNotes: ["Fruity"],

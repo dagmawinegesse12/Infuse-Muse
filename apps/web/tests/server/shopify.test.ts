@@ -73,14 +73,34 @@ describe('mapShopifyProduct', () => {
     expect(p.availableForSale).toBe(false);
   });
 
-  it('borrows photo and featured flag from the local record, never allergens', async () => {
+  it('borrows photo, featured flag and the allergen declaration from the local record', async () => {
     const { mapShopifyProduct } = await import('@/lib/shopify');
-    const local = { ...demoProducts.find((d) => d.slug === 'coco-breeze')!, allergens: 'Contains nuts' };
+    const local = { ...demoProducts.find((d) => d.slug === 'coco-breeze')!, allergens: 'May contain dairy' };
     const p = mapShopifyProduct(node(), local);
 
     expect(p.image).toBe(local.image);
     expect(p.featured).toBe(local.featured);
-    expect(p.allergens).toBe('');
+    expect(p.allergens).toBe('May contain dairy');
+  });
+
+  it('lets a Shopify allergen declaration override ours', async () => {
+    const { mapShopifyProduct } = await import('@/lib/shopify');
+    const local = { ...demoProducts.find((d) => d.slug === 'coco-breeze')!, allergens: 'May contain dairy' };
+    const p = mapShopifyProduct(
+      node({ metafields: [{ key: 'allergens', value: 'Contains milk and nuts' }] }),
+      local
+    );
+
+    expect(p.allergens).toBe('Contains milk and nuts');
+  });
+
+  it('reports no allergen declaration when neither source has one', async () => {
+    const { mapShopifyProduct } = await import('@/lib/shopify');
+    const local = { ...demoProducts.find((d) => d.slug === 'coco-breeze')!, allergens: '' };
+
+    // Empty must stay empty: the product page turns it into an explicit
+    // "not yet confirmed", and anything else would read as "no allergens".
+    expect(mapShopifyProduct(node(), local).allergens).toBe('');
   });
 
   it('keeps our own photo pair even when Shopify has a photo', async () => {
