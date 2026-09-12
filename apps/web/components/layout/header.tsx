@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useCart } from '@/lib/cart/cart-context';
 import { useMuseTheme } from '@/components/system/theme';
 import { ThemeToggle } from '@/components/system/theme-toggle';
+import { THEME_CHOICE_ENABLED } from '@/components/system/theme-constants';
 
 const PRIMARY = [
   ['Blends', '/products'],
@@ -20,6 +21,9 @@ const SECONDARY = [
 ] as const;
 
 export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }) {
+  /* The route may allow the toggle while the theme itself is withdrawn, in
+     which case the mobile block's "Theme" heading would label nothing. */
+  const themeControl = showThemeToggle && THEME_CHOICE_ENABLED;
   const pathname = usePathname();
   const { itemCount, openCart } = useCart();
   const { theme } = useMuseTheme();
@@ -114,7 +118,7 @@ export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }
 
           {/* Right — commerce */}
           <div className="flex items-center gap-5 justify-self-end sm:gap-7">
-            {showThemeToggle ? <ThemeToggle className="hidden sm:inline-flex" /> : null}
+            {themeControl ? <ThemeToggle className="hidden sm:inline-flex" /> : null}
             <Link href="/products" className="hit t-label wipe-link hidden text-ink-strong sm:inline">
               Search
             </Link>
@@ -157,7 +161,7 @@ export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }
 
             <hr className="rule my-10 max-w-md" />
 
-            {showThemeToggle ? (
+            {themeControl ? (
               <div
                 className="mb-10 transition-opacity duration-700 ease-muse sm:hidden"
                 style={{ opacity: open ? 1 : 0, transitionDelay: '380ms' }}

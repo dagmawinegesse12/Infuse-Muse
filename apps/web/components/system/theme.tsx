@@ -9,7 +9,12 @@ import {
   type ReactNode,
 } from 'react';
 
-import { DEFAULT_THEME, THEME_STORAGE_KEY, type MuseTheme } from '@/components/system/theme-constants';
+import {
+  DEFAULT_THEME,
+  SELECTABLE_THEMES,
+  THEME_STORAGE_KEY,
+  type MuseTheme,
+} from '@/components/system/theme-constants';
 
 export type { MuseTheme };
 
@@ -28,11 +33,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Adopt whatever the pre-paint script already decided.
   useEffect(() => {
-    const current = document.documentElement.dataset.muse;
-    if (current === 'light' || current === 'night') setThemeState(current);
+    const current = document.documentElement.dataset.muse as MuseTheme | undefined;
+    if (current && SELECTABLE_THEMES.includes(current)) setThemeState(current);
   }, []);
 
+  /*
+    Refuses a theme that is not on offer. The toggle already hides while a
+    theme is withdrawn, so this guards the ways in that are not the toggle:
+    a stale bookmark of a forced route, a console call, or code written later
+    that has forgotten the light ground is away.
+  */
   const setTheme = useCallback((next: MuseTheme) => {
+    if (!SELECTABLE_THEMES.includes(next)) return;
     setThemeState(next);
     document.documentElement.dataset.muse = next;
     try {

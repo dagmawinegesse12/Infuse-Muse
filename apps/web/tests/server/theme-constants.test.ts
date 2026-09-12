@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_THEME,
+  LIGHT_THEME_ENABLED,
+  SELECTABLE_THEMES,
   THEMES,
+  THEME_CHOICE_ENABLED,
   THEME_STORAGE_KEY,
 } from '@/components/system/theme-constants';
 
@@ -22,7 +25,24 @@ describe('theme constants', () => {
     expect(THEMES).toContain(DEFAULT_THEME);
   });
 
-  it('offers exactly the two user-facing themes', () => {
+  it('still describes both themes the design system has', () => {
     expect([...THEMES]).toEqual(['night', 'light']);
+  });
+
+  /*
+    The light ground is withdrawn until photography made for it exists. These
+    assertions are the ones that will fail loudly if it is ever half-restored:
+    the switch and what derives from it have to agree, or the toggle and the
+    pre-paint bootstrap end up disagreeing about what is on offer.
+  */
+  it('derives what is selectable from the one switch', () => {
+    expect([...SELECTABLE_THEMES]).toEqual(
+      LIGHT_THEME_ENABLED ? ['night', 'light'] : ['night']
+    );
+    expect(THEME_CHOICE_ENABLED).toBe(SELECTABLE_THEMES.length > 1);
+  });
+
+  it('never leaves the default unselectable', () => {
+    expect(SELECTABLE_THEMES).toContain(DEFAULT_THEME);
   });
 });

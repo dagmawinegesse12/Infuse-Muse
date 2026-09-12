@@ -1,14 +1,19 @@
 'use client';
 
 import { useMuseTheme } from '@/components/system/theme';
-import { THEMES } from '@/components/system/theme-constants';
+import { SELECTABLE_THEMES } from '@/components/system/theme-constants';
 
 /**
  * Two words and a moving hairline — the same grammar as every other control.
  * Both labels stay rendered so the control never changes width on switch.
+ *
+ * Renders nothing when there is only one theme to choose from: a radiogroup of
+ * one is a control that cannot do anything.
  */
 export function ThemeToggle({ className = '' }: { className?: string }) {
   const { theme, setTheme } = useMuseTheme();
+
+  if (SELECTABLE_THEMES.length < 2) return null;
 
   return (
     <div
@@ -16,7 +21,7 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
       aria-label="Colour theme"
       className={`relative inline-flex items-center gap-3 ${className}`.trim()}
     >
-      {THEMES.map((option) => {
+      {SELECTABLE_THEMES.map((option) => {
         const active = theme === option;
         return (
           <button
