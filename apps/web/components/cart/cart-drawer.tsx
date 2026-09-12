@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/lib/cart/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -9,12 +10,29 @@ import { QuantityStepper } from '@/components/cart/quantity-stepper';
 
 export function CartDrawer() {
   const { state, closeCart, setQuantity, removeItem, subtotal } = useCart();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeCart();
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [closeCart]);
+
+  /*
+    Navigating out of the drawer leaves it behind. "Review bag" goes to /cart,
+    and a drawer sitting open on top of that page hides the very summary the
+    customer just asked for; the empty-state link to the blends had the same
+    problem. The header menu closes on a route change in the same way.
+
+    Keyed on the path alone, deliberately. `closeCart` comes from a context
+    value memoised on [state, run], so it takes a new identity on every cart
+    change: depending on it here would fire this effect constantly and shut the
+    drawer the instant it opened.
+  */
+  useEffect(() => {
+    closeCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <>
