@@ -136,8 +136,8 @@ export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }
         }}
         aria-hidden={!open}
       >
-        <div className="grid h-full grid-cols-1 pt-28 lg:grid-cols-[1fr_0.85fr]">
-          <nav className="flex flex-col justify-center px-[var(--gutter)] pb-16">
+        <div className="h-full pt-28">
+          <nav className="flex h-full flex-col justify-center px-[var(--gutter)] pb-16">
             <ul>
               {PRIMARY.map(([label, href], i) => (
                 <li key={href} className="overflow-hidden">
@@ -182,26 +182,6 @@ export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }
               ))}
             </ul>
           </nav>
-
-          <div
-            className="plate relative hidden transition-opacity duration-1000 ease-muse lg:block"
-            style={{ opacity: open ? 1 : 0, transitionDelay: '200ms' }}
-          >
-            <Image
-              src="/images/products/minted-stillness.png"
-              alt=""
-              fill
-              sizes="45vw"
-              className="object-cover"
-            />
-            <div className="plate__veil" />
-            <div className="absolute inset-x-0 bottom-0 p-[var(--gutter)]">
-              <p className="t-label t-label--accent">In season</p>
-              <p className="t-sub mt-2" style={{ color: 'var(--on-media)' }}>
-                Minted Stillness
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </>
