@@ -17,7 +17,6 @@ const PRIMARY = [
 const SECONDARY = [
   ['Contact', '/contact'],
   ['Questions', '/faq'],
-  ['Waitlist', '/waitlist'],
 ] as const;
 
 export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }) {
