@@ -65,11 +65,13 @@ export const MUSES: Muse[] = [
     pairsWith: 'rose-vitalitea',
   },
   {
-    // ARTWORK PENDING: added on the content form with no painting supplied.
+    // The painting arrived later than the other four. It is landscape where
+    // they are portrait, so the grid crops it to the two figures; the full
+    // composition shows on mobile, where the tile is 4:3.
     slug: 'the-old-soul',
     name: 'The Old-Soul',
-    image: null,
-    alt: '',
+    image: '/images/muses/the-old-soul.jpg',
+    alt: 'An oil painting of an elderly white-haired man in conversation with a younger man across a desk, in a lamplit study lined with books',
     blurb:
       'The Old-Soul carries a gravity that seems borrowed from an earlier century. A preference for letters over messages, for rooms with history in their walls. This is not just nostalgia, it is loyalty extended toward whatever has already proven itself worth keeping.',
     pairsWith: 'classic-thyme',

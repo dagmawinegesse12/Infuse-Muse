@@ -4,12 +4,13 @@ import type { Muse } from '@/lib/muses';
 /**
  * The artwork behind a Muse, or a typographic stand-in where none exists yet.
  *
- * The Old-Soul was added to the set without a painting. Rather than leave a
- * hole or repeat another work, that plate becomes a quiet title card: house
- * green with a soft radial lift, a gold hairline frame and a small centred
- * mark. It carries no text of its own — every plate already captions itself
- * with a numeral and a name, and repeating the name inside the frame read as
- * a duplication rather than a design.
+ * All five works now have paintings; The Old-Soul's arrived on 2026-09-12.
+ * The fallback below is kept for any archetype added without art: rather than
+ * leave a hole or repeat another work, that plate becomes a quiet title card,
+ * house green with a soft radial lift, a gold hairline frame and a small
+ * centred mark. It carries no text of its own, since every plate already
+ * captions itself with a numeral and a name, and repeating the name inside the
+ * frame read as a duplication rather than a design.
  */
 export function MusePlate({
   muse,
