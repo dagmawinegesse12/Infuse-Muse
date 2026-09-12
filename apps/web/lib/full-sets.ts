@@ -1,6 +1,6 @@
 /**
- * The boxed sets: a blend's tin packed with a strainer, a spoon and an infuser
- * ball in the box.
+ * The boxed sets: a blend's tin packed with a strainer, a saucer, a spoon and an
+ * infuser ball in the box.
  *
  * Each one is its own Shopify product rather than a variant of the blend, for
  * two reasons that are easy to undo by accident. Shopify sets the tax Category
@@ -31,13 +31,15 @@ export function fullSetTitleFor(blendTitle: string): string {
 export type Slide = { src: string; alt: string };
 
 /**
- * The three pieces, shot on the same dark velvet as the boxes. They are the
- * same in every set, so they are shared rather than repeated per blend.
+ * The pieces, shot on the same dark velvet as the boxes. They are identical
+ * in every set, so they are shared rather than repeated per blend. Three
+ * photographs cover four pieces: the saucer is shot beside the strainer it
+ * belongs under.
  */
 const PIECES: Slide[] = [
   {
     src: "/images/accessories/tea-strainer.jpg",
-    alt: "A gold tea strainer beside its resting bowl on dark green velvet",
+    alt: "A gold tea strainer beside its saucer on dark green velvet",
   },
   {
     src: "/images/accessories/tea-spoon.jpg",
@@ -53,23 +55,23 @@ const PIECES: Slide[] = [
 const BOXES: Record<string, Slide> = {
   "rose-vitalitea": {
     src: "/images/accessories/full-set-rose-vitalitea.jpg",
-    alt: "The open box with the pink Rose VitaliTea tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the pink Rose VitaliTea tin, a strainer, a saucer, a spoon and an infuser ball in a fitted tray",
   },
   "lavender-lullaby": {
     src: "/images/accessories/full-set-lavender-lullaby.jpg",
-    alt: "The open box with the violet Lavender Lullaby tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the violet Lavender Lullaby tin, a strainer, a saucer, a spoon and an infuser ball in a fitted tray",
   },
   "peach-me-green": {
     src: "/images/accessories/full-set-peach-me-green.jpg",
-    alt: "The open box with the coral Peach Me Green tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the coral Peach Me Green tin, a strainer, a saucer, a spoon and an infuser ball in a fitted tray",
   },
   "coco-breeze": {
     src: "/images/accessories/full-set-coco-breeze.jpg",
-    alt: "The open box with the dark brown Coco Breeze tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the dark brown Coco Breeze tin, a strainer, a saucer, a spoon and an infuser ball in a fitted tray",
   },
   "classic-thyme": {
     src: "/images/accessories/full-set-classic-thyme.jpg",
-    alt: "The open box with the oxblood Classic Thyme tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the oxblood Classic Thyme tin, a strainer, a saucer, a spoon and an infuser ball in a fitted tray",
   },
 };
 
@@ -86,7 +88,7 @@ export function fullSetSlides(blendSlug: string): Slide[] {
 
 /** What the customer is being sold, in plain words. */
 export const FULL_SET_CONTENTS =
-  "The tin, a strainer, a spoon and an infuser ball, in the box.";
+  "The tea, a strainer, a saucer, a spoon and an infuser ball, in the box.";
 
 /**
  * Shown whichever option is selected, not only once the set is chosen: it is
