@@ -6,7 +6,7 @@ import {
   type GallerySlide,
 } from '@/components/product/product-gallery';
 import { AddToCartButton } from '@/app/(site)/products/[slug]/add-to-cart';
-import { FULL_SET_CONTENTS } from '@/lib/full-sets';
+import { FULL_SET_CONTENTS, FULL_SET_RECOMMENDATION } from '@/lib/full-sets';
 import { formatPrice } from '@/lib/utils';
 import type { Product } from '@/lib/types';
 
@@ -143,12 +143,9 @@ export function PurchasePanel({ size }: { size: string }) {
       {set ? (
         <div className='mb-7'>
           <ModeToggle />
-          <p
-            className='t-body mt-4'
-            style={{ opacity: mode === 'set' ? 1 : 0 }}
-            aria-hidden={mode !== 'set'}
-          >
-            {FULL_SET_CONTENTS}
+          {mode === 'set' ? <p className='t-body mt-4'>{FULL_SET_CONTENTS}</p> : null}
+          <p className='t-body mt-3' style={{ opacity: 0.75 }}>
+            {FULL_SET_RECOMMENDATION}
           </p>
         </div>
       ) : null}

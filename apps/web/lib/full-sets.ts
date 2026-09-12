@@ -1,6 +1,6 @@
 /**
  * The boxed sets: a blend's tin packed with a strainer, a spoon and an infuser
- * ball in the gift box.
+ * ball in the box.
  *
  * Each one is its own Shopify product rather than a variant of the blend, for
  * two reasons that are easy to undo by accident. Shopify sets the tax Category
@@ -53,23 +53,23 @@ const PIECES: Slide[] = [
 const BOXES: Record<string, Slide> = {
   "rose-vitalitea": {
     src: "/images/accessories/full-set-rose-vitalitea.jpg",
-    alt: "The open gift box with the pink Rose VitaliTea tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the pink Rose VitaliTea tin, a strainer, a spoon and an infuser ball in a fitted tray",
   },
   "lavender-lullaby": {
     src: "/images/accessories/full-set-lavender-lullaby.jpg",
-    alt: "The open gift box with the violet Lavender Lullaby tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the violet Lavender Lullaby tin, a strainer, a spoon and an infuser ball in a fitted tray",
   },
   "peach-me-green": {
     src: "/images/accessories/full-set-peach-me-green.jpg",
-    alt: "The open gift box with the coral Peach Me Green tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the coral Peach Me Green tin, a strainer, a spoon and an infuser ball in a fitted tray",
   },
   "coco-breeze": {
     src: "/images/accessories/full-set-coco-breeze.jpg",
-    alt: "The open gift box with the dark brown Coco Breeze tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the dark brown Coco Breeze tin, a strainer, a spoon and an infuser ball in a fitted tray",
   },
   "classic-thyme": {
     src: "/images/accessories/full-set-classic-thyme.jpg",
-    alt: "The open gift box with the oxblood Classic Thyme tin, a strainer, a spoon and an infuser ball in a fitted tray",
+    alt: "The open box with the oxblood Classic Thyme tin, a strainer, a spoon and an infuser ball in a fitted tray",
   },
 };
 
@@ -86,7 +86,15 @@ export function fullSetSlides(blendSlug: string): Slide[] {
 
 /** What the customer is being sold, in plain words. */
 export const FULL_SET_CONTENTS =
-  "The tin, a strainer, a spoon and an infuser ball, in the gift box.";
+  "The tin, a strainer, a spoon and an infuser ball, in the box.";
+
+/**
+ * Shown whichever option is selected, not only once the set is chosen: it is
+ * meant to reach someone still deciding, and a recommendation that appears
+ * only after you have already switched has nothing left to recommend.
+ */
+export const FULL_SET_RECOMMENDATION =
+  "If this is your first time with us, the full set is where we would start.";
 
 /**
  * The owner's prices, from the Full Set table in content form three. Shopify
