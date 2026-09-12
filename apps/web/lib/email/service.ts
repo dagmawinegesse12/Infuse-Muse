@@ -27,7 +27,7 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
     subject: "You're on the Infuse & Muse waitlist",
     html: generateWaitlistConfirmationHtml(to),
     text: [
-      'Infuse & Muse — Luxury Tea, Toronto',
+      'Infuse & Muse · Luxury Tea, Toronto',
       '',
       'Welcome to Infuse & Muse.',
       '',
@@ -41,7 +41,7 @@ export async function sendWaitlistConfirmation(to: string): Promise<void> {
       '',
       'Until then, stay close.',
       '',
-      '— Mar',
+      'Mar',
       '',
       '─',
       'Instagram: https://www.instagram.com/infuseandmuse',

@@ -1,7 +1,7 @@
 import { Reveal } from '@/components/system/reveal';
 
 const STEPS: Array<[string, string, string]> = [
-  ['I', 'Measure', 'One heaped teaspoon for every cup. Loose, never bagged — the leaf needs room to open.'],
+  ['I', 'Measure', 'One heaped teaspoon for every cup. Loose, never bagged, the leaf needs room to open.'],
   ['II', 'Steep', 'Three to five minutes, off the boil. Longer draws the tannin forward; shorter keeps it floral.'],
   ['III', 'Sit', 'The part most people skip. The blend is designed for the minutes after it is poured.'],
 ];

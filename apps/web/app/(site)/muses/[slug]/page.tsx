@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     });
   }
   return createMetadata({
-    title: `${muse.name} — The Archetypes`,
+    title: `${muse.name} · The Archetypes`,
     description: muse.blurb,
     path: `/muses/${muse.slug}`,
     image: muse.image ?? undefined,

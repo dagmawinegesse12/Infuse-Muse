@@ -36,7 +36,7 @@ export function ChapterPlate() {
           </Reveal>
           <Reveal delay={170}>
             <p className="t-body mt-7" style={{ color: 'var(--plate-ink)', opacity: 0.72 }}>
-              Lavender Lullaby was built backwards — from the quiet we wanted at the end
+              Lavender Lullaby was built backwards, from the quiet we wanted at the end
               of an evening, to the botanicals that could produce it. Soft, aromatic and
               entirely caffeine free.
             </p>

@@ -16,6 +16,13 @@ export type Product = {
   /** Same product shot for the light theme. Absent means `image` serves both. */
   imageLight?: string;
   alt: string;
+  /**
+   * Further photographs, shown after the main shot in the product gallery.
+   * Unlike `image`/`imageLight` these are theme-independent: they are stills on
+   * a pale ground that read correctly in both themes. Absent or empty means the
+   * product has one photograph and the gallery renders without arrows.
+   */
+  gallery?: { src: string; alt: string }[];
   priceCents: number;
   currency: string;
   /**

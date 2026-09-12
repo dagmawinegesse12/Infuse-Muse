@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
   if (await isAlreadyOnList(email)) {
     return NextResponse.json({
-      message: "You're already on the list — we'll be in touch before launch.",
+      message: "You're already on the list. We'll be in touch before launch.",
     });
   }
 

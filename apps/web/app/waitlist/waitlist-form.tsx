@@ -19,7 +19,7 @@ export function WaitlistForm() {
       const data = await res.json();
       if (res.ok) {
         setStatus('success');
-        setMessage(data.message ?? "You're on the list — we'll reach out before launch.");
+        setMessage(data.message ?? "You're on the list. We'll reach out before launch.");
       } else {
         setStatus('error');
         setMessage(data.error ?? 'Something went wrong. Please try again.');

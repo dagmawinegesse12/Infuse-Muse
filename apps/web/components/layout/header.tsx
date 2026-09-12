@@ -11,7 +11,7 @@ import { ThemeToggle } from '@/components/system/theme-toggle';
 const PRIMARY = [
   ['Blends', '/products'],
   ['The Archetypes', '/muses'],
-  ['The Maison', '/about'],
+  ['The Prologue', '/about'],
 ] as const;
 
 const SECONDARY = [
@@ -100,7 +100,7 @@ export function Header({ showThemeToggle = true }: { showThemeToggle?: boolean }
           {/* Centre — crest */}
           <Link
             href="/"
-            aria-label="Infuse &amp; Muse — home"
+            aria-label="Infuse &amp; Muse, home"
             className="hit justify-self-center"
           >
             <Image

@@ -52,7 +52,7 @@ export default function WaitlistPage() {
         />
         <Image
           src="/images/wordmark.svg"
-          alt="Infuse & Muse — Redefining stillness"
+          alt="Infuse & Muse. Redefining stillness"
           width={420}
           height={84}
           priority

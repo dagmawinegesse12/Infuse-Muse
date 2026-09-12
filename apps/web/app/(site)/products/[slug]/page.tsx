@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { ThemedImage } from '@/components/system/themed-image';
+import { ProductGallery } from '@/components/product/product-gallery';
 import { SchemaScript } from '@/components/schema-script';
 import { getProductBySlug } from '@/lib/data';
 import { createMetadata } from '@/lib/metadata';
@@ -54,19 +54,17 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
       <SchemaScript data={schema} />
 
       <div className="grid lg:grid-cols-2">
-        {/* The photograph fills its column edge to edge. The source shots are
-            square with the tin centred and room around it, so covering a
-            roughly square column only trims background, never the lid. On
-            large screens it sits below the fixed header, not under it. */}
-        <div className="plate relative mt-[var(--header-h)] aspect-[4/5] lg:sticky lg:top-[var(--header-h)] lg:mt-0 lg:aspect-auto lg:h-[calc(100svh-var(--header-h))]">
-          <ThemedImage
-            src={product.image}
-            srcLight={product.imageLight}
-            alt={product.alt}
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+        {/* The photographs. Square, because the tins are square and the wider
+            stills only lose their outer edges at that ratio; a portrait frame
+            cut the bowls out of the stills and a landscape one took the lid off
+            the tins. Sticky on large screens so the image stays alongside the
+            copy, and self-start so the grid does not stretch it. */}
+        <div className="mt-[var(--header-h)] lg:sticky lg:top-[var(--header-h)] lg:mt-0 lg:self-start">
+          <ProductGallery
+            slides={[
+              { src: product.image, srcLight: product.imageLight, alt: product.alt },
+              ...(product.gallery ?? []),
+            ]}
           />
         </div>
 
@@ -144,7 +142,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 <h2 className="t-label">Caffeine</h2>
                 <p className="t-body mt-4">
                   {product.caffeineLevel === 'Herbal'
-                    ? 'Herbal — no caffeine'
+                    ? 'Herbal, no caffeine'
                     : product.caffeineLevel}
                 </p>
               </div>

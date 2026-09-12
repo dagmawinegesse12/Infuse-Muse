@@ -53,8 +53,8 @@ export default function TermsPage() {
         <ProseSection index={3} heading="Orders">
           <P>
             Your order is an offer to buy. It is accepted when we send your confirmation
-            email. We may decline an order — for example if stock has run out or we
-            cannot verify payment — and will refund you in full where that happens.
+            email. We may decline an order, for example if stock has run out or we
+            cannot verify payment, and will refund you in full where that happens.
           </P>
         </ProseSection>
 

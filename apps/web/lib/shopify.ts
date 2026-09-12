@@ -157,6 +157,10 @@ export function mapShopifyProduct(node: ShopifyProductNode, fallback?: Product |
       fallback?.image ||
       "/images/products/rose-vitalitea-emerald.jpg",
     imageLight: ownPair ? fallback?.imageLight : undefined,
+    // The extra gallery photographs are ours, like the pair, so they travel
+    // with it: a Shopify-backed page keeps them rather than dropping to a
+    // single shot.
+    gallery: ownPair ? fallback?.gallery : undefined,
     alt: (ownPair ? fallback?.alt : node.featuredImage?.altText) || fallback?.alt || node.title,
     priceCents: variant ? Math.round(Number(variant.price.amount) * 100) : fallback?.priceCents ?? 0,
     currency: variant?.price.currencyCode || fallback?.currency || "CAD",

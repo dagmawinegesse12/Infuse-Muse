@@ -11,7 +11,7 @@ export const demoCategories: Category[] = [
   { _id: "arch-romantic", title: "The Romantic", slug: "the-romantic", description: "Unhurried devotion. Not the performance of love, but the architecture of it." },
   { _id: "arch-dreamer", title: "The Dreamer", slug: "the-dreamer", description: "The threshold between waking and sleep, kept open on purpose." },
   { _id: "arch-free-spirit", title: "The Free Spirit", slug: "the-free-spirit", description: "Attention with nothing holding it down." },
-  { _id: "arch-poet", title: "The Poet", slug: "the-poet", description: "Language as excavation — reaching past the obvious word for the true one." },
+  { _id: "arch-poet", title: "The Poet", slug: "the-poet", description: "Language as excavation. Reaching past the obvious word for the true one." },
   { _id: "arch-old-soul", title: "The Old-Soul", slug: "the-old-soul", description: "Loyalty extended toward whatever has already proven itself worth keeping." }
 ];
 
@@ -28,6 +28,7 @@ export const demoProducts: Product[] = [
     description: "Rose VitaliTea is a fragrant herbal blend with floral notes, crafted for slow mornings and elegant afternoons.",
     image: "/images/products/rose-vitalitea-emerald.jpg", imageLight: "/images/products/rose-vitalitea-light.jpg",
     alt: "Rose VitaliTea tin, pink with gold foil lettering",
+    gallery: [{ src: "/images/products/rose-vitalitea-detail.jpg", alt: "A glass bowl of brewed amber tea beside a bowl of dried pink rose petals on a wooden board, with a gold spoon" }],
     priceCents: 2552, currency: "CAD", size: "75 g",
     brewing: { temperature: "95–100 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
     allergens: "",
@@ -45,6 +46,7 @@ export const demoProducts: Product[] = [
     description: "An evening blend for winding down the day and waking the imagination.",
     image: "/images/products/lavender-lullaby-emerald.jpg", imageLight: "/images/products/lavender-lullaby-light.jpg",
     alt: "Lavender Lullaby tin, deep violet with gold foil lettering",
+    gallery: [{ src: "/images/products/lavender-lullaby-detail.jpg", alt: "A glass bowl of brewed tea, turquoise from butterfly pea flower, beside a bowl of chamomile and rose buds on a wooden board" }],
     priceCents: 3360, currency: "CAD", size: "75 g",
     brewing: { temperature: "95–100 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
     allergens: "",
@@ -62,6 +64,7 @@ export const demoProducts: Product[] = [
     description: "Peach Me Green balances crisp green tea with ripe peach character and floral aromatics.",
     image: "/images/products/peach-me-green-emerald.jpg", imageLight: "/images/products/peach-me-green-light.jpg",
     alt: "Peach Me Green tin, coral orange with gold foil lettering",
+    gallery: [{ src: "/images/products/peach-me-green-detail.jpg", alt: "A glass bowl of brewed amber tea beside a bowl of green tea leaves, blue cornflower petals and dried peach on a wooden board" }],
     priceCents: 2881, currency: "CAD", size: "75 g",
     brewing: { temperature: "60–70 °C", time: "4–5 minutes", amount: "1 tsp per 250 ml" },
     allergens: "",
@@ -79,6 +82,7 @@ export const demoProducts: Product[] = [
     description: "Coco Breeze is a mint cacao blend with an earthy undertone.",
     image: "/images/products/coco-breeze-emerald.jpg", imageLight: "/images/products/coco-breeze-light.jpg",
     alt: "Coco Breeze tin, dark espresso brown with gold foil lettering",
+    gallery: [{ src: "/images/products/coco-breeze-detail.jpg", alt: "A glass bowl of brewed amber tea beside a bowl of dried mint, cacao nibs and yellow calendula petals on a wooden board" }],
     priceCents: 2995, currency: "CAD", size: "75 g",
     brewing: { temperature: "95–100 °C", time: "5–7 minutes", amount: "1 tsp per 250 ml" },
     allergens: "",

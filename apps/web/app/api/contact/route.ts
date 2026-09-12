@@ -43,5 +43,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ message: 'Thank you — your note is on its way to us.' });
+  return NextResponse.json({ message: 'Thank you. Your note is on its way to us.' });
 }

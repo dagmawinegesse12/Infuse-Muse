@@ -36,8 +36,8 @@ export default function ShippingReturnsPage() {
         <ProseSection index={1} heading="Delivery">
           <List
             items={[
-              'Standard — $12, 3 to 5 business days. Free on orders of $75 or more.',
-              'Express — $20, 1 to 2 business days.',
+              'Standard: $12, 3 to 5 business days. Free on orders of $75 or more.',
+              'Express: $20, 1 to 2 business days.',
               'We ship within Canada only for now.',
             ]}
           />
@@ -50,7 +50,7 @@ export default function ShippingReturnsPage() {
 
         <ProseSection index={2} heading="Returns">
           <P>
-            Tea is a consumable, so we cannot accept returns on opened tins — a matter
+            Tea is a consumable, so we cannot accept returns on opened tins, a matter
             of food safety rather than preference. Unopened tins in original condition
             may be returned within 14 days of delivery. Return postage is yours unless
             the fault is ours.

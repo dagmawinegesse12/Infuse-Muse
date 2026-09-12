@@ -23,7 +23,7 @@ const ENTRIES: Array<{ title: string; copy: string; image: string; href: string 
   },
   {
     title: 'Spice, restrained',
-    copy: 'Warmth without the syrup — how Coco Breeze stays a tea, not a dessert.',
+    copy: 'Warmth without the syrup: how Coco Breeze stays a tea, not a dessert.',
     image: '/images/products/coco-breeze.png',
     href: '/products/coco-breeze',
   },

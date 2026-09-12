@@ -36,7 +36,7 @@ export function List({ items }: { items: string[] }) {
       {items.map((item) => (
         <li key={item} className="t-body flex gap-4">
           <span aria-hidden style={{ color: 'var(--accent)' }}>
-            —
+            ·
           </span>
           <span>{item}</span>
         </li>

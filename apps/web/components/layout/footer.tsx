@@ -11,7 +11,7 @@ const COLUMNS: Array<[string, Array<[string, string]>]> = [
     ],
   ],
   [
-    'The Maison',
+    'The Prologue',
     [
       ['Our story', '/about'],
       ['Instagram', 'https://www.instagram.com/infuse_and_muse'],

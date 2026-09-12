@@ -90,7 +90,7 @@ export default function PrivacyPage() {
 
         <ProseSection index={6} heading="Cookies">
           <P>
-            The site uses only what it needs to function — your cart, and your choice of
+            The site uses only what it needs to function: your cart, and your choice of
             light or dark theme, both stored in your own browser. We do not run
             advertising trackers or third-party profiling cookies.
           </P>

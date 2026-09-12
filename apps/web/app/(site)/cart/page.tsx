@@ -7,7 +7,7 @@ export default function CartPage() {
       <PageHeader
         eyebrow="Bag"
         title="Review your blends before checkout."
-        lede="Adjust quantities or remove anything — your selections are kept while you browse."
+        lede="Adjust quantities or remove anything. Your selections are kept while you browse."
       />
       <div className="shell pb-[var(--chapter)]">
         <CartPageClient />
