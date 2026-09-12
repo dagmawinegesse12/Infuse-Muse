@@ -98,9 +98,11 @@ function ModeToggle() {
       aria-label='What to buy'
       className='flex items-center gap-6'
     >
+      {/* The internal name stays `tin` — it is a tin — but the label says what
+          the customer is choosing between, which is tea or tea plus pieces. */}
       {(
         [
-          ['tin', 'Tin only'],
+          ['tin', 'Tea only'],
           ['set', 'Full set'],
         ] as const
       ).map(([value, label]) => {
