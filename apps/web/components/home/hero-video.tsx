@@ -3,7 +3,13 @@
 import { useRef, useState } from 'react';
 
 /**
- * The hero film, with a sound control.
+ * The hero film, with a sound control: an eighth note, struck through while
+ * the film is muted.
+ *
+ * The note is drawn rather than typed. The ♪ character renders inconsistently
+ * across platforms and some substitute an emoji glyph for it, which would sit
+ * badly on this page. Because the button now carries no text, it needs an
+ * explicit aria-label: the old visible word was its accessible name.
  *
  * The clip carries an audio track, but every browser blocks autoplay unless the
  * video starts muted — so it does, and the viewer opts in. Nothing about the
@@ -62,28 +68,39 @@ export function HeroVideo() {
           type="button"
           onClick={toggleSound}
           aria-pressed={!muted}
-          className="hit t-label flex items-center gap-3 rounded-full border px-4 py-2 backdrop-blur-sm"
+          aria-label="Film sound"
+          className="hit flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-sm transition-opacity duration-500 ease-muse"
           style={{
             color: 'var(--on-media)',
             borderColor: 'rgba(255, 255, 255, 0.22)',
             background: 'rgba(9, 37, 22, 0.32)',
+            opacity: muted ? 0.72 : 1,
           }}
         >
-          {/* Three bars that stand up when the sound is on. */}
-          <span aria-hidden className="flex h-3 items-end gap-[3px]">
-            {[0.45, 1, 0.7].map((scale, i) => (
-              <span
-                key={i}
-                className="block w-px origin-bottom transition-transform duration-500 ease-muse"
-                style={{
-                  height: '100%',
-                  background: 'var(--on-media)',
-                  transform: `scaleY(${muted ? 0.2 : scale})`,
-                }}
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            {/* Stem and flag. */}
+            <path
+              d="M10 17.2V4.6l7-1.6v3.1"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            {/* Notehead. */}
+            <ellipse cx="7.4" cy="17.4" rx="2.9" ry="2.3" fill="currentColor" />
+            {/* Struck through only while muted. */}
+            {muted ? (
+              <line
+                x1="4.2"
+                y1="19.8"
+                x2="19.8"
+                y2="4.2"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
               />
-            ))}
-          </span>
-          {muted ? 'Sound' : 'Mute'}
+            ) : null}
+          </svg>
         </button>
       </div>
     </>
