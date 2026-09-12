@@ -100,14 +100,12 @@ export const demoProducts: Product[] = [
     seoDescription: "Shop Coco Breeze, a caffeine-free mint and cacao blend from Infuse & Muse."
   },
   {
-    // The tin pair is real and correct. Still outstanding is the third photo
-    // the other four have: the brew-and-leaf still that fills `gallery`, so
-    // this is the one blend whose page shows a single image and no arrows.
     _id: "prod-thyme", title: "Classic Thyme", slug: "classic-thyme",
     shortDescription: "An Earl Grey blend layered with spice and wisdom.",
     description: "Classic Thyme is a rich, creamy Earl Grey, layered with a spice combination used in East Africa for centuries.",
     image: "/images/products/classic-thyme-emerald.jpg", imageLight: "/images/products/classic-thyme-light.jpg",
     alt: "Classic Thyme tin, oxblood red with gold foil lettering",
+    gallery: [{ src: "/images/products/classic-thyme-detail.jpg", alt: "A glass bowl of brewed russet tea beside a bowl of black tea leaves with cardamom pods and cinnamon on a wooden board, with a gold spoon" }],
     priceCents: 3303, currency: "CAD", size: "100 g",
     brewing: { temperature: "95–100 °C", time: "3–4 minutes", amount: "1 tsp per 250 ml" },
     allergens: "",
