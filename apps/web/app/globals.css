@@ -562,6 +562,21 @@ body {
   animation: museDrift 2600ms var(--ease) both;
 }
 
+/* Two stills for two cuts of the film. This is the only frame a phone shows
+   under reduced motion, where the video is removed entirely, so the tall one
+   has to be a real portrait frame rather than a wide one cropped to a slot. */
+.hero__still--tall {
+  display: none;
+}
+@media (max-width: 639px) {
+  .hero__still--wide {
+    display: none;
+  }
+  .hero__still--tall {
+    display: block;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;

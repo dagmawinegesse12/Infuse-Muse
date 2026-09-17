@@ -25,8 +25,16 @@ export function Hero() {
           fill
           priority
           sizes="100vw"
-          className="hero__still object-cover"
+          className="hero__still hero__still--wide object-cover"
           style={{ objectPosition: '50% 55%' }}
+        />
+        <Image
+          src="/video/hero-poster-portrait.jpg"
+          alt=""
+          aria-hidden
+          fill
+          sizes="100vw"
+          className="hero__still hero__still--tall object-cover"
         />
 
         <HeroVideo />

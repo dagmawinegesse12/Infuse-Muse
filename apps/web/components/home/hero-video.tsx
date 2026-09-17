@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * The hero film, with a sound control: an eighth note, struck through while
@@ -25,9 +25,45 @@ import { useRef, useState } from 'react';
  * width, so the control moves to the top-right, under the header; from `sm` up
  * the plate is narrow and the control sits bottom-right beside it.
  */
+/**
+ * The film was shot twice: wide for desktop, and a portrait cut for phones,
+ * where a 16:9 frame in a tall viewport crops to a letterbox of the middle.
+ *
+ * Which one loads is decided on the client rather than by a `media` attribute
+ * on <source>, which Chrome and Firefox ignore, and rather than rendering both
+ * and hiding one, which downloads a few megabytes nobody watches. Nothing
+ * renders until the viewport is known; the poster underneath covers that tick,
+ * and the film fades in over it anyway.
+ */
+const NARROW = '(max-width: 639px)';
+
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const [cut, setCut] = useState<'wide' | 'tall' | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia(NARROW);
+    const apply = () => setCut(mq.matches ? 'tall' : 'wide');
+    apply();
+
+    // Safari only learned addEventListener on a MediaQueryList in 14. Calling
+    // it on an older one throws, and a throw in an effect takes the whole
+    // route down through the error boundary — a dead page over a film that
+    // does not resize. Fall back to the deprecated listener instead.
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', apply);
+      return () => mq.removeEventListener('change', apply);
+    }
+    mq.addListener(apply);
+    return () => mq.removeListener(apply);
+  }, []);
+
+  // Swapping cut remounts the element, which resets it to the muted attribute.
+  // Carry the viewer's choice across, or rotating a phone re-mutes the film.
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.muted = muted;
+  }, [cut, muted]);
 
   function toggleSound() {
     const video = videoRef.current;
@@ -42,20 +78,23 @@ export function HeroVideo() {
 
   return (
     <>
-      <video
-        ref={videoRef}
-        className="hero__video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        poster="/video/hero-poster.jpg"
-        aria-label="Infuse & Muse launch film"
-      >
-        <source src="/video/hero.webm" type="video/webm" />
-        <source src="/video/hero.mp4" type="video/mp4" />
-      </video>
+      {cut === null ? null : (
+        <video
+          key={cut}
+          ref={videoRef}
+          className="hero__video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster={cut === 'tall' ? '/video/hero-poster-portrait.jpg' : '/video/hero-poster.jpg'}
+          aria-label="Infuse & Muse launch film"
+        >
+          <source src={`/video/hero${cut === 'tall' ? '-portrait' : ''}.webm`} type="video/webm" />
+          <source src={`/video/hero${cut === 'tall' ? '-portrait' : ''}.mp4`} type="video/mp4" />
+        </video>
+      )}
 
       {/*
         The wrapper carries the position, not the button. `.hit` sets
