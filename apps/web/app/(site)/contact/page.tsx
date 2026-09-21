@@ -15,8 +15,8 @@ export default function ContactPage() {
     <>
       <PageHeader
         eyebrow="Contact"
-        title="Questions, gifting, or partnerships?"
-        lede="For product questions, partnerships, event gifting, or anything else you would like to ask."
+        title="Questions, gifting, or feedback?"
+        lede="For product questions, partnerships, event gifting, a word on a blend you have tried, or anything else you would like to tell us."
       />
 
       <section className="shell grid gap-x-[clamp(2rem,6vw,6rem)] gap-y-16 pb-[var(--chapter)] lg:grid-cols-[0.8fr_1.2fr]">

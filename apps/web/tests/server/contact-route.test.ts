@@ -27,6 +27,7 @@ describe('POST /api/contact', () => {
     process.env.RESEND_API_KEY = 'test_key';
     process.env.CONTACT_INBOX = 'hello@infuseandmuse.ca';
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
   afterEach(() => vi.restoreAllMocks());
 
@@ -75,6 +76,30 @@ describe('POST /api/contact', () => {
     expect(res.status).toBe(503);
     expect(send).not.toHaveBeenCalled();
     expect((await res.json()).error).toMatch(/unavailable/i);
+  });
+
+  it('titles a plain enquiry as a question', async () => {
+    await post(valid);
+    expect(send.mock.calls[0][0].subject).toBe('Question from Ada Lovelace');
+  });
+
+  it('titles feedback with the blend, so it can be sorted in the inbox', async () => {
+    await post({ ...valid, topic: 'feedback', about: 'Rose VitaliTea' });
+    const mail = send.mock.calls[0][0];
+    expect(mail.subject).toBe('Feedback on Rose VitaliTea from Ada Lovelace');
+    expect(mail.html).toContain('Feedback, Rose VitaliTea');
+  });
+
+  it('thanks a bot that fills the hidden field, and sends nothing', async () => {
+    const res = await post({ ...valid, hp_note: 'https://spam.example' });
+    expect(res.status).toBe(200);
+    expect(send).not.toHaveBeenCalled();
+    expect((await res.json()).message).toMatch(/thank you/i);
+  });
+
+  it('does not trip the trap on an empty hidden field', async () => {
+    await post({ ...valid, hp_note: '' });
+    expect(send).toHaveBeenCalledOnce();
   });
 
   it('surfaces a provider failure instead of claiming success', async () => {
