@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { getEventTicket } from '@/lib/data';
+import { isValidInvite } from '@/lib/event-invite';
+import { MAX_TICKETS_PER_ORDER, ticketsInCart } from '@/lib/event';
 import { shopifyEnabled } from '@/lib/shopify';
 import {
   CartError,
@@ -24,6 +27,10 @@ const MAX_QUANTITY = 50;
 // Shopify codes are letters, digits and a few separators; anything else is noise.
 const CODE_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 
+const TICKET_CAP_MESSAGE = `You can buy up to ${MAX_TICKETS_PER_ORDER} tickets per order.`;
+
+const TICKET_INVITE_MESSAGE = 'Tickets are by request. Send us a request on the event page.';
+
 const bad = (error: string, status = 400) => NextResponse.json({ error }, { status });
 
 function parse(body: unknown): CartRequest | null {
@@ -43,7 +50,8 @@ function parse(body: unknown): CartRequest | null {
       if (!variantId) return null;
       const qty = quantity ?? 1;
       if (qty < 1 || qty > MAX_QUANTITY) return null;
-      return { op: 'add', cartId, variantId, quantity: qty };
+      const invite = typeof b.invite === 'string' ? b.invite : undefined;
+      return { op: 'add', cartId, variantId, quantity: qty, invite };
     }
     case 'update':
       if (!cartId || !lineId || quantity === null || quantity < 0 || quantity > MAX_QUANTITY) {
@@ -83,6 +91,13 @@ export async function POST(request: Request) {
       case 'get':
         return NextResponse.json({ cart: await getCart(req.cartId) });
       case 'add': {
+        const ticket = await getEventTicket();
+        if (ticket && req.variantId === ticket.variantId) {
+          if (!isValidInvite(req.invite)) return bad(TICKET_INVITE_MESSAGE, 403);
+          const current = req.cartId ? await getCart(req.cartId) : null;
+          const held = ticketsInCart(current?.lines ?? [], ticket.variantId);
+          if (held + req.quantity > MAX_TICKETS_PER_ORDER) return bad(TICKET_CAP_MESSAGE);
+        }
         const line = { merchandiseId: req.variantId, quantity: req.quantity };
         // A stored cart can have expired or been checked out; start over then.
         const existing = req.cartId ? await addLines(req.cartId, [line]) : null;
@@ -94,8 +109,15 @@ export async function POST(request: Request) {
         }
         return NextResponse.json({ cart });
       }
-      case 'update':
+      case 'update': {
+        if (req.quantity > MAX_TICKETS_PER_ORDER) {
+          const ticket = await getEventTicket();
+          const current = ticket ? await getCart(req.cartId) : null;
+          const line = current?.lines.find((l) => l.id === req.lineId);
+          if (ticket && line?.variantId === ticket.variantId) return bad(TICKET_CAP_MESSAGE);
+        }
         return NextResponse.json({ cart: await updateLine(req.cartId, req.lineId, req.quantity) });
+      }
       case 'remove':
         return NextResponse.json({ cart: await removeLines(req.cartId, [req.lineId]) });
       case 'discount': {

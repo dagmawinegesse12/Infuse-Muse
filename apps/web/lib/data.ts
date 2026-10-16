@@ -1,3 +1,4 @@
+import { TICKET_HANDLE, TICKET_PRODUCT_TYPE } from "./event";
 import { isFullSet, previewFullSets } from "./full-sets";
 import { sanityClient, sanityEnabled } from "./sanity";
 import {
@@ -53,7 +54,9 @@ const productProjection = `
 async function getShopifyProducts(): Promise<Product[] | null> {
   if (!shopifyEnabled) return null;
   try {
-    const nodes = await fetchShopifyProducts();
+    const nodes = (await fetchShopifyProducts()).filter(
+      (node) => node.productType !== TICKET_PRODUCT_TYPE
+    );
     if (nodes.length === 0) return null;
     return nodes.map((node) =>
       mapShopifyProduct(node, demoProducts.find((p) => p.slug === node.handle))
@@ -68,9 +71,40 @@ async function getShopifyProduct(slug: string, fallback: Product | null): Promis
   if (!shopifyEnabled) return null;
   try {
     const node = await fetchShopifyProduct(slug);
+    if (node?.productType === TICKET_PRODUCT_TYPE) return null;
     return node ? mapShopifyProduct(node, fallback) : null;
   } catch (error) {
     console.error(`[data] Shopify product "${slug}" failed, falling back:`, error);
+    return null;
+  }
+}
+
+export type EventTicket = {
+  variantId: string;
+  availableForSale: boolean;
+  priceCents: number;
+  currency: string;
+};
+
+/**
+ * The gathering's ticket. Null while the product is Draft or not published to
+ * Headless, which is what keeps the event page on "not on sale yet" until she
+ * flips it. Read through the same 60 s cache as every other product.
+ */
+export async function getEventTicket(): Promise<EventTicket | null> {
+  if (!shopifyEnabled) return null;
+  try {
+    const node = await fetchShopifyProduct(TICKET_HANDLE);
+    const variant = node?.variants.nodes[0];
+    if (!node || node.productType !== TICKET_PRODUCT_TYPE || !variant) return null;
+    return {
+      variantId: variant.id,
+      availableForSale: variant.availableForSale,
+      priceCents: Math.round(Number(variant.price.amount) * 100),
+      currency: variant.price.currencyCode,
+    };
+  } catch (error) {
+    console.error("[data] Event ticket lookup failed:", error);
     return null;
   }
 }

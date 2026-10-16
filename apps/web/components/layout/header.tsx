@@ -13,6 +13,7 @@ const PRIMARY = [
   ['Blends', '/products'],
   ['The Archetypes', '/muses'],
   ['The Prologue', '/about'],
+  ['Events', '/events'],
 ] as const;
 
 const SECONDARY = [

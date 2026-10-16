@@ -43,11 +43,18 @@ export type CartState = {
   error: string | null;
 };
 
-export type AddToCartInput = { variantId: string; quantity?: number };
+/** `openCart: false` adds without sliding the bag open, for flows that go straight to checkout. */
+export type AddToCartInput = {
+  variantId: string;
+  quantity?: number;
+  openCart?: boolean;
+  /** The private event link's code; the server requires it for the ticket and ignores it otherwise. */
+  invite?: string;
+};
 
 export type CartRequest =
   | { op: "get"; cartId: string }
-  | { op: "add"; cartId: string | null; variantId: string; quantity: number }
+  | { op: "add"; cartId: string | null; variantId: string; quantity: number; invite?: string }
   | { op: "update"; cartId: string; lineId: string; quantity: number }
   | { op: "remove"; cartId: string; lineId: string }
   /** Empty `code` clears every code on the cart. */

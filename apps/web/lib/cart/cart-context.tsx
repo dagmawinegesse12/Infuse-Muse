@@ -235,10 +235,10 @@ export function CartProvider({ children }: PropsWithChildren) {
       itemCount,
       subtotal: state.subtotal,
       checkoutUrl: state.items.length > 0 ? state.checkoutUrl : null,
-      addItem: ({ variantId, quantity = 1 }) =>
+      addItem: ({ variantId, quantity = 1, openCart = true, invite }) =>
         run(
-          (cartId) => ({ op: 'add', cartId, variantId, quantity: Math.max(1, quantity) }),
-          true
+          (cartId) => ({ op: 'add', cartId, variantId, quantity: Math.max(1, quantity), invite }),
+          openCart
         ),
       setQuantity: (lineId, quantity) =>
         run((cartId) => (cartId ? { op: 'update', cartId, lineId, quantity } : null)),

@@ -7,6 +7,7 @@ const node = (over: Partial<ShopifyProductNode> = {}): ShopifyProductNode => ({
   handle: 'coco-breeze',
   title: 'Coco Breeze',
   description: 'Coco Breeze is a mint cacao blend with an earthy undertone.',
+  productType: '',
   featuredImage: null,
   seo: { title: 'Coco Breeze | Mint and Cacao Tea Blend', description: null },
   collections: { nodes: [{ handle: 'frontpage', title: 'Home page' }, { handle: 'the-poet', title: 'The Poet' }] },

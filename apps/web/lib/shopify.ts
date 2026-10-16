@@ -73,6 +73,7 @@ const PRODUCT_FIELDS = `
   handle
   title
   description
+  productType
   featuredImage { url altText }
   seo { title description }
   collections(first: 10) { nodes { handle title } }
@@ -94,6 +95,7 @@ export type ShopifyProductNode = {
   handle: string;
   title: string;
   description: string;
+  productType: string;
   featuredImage: { url: string; altText: string | null } | null;
   seo: { title: string | null; description: string | null };
   collections: { nodes: { handle: string; title: string }[] };

@@ -1,6 +1,7 @@
 /** Shared input rules, used by route handlers and covered by tests. */
 
 import { demoProducts } from './demo-data';
+import { MAX_TICKETS_PER_ORDER } from './event';
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -95,6 +96,34 @@ export function validateContact(body: unknown): ValidationResult<ContactInput> {
   }
 
   return { ok: true, value: { name, email: email.value, message, topic, about } };
+}
+
+export type TicketRequestInput = {
+  name: string;
+  email: string;
+  tickets: number;
+  note: string;
+};
+
+export function validateTicketRequest(body: unknown): ValidationResult<TicketRequestInput> {
+  const b = (body ?? {}) as Record<string, unknown>;
+
+  const name = typeof b.name === 'string' ? b.name.trim() : '';
+  if (!name) return { ok: false, error: 'Please tell us your name.' };
+  if (name.length > LIMITS.name) return { ok: false, error: 'That name is too long.' };
+
+  const email = validateEmail(b.email);
+  if (!email.ok) return email;
+
+  const tickets = Number(b.tickets);
+  if (!Number.isInteger(tickets) || tickets < 1 || tickets > MAX_TICKETS_PER_ORDER) {
+    return { ok: false, error: `Please ask for between 1 and ${MAX_TICKETS_PER_ORDER} tickets.` };
+  }
+
+  const note = typeof b.note === 'string' ? b.note.trim() : '';
+  if (note.length > LIMITS.message) return { ok: false, error: 'That note is too long.' };
+
+  return { ok: true, value: { name, email: email.value, tickets, note } };
 }
 
 /**
