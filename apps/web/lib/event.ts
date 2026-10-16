@@ -12,8 +12,12 @@ export const INVITE_PARAM = "invite";
 
 export const EVENT = {
   name: "Opening Pour",
-  /** Owner copy, shown only when filled in. */
-  description: "",
+  /** Owner copy, verbatim. One entry per paragraph. */
+  description: [
+    "An intimate evening celebrating the beginning of Infuse & Muse.",
+    "Step into our world of thoughtfully crafted teas, where five archetypes come to life through distinct blends, art, and sensory experiences. Discover the stories behind the collection, savour each blend, and linger in moments designed to be experienced slowly.",
+    "The first pour is only the beginning.",
+  ],
   startsAt: new Date("2026-11-15T16:00:00-05:00"),
   endsAt: new Date("2026-11-15T20:00:00-05:00"),
   salesCloseAt: new Date("2026-11-15T14:00:00-05:00"),

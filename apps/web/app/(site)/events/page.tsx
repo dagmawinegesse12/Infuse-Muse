@@ -22,7 +22,7 @@ const PHOTO = '/images/events/opening-pour.jpg';
 
 export const metadata = createMetadata({
   title: EVENT.name,
-  description: `${dateLabel()}, ${timeLabel()}, ${EVENT.venueLabel}.`,
+  description: `${EVENT.description[0]} ${dateLabel()}, ${timeLabel()}, ${EVENT.venueLabel}.`,
   path: '/events',
   image: PHOTO,
 });
@@ -47,6 +47,7 @@ export default async function EventsPage({
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: EVENT.name,
+    description: EVENT.description.join(' '),
     startDate: EVENT.startsAt.toISOString(),
     endDate: EVENT.endsAt.toISOString(),
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -70,7 +71,13 @@ export default async function EventsPage({
   return (
     <>
       <SchemaScript data={schema} />
-      <PageHeader eyebrow="Gathering" title={EVENT.name} />
+      <PageHeader eyebrow="Gathering" title={EVENT.name}>
+        {EVENT.description.map((paragraph, i) => (
+          <p key={paragraph} className={i === 0 ? 't-body t-body--lead' : 't-body'}>
+            {paragraph}
+          </p>
+        ))}
+      </PageHeader>
 
       <section className="shell pb-[var(--chapter)]">
         <div className="grid gap-14 lg:grid-cols-[1fr_26rem] lg:gap-20">
@@ -86,12 +93,6 @@ export default async function EventsPage({
                 </div>
               </Reveal>
             ))}
-
-            {EVENT.description ? (
-              <Reveal delay={220}>
-                <p className="t-body t-body--lead mt-10 max-w-measure">{EVENT.description}</p>
-              </Reveal>
-            ) : null}
 
             <Reveal delay={260}>
               <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">

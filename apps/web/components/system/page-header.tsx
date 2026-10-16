@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Reveal } from '@/components/system/reveal';
 
 /**
@@ -9,10 +10,12 @@ export function PageHeader({
   eyebrow,
   title,
   lede,
+  children,
 }: {
   eyebrow: string;
   title: string;
   lede?: string;
+  children?: ReactNode;
 }) {
   return (
     <header className="shell pb-[clamp(2.5rem,5vw,4rem)] pt-[var(--header-clear)]">
@@ -25,6 +28,11 @@ export function PageHeader({
       {lede ? (
         <Reveal delay={160}>
           <p className="t-body t-body--lead mt-8 max-w-measure">{lede}</p>
+        </Reveal>
+      ) : null}
+      {children ? (
+        <Reveal delay={190}>
+          <div className="mt-8 max-w-measure space-y-6">{children}</div>
         </Reveal>
       ) : null}
       <Reveal delay={220}>
