@@ -4,7 +4,6 @@ import {
   MAX_TICKETS_PER_ORDER,
   dateLabel,
   googleCalendarUrl,
-  mapLinks,
   saleState,
   ticketsInCart,
   timeLabel,
@@ -21,10 +20,11 @@ describe('event details', () => {
     expect(EVENT.endsAt.toISOString()).toBe('2026-11-16T01:00:00.000Z');
   });
 
-  it('links to the venue on both map apps', () => {
-    const { google, apple } = mapLinks();
-    expect(google).toContain('87+Wade+Ave,+Toronto,+ON+M6H+1P5');
-    expect(apple).toContain('87+Wade+Ave,+Toronto,+ON+M6H+1P5');
+  it('names the area only, never the street address', () => {
+    expect(EVENT.venueLabel).toBe('Downtown Toronto');
+    const url = googleCalendarUrl('https://infuseandmuse.com/events');
+    expect(new URL(url).searchParams.get('location')).toBe('Downtown Toronto');
+    expect(JSON.stringify(EVENT)).not.toMatch(/Wade|M6H/);
   });
 
   it('builds a Google Calendar link', () => {

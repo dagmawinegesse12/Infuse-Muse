@@ -10,10 +10,8 @@ import { isValidInvite } from '@/lib/event-invite';
 import {
   EVENT,
   INVITE_PARAM,
-  addressLine,
   dateLabel,
   googleCalendarUrl,
-  mapLinks,
   saleState,
   timeLabel,
 } from '@/lib/event';
@@ -24,7 +22,7 @@ const PHOTO = '/images/events/opening-pour.jpg';
 
 export const metadata = createMetadata({
   title: EVENT.name,
-  description: `${dateLabel()}, ${timeLabel()}, at ${addressLine()}.`,
+  description: `${dateLabel()}, ${timeLabel()}, ${EVENT.venueLabel}.`,
   path: '/events',
   image: PHOTO,
 });
@@ -36,7 +34,6 @@ export default async function EventsPage({
 }) {
   const ticket = await getEventTicket();
   const state = saleState(new Date(), ticket);
-  const maps = mapLinks();
 
   /* Tickets are by request. A guest the owner has approved arrives on a
      private link carrying the invite code; everyone else sees the request
@@ -56,14 +53,8 @@ export default async function EventsPage({
     eventStatus: 'https://schema.org/EventScheduled',
     location: {
       '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: EVENT.address.street,
-        addressLocality: EVENT.address.city,
-        addressRegion: EVENT.address.region,
-        postalCode: EVENT.address.postalCode,
-        addressCountry: EVENT.address.country,
-      },
+      name: EVENT.venueLabel,
+      address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressRegion: 'ON', addressCountry: 'CA' },
     },
     image: [absoluteUrl(PHOTO)],
     organizer: { '@type': 'Organization', name: 'Infuse & Muse', url: absoluteUrl('/') },
@@ -73,20 +64,7 @@ export default async function EventsPage({
     ['When', dateLabel()],
     ['Time', timeLabel()],
     ['Tickets', `${formatPrice(ticket?.priceCents ?? EVENT.priceCents, ticket?.currency)} ${EVENT.priceNote}`],
-    [
-      'Where',
-      <>
-        <span className="block">{addressLine()}</span>
-        <span className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
-          <a href={maps.google} target="_blank" rel="noreferrer noopener" className="wipe-link t-body">
-            Google Maps
-          </a>
-          <a href={maps.apple} target="_blank" rel="noreferrer noopener" className="wipe-link t-body">
-            Apple Maps
-          </a>
-        </span>
-      </>,
-    ],
+    ['Where', EVENT.venueLabel],
   ];
 
   return (

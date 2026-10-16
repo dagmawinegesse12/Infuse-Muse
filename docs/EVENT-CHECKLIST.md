@@ -3,7 +3,7 @@
 Decided: $25 + HST (checkout shows $28.25), 100 tickets, max 6 per order, everything in Shopify.
 
 **Access: by request, not public.** The public page shows the event and a request form that emails the owner. She approves a guest by sending the private link `https://infuseandmuse.com/events?invite=<EVENT_INVITE_CODE>`; only that link shows Get tickets, and the cart refuses ticket adds without the code. Changing EVENT_INVITE_CODE in Vercel retires every link already sent. Set it in Vercel (Production and Preview) before launch.
-Event: Sun Nov 15 2026, 4pm to 8pm, 87 Wade Ave, Toronto, ON M6H 1P5.
+Event: Sun Nov 15 2026, 4pm to 8pm, shown publicly as "Downtown Toronto" only. The street address is not on the site; the owner gives it to approved guests.
 Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 
 ## 0. Decisions and copy needed from the owner
@@ -40,7 +40,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] Get Tickets: quantity 1 to 6, adds to the existing Shopify cart and opens the bag; a Checkout button shows on the page once tickets are in the bag
 - [x] QR visitors (`/events?from=qr`) skip the bag and go straight to Shopify checkout; the Instagram link stays plain `/events`
 - [~] States built and unit tested (not yet on sale, on sale, sold out, sales closed, event passed); sold out does not yet point to the mailing list
-- [x] Map as plain links (Google and Apple Maps), no embedded iframe
+- [x] No map links and no street address on the site (owner decision 2026-10-16): the page says "Downtown Toronto"
 - [x] Add to calendar (.ics and Google Calendar link)
 - [~] Link-preview tags done with the square brew photo; a dedicated 1200x630 image still to make
 - [~] Added to the sitemap; footer link and homepage notice still to do

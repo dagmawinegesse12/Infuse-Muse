@@ -18,13 +18,8 @@ export const EVENT = {
   endsAt: new Date("2026-11-15T20:00:00-05:00"),
   salesCloseAt: new Date("2026-11-15T14:00:00-05:00"),
   timeZone: "America/Toronto",
-  address: {
-    street: "87 Wade Ave",
-    city: "Toronto",
-    region: "ON",
-    postalCode: "M6H 1P5",
-    country: "CA",
-  },
+  /** The street address is not published; approved guests get it from the owner. */
+  venueLabel: "Downtown Toronto",
   /** Shown until Shopify has the live price. */
   priceCents: 2500,
   priceNote: "plus HST",
@@ -42,19 +37,6 @@ export function saleState(
   if (!ticket.availableForSale) return "sold-out";
   return "on-sale";
 }
-
-export const addressLine = () => {
-  const a = EVENT.address;
-  return `${a.street}, ${a.city}, ${a.region} ${a.postalCode}`;
-};
-
-export const mapLinks = () => {
-  const query = encodeURIComponent(addressLine()).replace(/%20/g, "+").replace(/%2C/g, ",");
-  return {
-    google: `https://www.google.com/maps?q=${query}&ftid=0x882b34472d414009:0x55d72a744b79bac0`,
-    apple: `https://maps.apple.com/?q=${query}`,
-  };
-};
 
 function format(date: Date, options: Intl.DateTimeFormatOptions) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: EVENT.timeZone, ...options }).format(date);
@@ -78,7 +60,7 @@ export function googleCalendarUrl(pageUrl: string) {
     action: "TEMPLATE",
     text: EVENT.name,
     dates: `${calendarDate(EVENT.startsAt)}/${calendarDate(EVENT.endsAt)}`,
-    location: addressLine(),
+    location: EVENT.venueLabel,
     details: pageUrl,
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
