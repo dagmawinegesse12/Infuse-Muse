@@ -91,6 +91,11 @@ describe('toTicketOrder', () => {
     expect(toTicketOrder(node({ displayFinancialStatus: 'PARTIALLY_REFUNDED' }, 1))).toMatchObject({ status: 'ok', total: 1 });
   });
 
+  it('knows whether the personal ticket link was already emailed', () => {
+    expect(toTicketOrder(node()).emailed).toBe(false);
+    expect(toTicketOrder(node({ tags: ['tickets-emailed'] })).emailed).toBe(true);
+  });
+
   it('reads who is already in from the order tags', () => {
     expect(toTicketOrder(node({ tags: ['checked-in-2', 'vip', 'checked-in-1', 'checked-in-x'] })).admitted).toEqual([1, 2]);
   });

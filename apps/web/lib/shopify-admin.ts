@@ -143,6 +143,17 @@ export async function setAdmitted(orderId: string, position: number, admitted: b
   if (errors.length) throw new Error(errors.map((e) => e.message).join('; '));
 }
 
+/** Adds one tag to an order. */
+export async function addOrderTag(orderId: string, tag: string): Promise<void> {
+  const data = await adminFetch<{ tagsAdd: { userErrors: { message: string }[] } }>(
+    `mutation Add($id: ID!, $tags: [String!]!) { tagsAdd(id: $id, tags: $tags) { userErrors { message } } }`,
+    { id: orderGid(orderId), tags: [tag] }
+  );
+  if (data.tagsAdd.userErrors.length) {
+    throw new Error(data.tagsAdd.userErrors.map((e) => e.message).join('; '));
+  }
+}
+
 /** Test hook: forget the cached token. */
 export function resetAdminToken() {
   cached = null;

@@ -20,6 +20,7 @@ const order = (over: Partial<TicketOrder> = {}): TicketOrder => ({
   email: 'jane@example.com',
   total: 2,
   admitted: [],
+  emailed: false,
   status: 'ok',
   ...over,
 });

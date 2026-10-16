@@ -30,11 +30,14 @@ export type TicketOrder = {
   total: number;
   /** Positions already let in. */
   admitted: number[];
+  /** The personal ticket link has already been emailed (the `tickets-emailed` tag). */
+  emailed: boolean;
   status: TicketStatus;
 };
 
 const PAID = new Set(['PAID', 'PARTIALLY_REFUNDED']);
 const ADMIT_TAG = /^checked-in-(\d{1,3})$/;
+export const EMAILED_TAG = 'tickets-emailed';
 
 export const admitTag = (position: number) => `checked-in-${position}`;
 export const orderGid = (orderId: string) => `gid://shopify/Order/${orderId}`;
@@ -64,6 +67,7 @@ export function toTicketOrder(node: AdminOrderNode): TicketOrder {
     email: node.email,
     total,
     admitted,
+    emailed: node.tags.includes(EMAILED_TAG),
     status,
   };
 }
