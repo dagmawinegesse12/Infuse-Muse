@@ -143,6 +143,7 @@ export default async function EventsPage({
 
         <Reveal>
           <div className="mt-16 flex flex-wrap gap-x-12 gap-y-6">
+            <QuietLink href="/tickets">Find my tickets</QuietLink>
             <QuietLink href="/contact">Ask us a question</QuietLink>
             <QuietLink href="/products">Browse the blends</QuietLink>
           </div>

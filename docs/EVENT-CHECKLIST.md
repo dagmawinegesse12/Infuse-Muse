@@ -55,19 +55,24 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [ ] Owner decision: wording of the request section (current text is placeholder: "Tickets are by request.")
 
 ## 3. Site: tickets and QR
-- [ ] Signed ticket code per ticket (HMAC with a secret in env), so an order of 3 gives 3 passes and none can be guessed
-- [ ] `/t/<code>` ticket page: QR, guest name, ticket n of N, date, address, calendar link, works as a screenshot
-- [ ] Reads the order live from Shopify; shows "not valid" for unpaid, cancelled or refunded orders
-- [ ] Order confirmation email edited: ticket orders get a "View your tickets" button
+- [x] Signed ticket links (HMAC with TICKET_SECRET): one link per order, one QR per ticket; nothing stored, tamper-proof
+- [x] `/tickets` "Find my tickets" (order number + email) and `/tickets/<token>` page with a QR per ticket; `/t/<token>` single ticket (what the QR opens)
+- [x] Reads the order live from Shopify; cancelled, refunded and unpaid orders show as not valid; guest names shortened ("Jane D.") on shareable pages
+- [x] "Find my tickets" link on the event page
+- [ ] Add a line to Shopify's order confirmation email: "Your tickets: infuseandmuse.com/tickets" (owner, or paste a Liquid snippet)
 - [ ] Reminder email the day before (Shopify Email, segment = bought the ticket)
 
 ## 4. Site: door check-in
-- [ ] `/checkin` behind a staff PIN, rate-limited
-- [ ] Camera scanner: green "Valid, Jane Doe, ticket 2 of 3", red for used, refunded or invalid
-- [ ] Marks the ticket used on the Shopify order (metafield), so screenshots cannot get in twice
-- [ ] Manual search by name, email or order number when a QR will not scan
-- [ ] Live count: checked in vs sold
-- [ ] Fallback: exported guest list printed for the door in case there is no signal
+- [x] `/checkin` behind a staff PIN (CHECKIN_PIN), sent as a header, kept in sessionStorage only
+- [x] Camera scanner (jsQR): green Valid, amber Already used, red Not valid, with Undo
+- [x] Guest list with search by name, email or order number, per-ticket admit and undo, live "admitted of sold"
+- [x] "Admitted" is stored as an order tag in Shopify (`checked-in-<n>`), so it survives deploys
+- [x] Tested end to end against real Shopify orders (scan, repeat scan, forged code, refunded position, undo)
+- [ ] Try the camera on a real phone before the event (not testable from here)
+- [ ] Fallback: export the guest list from Shopify and print it, in case there is no signal at the door
+- Known limit: two phones scanning the very same ticket in the same second could both read "valid". Use one scanner per door.
+
+**Vercel needs 4 new variables (Production and Preview), pasted by the owner/you:** SHOPIFY_ADMIN_CLIENT_ID, SHOPIFY_ADMIN_CLIENT_SECRET, TICKET_SECRET, CHECKIN_PIN.
 
 ## 5. Instagram kit for the owner
 - [ ] One short link for the bio and story link sticker: infuseandmuse.com/events
