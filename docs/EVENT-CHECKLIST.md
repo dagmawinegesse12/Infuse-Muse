@@ -59,7 +59,8 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] `/tickets` "Find my tickets" (order number + email) and `/tickets/<token>` page with a QR per ticket; `/t/<token>` single ticket (what the QR opens)
 - [x] Reads the order live from Shopify; cancelled, refunded and unpaid orders show as not valid; guest names shortened ("Jane D.") on shareable pages
 - [x] "Find my tickets" link on the event page
-- [ ] Add a line to Shopify's order confirmation email: "Your tickets: infuseandmuse.com/tickets" (owner, or paste a Liquid snippet)
+- [x] Personal ticket link emailed to each guest automatically when a ticket order is paid (Shopify ORDERS_PAID webhook -> /api/webhooks/orders-paid -> Resend; tagged `tickets-emailed` so it sends once). Verified live with a real order.
+- [ ] Optional: also add "Your tickets: infuseandmuse.com/tickets" to Shopify's own confirmation email
 - [ ] Reminder email the day before (Shopify Email, segment = bought the ticket)
 
 ## 4. Site: door check-in
