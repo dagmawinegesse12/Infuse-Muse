@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useCart } from '@/lib/cart/cart-context';
+import { bagHeading, unitNoun } from '@/lib/cart/wording';
+import { PageHeader } from '@/components/system/page-header';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { QuietLink } from '@/components/system/quiet-link';
@@ -64,7 +66,7 @@ export function CartPageClient() {
           >
             <div>
               <h2 className="t-sub">{item.name}</h2>
-              <p className="t-label mt-2">{formatPrice(item.price, state.currency)} per tin</p>
+              <p className="t-label mt-2">{formatPrice(item.price, state.currency)} per {unitNoun(item)}</p>
               <div className="mt-5">
                 <QuantityStepper
                   value={item.quantity}
@@ -134,5 +136,16 @@ export function CartPageClient() {
         </div>
       </aside>
     </div>
+  );
+}
+
+export function CartHeader() {
+  const { state } = useCart();
+  return (
+    <PageHeader
+      eyebrow="Bag"
+      title={bagHeading(state.items)}
+      lede="Adjust quantities or remove anything. Your selections are kept while you browse."
+    />
   );
 }

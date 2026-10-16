@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/lib/cart/cart-context';
+import { bagCountLabel } from '@/lib/cart/wording';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { QuietLink } from '@/components/system/quiet-link';
@@ -64,9 +65,7 @@ export function CartDrawer() {
           <div>
             <h2 className="t-sub">Your bag</h2>
             <p className="t-label mt-2">
-              {state.items.length === 0
-                ? 'Empty'
-                : `${state.items.length} ${state.items.length === 1 ? 'blend' : 'blends'}`}
+              {bagCountLabel(state.items)}
             </p>
           </div>
           <button onClick={closeCart} className="hit t-label wipe-link text-ink-strong">

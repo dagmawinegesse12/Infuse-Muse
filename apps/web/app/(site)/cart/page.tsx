@@ -1,14 +1,9 @@
-import { CartPageClient } from '@/components/cart/cart-page-client';
-import { PageHeader } from '@/components/system/page-header';
+import { CartHeader, CartPageClient } from '@/components/cart/cart-page-client';
 
 export default function CartPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="Bag"
-        title="Review your blends before checkout."
-        lede="Adjust quantities or remove anything. Your selections are kept while you browse."
-      />
+      <CartHeader />
       <div className="shell pb-[var(--chapter)]">
         <CartPageClient />
       </div>
