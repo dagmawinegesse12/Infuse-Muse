@@ -107,7 +107,7 @@ export function TicketRequestForm() {
 
       <div>
         <Button type="submit" disabled={state === 'sending'}>
-          {state === 'sending' ? 'Sending…' : 'Request a ticket'}
+          {state === 'sending' ? 'Sending…' : 'Request access'}
         </Button>
       </div>
     </form>
