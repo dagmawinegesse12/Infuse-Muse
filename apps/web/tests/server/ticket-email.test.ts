@@ -31,8 +31,11 @@ describe('ticketEmail', () => {
       expect(body).toContain('Your 2 tickets');
       expect(body).toContain(base.link);
       expect(body).toContain('#1042');
-      expect(body).toContain('Downtown Toronto');
+      expect(body).toContain('87 Wade Ave, Toronto, ON M6H 1P5');
+      expect(body).toContain('Sunday, November 15, 2026');
     }
+    expect(m.html).toContain('href="https://www.google.com/maps?q=87+Wade+Ave,+Toronto,+ON+M6H+1P5');
+    expect(m.html).toContain('href="https://maps.apple.com/?q=87+Wade+Ave,+Toronto,+ON+M6H+1P5"');
     expect(m.html).toContain('href="https://www.infuseandmuse.com/tickets/123.abc"');
   });
 
@@ -42,9 +45,9 @@ describe('ticketEmail', () => {
     expect(m.text).toContain('Your ticket for Opening Pour is ready.');
   });
 
-  it('never prints the street address and uses no em dashes', () => {
+  it('uses no em dashes', () => {
     const m = ticketEmail(base);
-    expect(m.html + m.text).not.toMatch(/Wade|M6H|—/);
+    expect(m.html + m.text).not.toMatch(/—/);
   });
 
   it('escapes what a guest typed as their name', () => {

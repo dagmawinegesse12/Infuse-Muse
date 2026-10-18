@@ -59,6 +59,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] `/tickets` "Find my tickets" (order number + email) and `/tickets/<token>` page with a QR per ticket; `/t/<token>` single ticket (what the QR opens)
 - [x] Reads the order live from Shopify; cancelled, refunded and unpaid orders show as not valid; guest names shortened ("Jane D.") on shareable pages
 - [x] "Find my tickets" link on the event page
+- [x] The street address is shown only to ticket holders (ticket email and valid ticket pages); every public page still says "Downtown Toronto". Lives in server-only lib/event-venue.ts, guarded by tests/server/venue-privacy.test.ts.
 - [x] Personal ticket link emailed to each guest automatically when a ticket order is paid (Shopify ORDERS_PAID webhook -> /api/webhooks/orders-paid -> Resend; tagged `tickets-emailed` so it sends once). Verified live with a real order.
 - [ ] Optional: also add "Your tickets: infuseandmuse.com/tickets" to Shopify's own confirmation email
 - [ ] Reminder email the day before (Shopify Email, segment = bought the ticket)
@@ -69,7 +70,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] Guest list with search by name, email or order number, per-ticket admit and undo, live "admitted of sold"
 - [x] "Admitted" is stored as an order tag in Shopify (`checked-in-<n>`), so it survives deploys
 - [x] Tested end to end against real Shopify orders (scan, repeat scan, forged code, refunded position, undo)
-- [ ] Try the camera on a real phone before the event (not testable from here)
+- [x] Camera scanner tried on a real phone by the user (2026-10-17): scanned demo order #1017 ticket 1 and it worked
 - [ ] Fallback: export the guest list from Shopify and print it, in case there is no signal at the door
 - Known limit: two phones scanning the very same ticket in the same second could both read "valid". Use one scanner per door.
 
