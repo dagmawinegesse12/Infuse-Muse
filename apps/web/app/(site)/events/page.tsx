@@ -13,7 +13,6 @@ import {
   EVENT,
   INVITE_PARAM,
   dateLabel,
-  googleCalendarUrl,
   saleState,
   timeLabel,
 } from '@/lib/event';
@@ -119,20 +118,6 @@ export default async function EventsPage({
                 </div>
               </Reveal>
             ))}
-
-            <Reveal delay={260}>
-              <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
-                <a
-                  href={googleCalendarUrl(absoluteUrl('/events'), where.text)}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="quiet-link"
-                  data-tone="ground"
-                >
-                  Add to Google Calendar
-                </a>
-              </div>
-            </Reveal>
           </div>
 
           <aside className="lg:pt-8">

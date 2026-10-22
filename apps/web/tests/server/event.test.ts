@@ -3,7 +3,6 @@ import {
   EVENT,
   MAX_TICKETS_PER_ORDER,
   dateLabel,
-  googleCalendarUrl,
   saleState,
   ticketsInCart,
   timeLabel,
@@ -22,16 +21,9 @@ describe('event details', () => {
 
   it('names the area only, never the street address', () => {
     expect(EVENT.venueLabel).toBe('Downtown Toronto');
-    const url = googleCalendarUrl('https://infuseandmuse.com/events');
-    expect(new URL(url).searchParams.get('location')).toBe('Downtown Toronto');
-    expect(new URL(googleCalendarUrl('https://x.test/events', '87 Wade Ave')).searchParams.get('location')).toBe('87 Wade Ave');
     expect(JSON.stringify(EVENT)).not.toMatch(/Wade|M6H/);
   });
 
-  it('builds a Google Calendar link', () => {
-    const url = googleCalendarUrl('https://infuseandmuse.com/events');
-    expect(url).toContain('dates=20261115T210000Z%2F20261116T010000Z');
-  });
 });
 
 describe('saleState', () => {

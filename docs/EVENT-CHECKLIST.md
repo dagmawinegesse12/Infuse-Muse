@@ -41,7 +41,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] QR visitors (`/events?from=qr`) skip the bag and go straight to Shopify checkout; the Instagram link stays plain `/events`
 - [~] States built and unit tested (not yet on sale, on sale, sold out, sales closed, event passed); sold out does not yet point to the mailing list
 - [x] No map links and no street address on the site (owner decision 2026-10-16): the page says "Downtown Toronto"
-- [x] Add to calendar (.ics and Google Calendar link)
+- [x] Add to calendar was built, then removed at the owner's request (2026-10-22)
 - [~] Link-preview tags done with the square brew photo; a dedicated 1200x630 image still to make
 - [~] Added to the sitemap; footer link and homepage notice still to do
 - [x] Ticket kept out of the blends and boxed sets lists and the /products/<slug> route (by Product type)
