@@ -59,12 +59,12 @@ export const timeLabel = () => `${hour(EVENT.startsAt)} to ${hour(EVENT.endsAt)}
 
 const calendarDate = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 
-export function googleCalendarUrl(pageUrl: string) {
+export function googleCalendarUrl(pageUrl: string, location: string = EVENT.venueLabel) {
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: EVENT.name,
     dates: `${calendarDate(EVENT.startsAt)}/${calendarDate(EVENT.endsAt)}`,
-    location: EVENT.venueLabel,
+    location,
     details: pageUrl,
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;

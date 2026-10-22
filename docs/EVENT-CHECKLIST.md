@@ -59,6 +59,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] `/tickets` "Find my tickets" (order number + email) and `/tickets/<token>` page with a QR per ticket; `/t/<token>` single ticket (what the QR opens)
 - [x] Reads the order live from Shopify; cancelled, refunded and unpaid orders show as not valid; guest names shortened ("Jane D.") on shareable pages
 - [x] "Find my tickets" link on the event page
+- [x] Invite link and invite QR (`/events?invite=...`) show the street address and map links in "Where", add the venue as a note on the ticket line so Shopify's checkout prints "Venue: ..." under it, and are marked noindex. Public visitors and wrong codes still see "Downtown Toronto".
 - [x] The street address is shown only to ticket holders (ticket email and valid ticket pages); every public page still says "Downtown Toronto". Lives in server-only lib/event-venue.ts, guarded by tests/server/venue-privacy.test.ts.
 - [x] Personal ticket link emailed to each guest automatically when a ticket order is paid (Shopify ORDERS_PAID webhook -> /api/webhooks/orders-paid -> Resend; tagged `tickets-emailed` so it sends once). Verified live with a real order.
 - [ ] Optional: also add "Your tickets: infuseandmuse.com/tickets" to Shopify's own confirmation email

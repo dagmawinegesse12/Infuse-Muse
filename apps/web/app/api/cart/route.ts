@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getEventTicket } from '@/lib/data';
 import { isValidInvite } from '@/lib/event-invite';
+import { venueAddress } from '@/lib/event-venue';
 import { MAX_TICKETS_PER_ORDER, ticketsInCart } from '@/lib/event';
 import { shopifyEnabled } from '@/lib/shopify';
 import {
@@ -98,7 +99,15 @@ export async function POST(request: Request) {
           const held = ticketsInCart(current?.lines ?? [], ticket.variantId);
           if (held + req.quantity > MAX_TICKETS_PER_ORDER) return bad(TICKET_CAP_MESSAGE);
         }
-        const line = { merchandiseId: req.variantId, quantity: req.quantity };
+        /* An invited guest's ticket carries the venue as a note on the line:
+           Shopify prints it under the item at checkout and keeps it on the
+           order. Only reached with a valid invite code (checked above). */
+        const isTicket = Boolean(ticket && req.variantId === ticket.variantId);
+        const line = {
+          merchandiseId: req.variantId,
+          quantity: req.quantity,
+          ...(isTicket ? { attributes: [{ key: 'Venue', value: venueAddress() }] } : {}),
+        };
         // A stored cart can have expired or been checked out; start over then.
         const existing = req.cartId ? await addLines(req.cartId, [line]) : null;
         const cart = existing ?? (await createCart([line]));

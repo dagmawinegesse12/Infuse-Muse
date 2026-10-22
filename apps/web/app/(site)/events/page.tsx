@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { TicketPurchase } from '@/components/event/ticket-purchase';
 import { TicketRequestForm } from '@/components/event/ticket-request-form';
@@ -7,6 +8,7 @@ import { Reveal } from '@/components/system/reveal';
 import { SchemaScript } from '@/components/schema-script';
 import { getEventTicket } from '@/lib/data';
 import { isValidInvite } from '@/lib/event-invite';
+import { whereFor } from '@/lib/event-where';
 import {
   EVENT,
   INVITE_PARAM,
@@ -20,17 +22,23 @@ import { formatPrice } from '@/lib/utils';
 
 const PHOTO = '/images/events/opening-pour.jpg';
 
-export const metadata = createMetadata({
-  title: EVENT.name,
-  description: `${EVENT.description[0]} ${dateLabel()}, ${timeLabel()}, ${EVENT.venueLabel}.`,
-  path: '/events',
-  image: PHOTO,
-});
+type SearchParams = Record<string, string | string[] | undefined>;
+
+export function generateMetadata({ searchParams }: { searchParams: SearchParams }): Metadata {
+  const base = createMetadata({
+    title: EVENT.name,
+    description: `${EVENT.description[0]} ${dateLabel()}, ${timeLabel()}, ${EVENT.venueLabel}.`,
+    path: '/events',
+    image: PHOTO,
+  });
+  // An invite link can show the street address, so it must never be indexed.
+  return INVITE_PARAM in searchParams ? { ...base, robots: { index: false, follow: false } } : base;
+}
 
 export default async function EventsPage({
   searchParams,
 }: {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: SearchParams;
 }) {
   const ticket = await getEventTicket();
   const state = saleState(new Date(), ticket);
@@ -42,6 +50,7 @@ export default async function EventsPage({
   const code = Array.isArray(raw) ? raw[0] : raw;
   const invited = isValidInvite(code);
   const sellable = state === 'on-sale' || state === 'not-on-sale';
+  const where = whereFor(invited);
 
   const schema = {
     '@context': 'https://schema.org',
@@ -65,7 +74,24 @@ export default async function EventsPage({
     ['When', dateLabel()],
     ['Time', timeLabel()],
     ['Tickets', `${formatPrice(ticket?.priceCents ?? EVENT.priceCents, ticket?.currency)} ${EVENT.priceNote}`],
-    ['Where', EVENT.venueLabel],
+    [
+      'Where',
+      where.maps ? (
+        <>
+          <span className="block">{where.text}</span>
+          <span className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
+            <a href={where.maps.google} target="_blank" rel="noreferrer noopener" className="wipe-link t-body">
+              Google Maps
+            </a>
+            <a href={where.maps.apple} target="_blank" rel="noreferrer noopener" className="wipe-link t-body">
+              Apple Maps
+            </a>
+          </span>
+        </>
+      ) : (
+        where.text
+      ),
+    ],
   ];
 
   return (
@@ -97,7 +123,7 @@ export default async function EventsPage({
             <Reveal delay={260}>
               <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
                 <a
-                  href={googleCalendarUrl(absoluteUrl('/events'))}
+                  href={googleCalendarUrl(absoluteUrl('/events'), where.text)}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="quiet-link"

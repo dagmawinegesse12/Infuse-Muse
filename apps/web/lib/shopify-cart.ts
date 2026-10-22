@@ -113,7 +113,12 @@ async function mutate(
   return payload.cart ? mapCart(payload.cart) : null;
 }
 
-export type LineInput = { merchandiseId: string; quantity: number };
+export type LineInput = {
+  merchandiseId: string;
+  quantity: number;
+  /** Notes Shopify shows under the item at checkout and keeps on the order. */
+  attributes?: { key: string; value: string }[];
+};
 
 export async function getCart(id: string): Promise<CartSnapshot | null> {
   const data = await storefrontFetch<{ cart: CartNode | null }>(

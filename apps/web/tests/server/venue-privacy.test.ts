@@ -24,7 +24,6 @@ describe('venue address', () => {
 describe('the address stays out of public code', () => {
   const PUBLIC = [
     'lib/event.ts',
-    'app/(site)/events/page.tsx',
     'components/event/ticket-purchase.tsx',
     'components/event/ticket-request-form.tsx',
     'components/event/ticket-lookup.tsx',
@@ -40,8 +39,14 @@ describe('the address stays out of public code', () => {
     expect(source).not.toMatch(/event-venue/);
   });
 
+  it('the event page holds no address and reaches it only through the invite check', () => {
+    const page = read('app/(site)/events/page.tsx');
+    expect(page).not.toMatch(/Wade|M6H|event-venue/);
+    expect(page).toMatch(/whereFor\(invited\)/);
+  });
+
   it('only server code imports the venue file', () => {
-    const importers = ['lib/ticket-email.ts', 'components/event/ticket-card.tsx'];
+    const importers = ['lib/ticket-email.ts', 'components/event/ticket-card.tsx', 'lib/event-where.ts', 'app/api/cart/route.ts'];
     for (const file of importers) expect(read(file)).toMatch(/event-venue/);
     expect(read('components/event/ticket-card.tsx')).not.toMatch(/'use client'/);
   });

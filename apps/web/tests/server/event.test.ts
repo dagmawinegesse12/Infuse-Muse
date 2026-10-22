@@ -24,6 +24,7 @@ describe('event details', () => {
     expect(EVENT.venueLabel).toBe('Downtown Toronto');
     const url = googleCalendarUrl('https://infuseandmuse.com/events');
     expect(new URL(url).searchParams.get('location')).toBe('Downtown Toronto');
+    expect(new URL(googleCalendarUrl('https://x.test/events', '87 Wade Ave')).searchParams.get('location')).toBe('87 Wade Ave');
     expect(JSON.stringify(EVENT)).not.toMatch(/Wade|M6H/);
   });
 
@@ -101,8 +102,11 @@ describe('POST /api/cart ticket cap', () => {
     },
   });
 
+  let lastLines: { merchandiseId: string; quantity: number; attributes?: { key: string; value: string }[] }[] | undefined;
+
   function fakeShopify(heldTickets: number) {
     const calls: string[] = [];
+    lastLines = undefined;
     vi.stubGlobal(
       'fetch',
       vi.fn(async (_url: string, init: RequestInit) => {
@@ -134,12 +138,14 @@ describe('POST /api/cart ticket cap', () => {
           };
         } else if (query.includes('cartLinesAdd(')) {
           calls.push('cartLinesAdd');
+          lastLines = variables.lines as typeof lastLines;
           data = { cartLinesAdd: { cart: cartWith(TICKET, heldTickets + 1), userErrors: [] } };
         } else if (query.includes('cartLinesUpdate(')) {
           calls.push('cartLinesUpdate');
           data = { cartLinesUpdate: { cart: cartWith(TICKET, 6), userErrors: [] } };
         } else if (query.includes('cartCreate(')) {
           calls.push('cartCreate');
+          lastLines = variables.lines as typeof lastLines;
           const [line] = variables.lines as { merchandiseId: string; quantity: number }[];
           data = { cartCreate: { cart: cartWith(line.merchandiseId, line.quantity), userErrors: [] } };
         } else {
@@ -222,6 +228,18 @@ describe('POST /api/cart ticket cap', () => {
     const res = await post({ op: 'add', cartId: null, variantId: TICKET, quantity: 1, invite: '' });
     expect(res.status).toBe(403);
     expect(calls).toHaveLength(0);
+  });
+
+  it('puts the venue on an invited guest\'s ticket so checkout shows it', async () => {
+    fakeShopify(0);
+    await post({ op: 'add', cartId: null, variantId: TICKET, quantity: 2, invite: INVITE });
+    expect(lastLines?.[0].attributes).toEqual([{ key: 'Venue', value: '87 Wade Ave, Toronto, ON M6H 1P5' }]);
+  });
+
+  it('adds no venue note to anything else', async () => {
+    fakeShopify(0);
+    await post({ op: 'add', cartId: null, variantId: TEA, quantity: 1 });
+    expect(lastLines?.[0].attributes).toBeUndefined();
   });
 
   it('does not limit other products', async () => {
