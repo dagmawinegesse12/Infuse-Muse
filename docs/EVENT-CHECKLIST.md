@@ -67,7 +67,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [ ] Reminder email the day before (Shopify Email, segment = bought the ticket)
 
 ## 4. Site: door check-in
-- [x] `/checkin` behind a staff PIN (CHECKIN_PIN), sent as a header, kept in sessionStorage only
+- [x] `/checkin` behind a staff PIN (CHECKIN_PIN), sent as a header, kept in sessionStorage only. PIN changed 2026-11-02 and verified live (the value lives in Vercel, not in this repo)
 - [x] Camera scanner (jsQR): green Valid, amber Already used, red Not valid, with Undo
 - [x] Guest list with search by name, email or order number, per-ticket admit and undo, live "admitted of sold"
 - [x] "Admitted" is stored as an order tag in Shopify (`checked-in-<n>`), so it survives deploys
