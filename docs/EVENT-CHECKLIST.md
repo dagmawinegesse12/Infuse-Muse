@@ -62,6 +62,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] Invite link and invite QR (`/events?invite=...`) show the street address and map links in "Where", add the venue as a note on the ticket line so Shopify's checkout prints "Venue: ..." under it, and are marked noindex. Public visitors and wrong codes still see "Downtown Toronto".
 - [x] The street address is shown only to ticket holders (ticket email and valid ticket pages); every public page still says "Downtown Toronto". Lives in server-only lib/event-venue.ts, guarded by tests/server/venue-privacy.test.ts.
 - [x] Personal ticket link emailed to each guest automatically when a ticket order is paid (Shopify ORDERS_PAID webhook -> /api/webhooks/orders-paid -> Resend; tagged `tickets-emailed` so it sends once). Verified live with a real order.
+- [x] Door guest list has an "Email tickets" / "Resend tickets email" button per order (`/api/checkin/email`, staff PIN), for orders with no email at payment time such as phone Quick Sales. The order needs an email added in Shopify first; the list says so when it is missing.
 - [ ] Optional: also add "Your tickets: infuseandmuse.com/tickets" to Shopify's own confirmation email
 - [ ] Reminder email the day before (Shopify Email, segment = bought the ticket)
 

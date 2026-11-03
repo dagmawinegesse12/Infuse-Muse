@@ -86,3 +86,10 @@ export const STATUS_MESSAGE: Record<Exclude<TicketStatus, 'ok'>, string> = {
   unpaid: 'This order has not been paid.',
   none: 'This order has no Opening Pour tickets.',
 };
+
+/** "jane@example.com" becomes "ja***@example.com", for confirming where an email went without printing the address. */
+export function maskEmail(email: string): string {
+  const [name, domain] = email.split('@');
+  if (!domain) return '***';
+  return `${name.slice(0, 2)}***@${domain}`;
+}

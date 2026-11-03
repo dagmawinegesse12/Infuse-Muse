@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
-import { absoluteUrl } from '@/lib/metadata';
 import { addOrderTag, adminConfigured, fetchTicketOrder } from '@/lib/shopify-admin';
-import { ticketEmail } from '@/lib/ticket-email';
-import { signOrder } from '@/lib/ticket-token';
+import { sendTicketEmail } from '@/lib/send-ticket-email';
 import { EMAILED_TAG } from '@/lib/tickets';
 import { verifyShopifyWebhook } from '@/lib/shopify-webhook';
-
-const FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
-const REPLY_TO = process.env.CONTACT_INBOX || process.env.NEXT_PUBLIC_CONTACT_EMAIL;
 
 /**
  * Shopify calls this when an order is paid. If the order has tickets and the
@@ -47,24 +41,7 @@ export async function POST(request: Request) {
     }
     if (order.emailed) return NextResponse.json({ sent: false, reason: 'already emailed' });
 
-    const mail = ticketEmail({
-      holder: order.holder,
-      orderName: order.name,
-      tickets: order.total,
-      link: absoluteUrl(`/tickets/${signOrder(order.orderId)}`),
-      findUrl: absoluteUrl('/tickets'),
-    });
-
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const { error } = await resend.emails.send({
-      from: FROM,
-      to: order.email,
-      ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
-      subject: mail.subject,
-      html: mail.html,
-      text: mail.text,
-    });
-    if (error) throw new Error(`Resend: ${error.message}`);
+    await sendTicketEmail(order);
 
     // The email is out. If tagging fails, say so but do not make Shopify
     // retry, or the guest would get it twice.

@@ -11,6 +11,7 @@ type Order = {
   email: string;
   total: number;
   admitted: number[];
+  emailed: boolean;
   status: 'ok' | 'cancelled' | 'refunded' | 'unpaid' | 'none';
 };
 type Guests = { orders: Order[]; sold: number; admitted: number };
@@ -311,6 +312,8 @@ function GuestList({ pin, guests, onChanged }: { pin: string; guests: Guests | n
   const [query, setQuery] = useState('');
   const [busyKey, setBusyKey] = useState('');
   const [note, setNote] = useState('');
+  const [info, setInfo] = useState('');
+  const [emailing, setEmailing] = useState('');
 
   if (!guests) return <p className="t-body">Loading…</p>;
 
@@ -338,6 +341,23 @@ function GuestList({ pin, guests, onChanged }: { pin: string; guests: Guests | n
     onChanged();
   }
 
+  async function emailTickets(order: Order) {
+    setEmailing(order.orderId);
+    setNote('');
+    setInfo('');
+    try {
+      const { data } = await call<{ ok?: boolean; to?: string; message?: string }>('/api/checkin/email', pin, {
+        orderId: order.orderId,
+      });
+      if (data.ok) setInfo(`Emailed the tickets for ${order.name} to ${data.to}.`);
+      else setNote(data.message ?? 'Could not send the email.');
+    } catch {
+      setNote('Could not send the email. Try again.');
+    }
+    setEmailing('');
+    onChanged();
+  }
+
   return (
     <div>
       <label htmlFor="guest-search" className="t-label">
@@ -353,6 +373,11 @@ function GuestList({ pin, guests, onChanged }: { pin: string; guests: Guests | n
       {note ? (
         <p role="alert" className="t-body mt-4" style={{ color: '#c2410c' }}>
           {note}
+        </p>
+      ) : null}
+      {info ? (
+        <p role="status" className="t-body mt-4" style={{ color: GOOD }}>
+          {info}
         </p>
       ) : null}
 
@@ -400,6 +425,29 @@ function GuestList({ pin, guests, onChanged }: { pin: string; guests: Guests | n
                 })}
               </div>
             )}
+            {order.status === 'ok' ? (
+              <div className="mt-4">
+                {order.email ? (
+                  <button
+                    type="button"
+                    disabled={emailing === order.orderId}
+                    onClick={() => emailTickets(order)}
+                    className="t-label hit wipe-link"
+                    style={{ color: 'var(--ink-strong)' }}
+                  >
+                    {emailing === order.orderId
+                      ? 'Sending…'
+                      : order.emailed
+                        ? 'Resend tickets email'
+                        : 'Email tickets'}
+                  </button>
+                ) : (
+                  <p className="t-body" style={{ color: WARN }}>
+                    No email on this order. Add one in Shopify, then come back to send the tickets.
+                  </p>
+                )}
+              </div>
+            ) : null}
           </li>
         ))}
       </ul>
