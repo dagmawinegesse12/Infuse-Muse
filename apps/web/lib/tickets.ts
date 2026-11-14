@@ -38,7 +38,10 @@ export type TicketOrder = {
   status: TicketStatus;
 };
 
-const PAID = new Set(['PAID', 'PARTIALLY_REFUNDED']);
+// AUTHORIZED: a Shopify POS card sale holds the money first and captures it
+// within about 15 minutes. The card was approved, so the guest can walk in;
+// if staff cancel the sale instead, the order turns cancelled.
+const PAID = new Set(['PAID', 'PARTIALLY_REFUNDED', 'AUTHORIZED']);
 const ADMIT_TAG = /^checked-in-(\d{1,3})$/;
 export const EMAILED_TAG = 'tickets-emailed';
 

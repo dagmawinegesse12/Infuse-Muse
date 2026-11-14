@@ -68,10 +68,10 @@ describe('POST /api/webhooks/orders-paid', () => {
     total: 2, admitted: [], emailed: false, status: 'ok', ...over,
   });
 
-  async function post(body: string, signature = sign(body, SECRET)) {
+  async function post(body: string, signature = sign(body, SECRET), topic = 'orders/paid') {
     const { POST } = await import('@/app/api/webhooks/orders-paid/route');
     return POST(new Request('http://localhost/api/webhooks/orders-paid', {
-      method: 'POST', body, headers: { 'x-shopify-hmac-sha256': signature },
+      method: 'POST', body, headers: { 'x-shopify-hmac-sha256': signature, 'x-shopify-topic': topic },
     }));
   }
 
@@ -151,5 +151,19 @@ describe('POST /api/webhooks/orders-paid', () => {
 
   it('rejects a payload with no order id', async () => {
     expect((await post('{"nope":true}')).status).toBe(400);
+  });
+
+  it('emails a POS card sale as soon as it is created and authorized', async () => {
+    const body = '{"id":7246120386800,"financial_status":"authorized"}';
+    expect(await (await post(body, sign(body, SECRET), 'orders/create')).json()).toEqual({ sent: true });
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['paid', 'pending'])('leaves a %s order created online to orders/paid', async (financial) => {
+    const body = `{"id":1,"financial_status":"${financial}"}`;
+    const res = await post(body, sign(body, SECRET), 'orders/create');
+    expect(await res.json()).toMatchObject({ sent: false, reason: 'waiting for payment' });
+    expect(fetchTicketOrder).not.toHaveBeenCalled();
+    expect(send).not.toHaveBeenCalled();
   });
 });

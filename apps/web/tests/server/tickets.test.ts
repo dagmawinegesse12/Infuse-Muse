@@ -82,6 +82,7 @@ describe('toTicketOrder', () => {
     [{ displayFinancialStatus: 'REFUNDED' }, 'refunded'],
     [{ displayFinancialStatus: 'PENDING' }, 'unpaid'],
     [{ displayFinancialStatus: 'VOIDED' }, 'unpaid'],
+    [{ displayFinancialStatus: 'AUTHORIZED' }, 'ok'],
   ])('flags %j as %s', (over, status) => {
     expect(toTicketOrder(node(over as Partial<AdminOrderNode>)).status).toBe(status);
   });
