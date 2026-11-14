@@ -11,7 +11,7 @@ const ORDER_NODE = (name: string, email: string) => ({
   lineItems: { nodes: [{ currentQuantity: 2, product: { productType: 'Event ticket' } }] },
 });
 
-function stubShopify(handlers: { orders?: unknown[]; tokenStatuses?: number[] }) {
+function stubShopify(handlers: { orders?: unknown[]; tokenStatuses?: number[]; denyCustomer?: boolean }) {
   const calls: string[] = [];
   const statuses = [...(handlers.tokenStatuses ?? [])];
   vi.stubGlobal(
@@ -25,6 +25,15 @@ function stubShopify(handlers: { orders?: unknown[]; tokenStatuses?: number[] })
       calls.push(query.includes('tagsAdd') ? 'tagsAdd' : query.includes('tagsRemove') ? 'tagsRemove' : 'query');
       const status = statuses.shift();
       if (status) return new Response('nope', { status });
+      if (handlers.denyCustomer && query.includes('customer {')) {
+        calls.push('denied');
+        return new Response(
+          JSON.stringify({
+            data: null,
+            errors: [{ message: 'Access denied for customer field. Required access: `read_customers` access scope.' }],
+          })
+        );
+      }
       if (query.includes('tagsAdd') || query.includes('tagsRemove')) {
         return new Response(JSON.stringify({ data: { tagsAdd: { userErrors: [] }, tagsRemove: { userErrors: [] } } }));
       }
@@ -91,6 +100,44 @@ describe('Shopify Admin client', () => {
     stubShopify({ orders: [ORDER_NODE('#1042', 'jane@example.com'), tea] });
     const { listTicketOrders } = await import('@/lib/shopify-admin');
     expect((await listTicketOrders()).map((o) => o.name)).toEqual(['#1042']);
+  });
+
+  it('uses the customer email and name for a POS sale, whose order has no email of its own', async () => {
+    const pos = {
+      ...ORDER_NODE('#1042', ''),
+      email: null,
+      billingAddress: null,
+      customer: { email: 'guest@example.com', displayName: 'Testing Lastname' },
+    };
+    stubShopify({ orders: [pos] });
+    const { findTicketOrder, listTicketOrders } = await import('@/lib/shopify-admin');
+    expect((await listTicketOrders())[0]).toMatchObject({ email: 'guest@example.com', holder: 'Testing Lastname' });
+    expect(await findTicketOrder('1042', 'guest@example.com')).toMatchObject({ name: '#1042' });
+  });
+
+  it('carries on without customer fields if Shopify refuses them, and stops asking', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const calls = stubShopify({ orders: [ORDER_NODE('#1042', 'jane@example.com')], denyCustomer: true });
+    const { listTicketOrders } = await import('@/lib/shopify-admin');
+    expect((await listTicketOrders()).map((o) => o.email)).toEqual(['jane@example.com']);
+    await listTicketOrders();
+    expect(calls.filter((c) => c === 'denied')).toHaveLength(1);
+    vi.restoreAllMocks();
+  });
+
+  it('asks for the customer when it may', async () => {
+    let asked = '';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init: RequestInit) => {
+        if (url.endsWith('/oauth/access_token')) return new Response(JSON.stringify({ access_token: 't' }));
+        asked = JSON.parse(init.body as string).query;
+        return new Response(JSON.stringify({ data: { order: null } }));
+      })
+    );
+    const { fetchTicketOrder } = await import('@/lib/shopify-admin');
+    await fetchTicketOrder('7246079099120');
+    expect(asked).toContain('customer { email displayName }');
   });
 
   it('adds and removes the checked-in tag', async () => {

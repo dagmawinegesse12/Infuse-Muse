@@ -6,7 +6,7 @@ import { admitTag, orderGid, toTicketOrder, type AdminOrderNode, type TicketOrde
  * The "Opening Pour check-in" app lives in the owner's Dev Dashboard and uses
  * the client-credentials grant: the app's id and secret are exchanged for an
  * access token that lasts about a day. Server-only; none of this reaches the
- * browser. Scopes: read_orders, write_orders, read_products.
+ * browser. Scopes: read_orders, write_orders, read_products, read_customers.
  */
 const API_VERSION = '2026-04';
 const EARLIEST_ORDER = '2026-10-01';
@@ -68,7 +68,7 @@ async function adminFetch<T>(query: string, variables: Record<string, unknown> =
   return json.data;
 }
 
-const ORDER_FIELDS = `
+const BASE_FIELDS = `
   id
   name
   email
@@ -78,10 +78,33 @@ const ORDER_FIELDS = `
   billingAddress { name }
   lineItems(first: 50) { nodes { currentQuantity product { productType } } }
 `;
+// A sale rung up in Shopify POS leaves the order's own email empty and keeps
+// the guest's on the customer, which needs read_customers.
+const CUSTOMER_FIELDS = `customer { email displayName }`;
+
+/* If Shopify refuses the customer fields (scope missing or withdrawn), drop
+   them for the life of this server rather than break every ticket lookup. */
+let customerAccess = true;
+
+const customerDenied = (error: unknown) =>
+  error instanceof Error && /access denied|read_customers|customer/i.test(error.message);
+
+async function orderQuery<T>(build: (fields: string) => string, variables: Record<string, unknown>): Promise<T> {
+  if (customerAccess) {
+    try {
+      return await adminFetch<T>(build(`${BASE_FIELDS} ${CUSTOMER_FIELDS}`), variables);
+    } catch (error) {
+      if (!customerDenied(error)) throw error;
+      console.error('[shopify-admin] customer fields refused; continuing without them:', error);
+      customerAccess = false;
+    }
+  }
+  return adminFetch<T>(build(BASE_FIELDS), variables);
+}
 
 export async function fetchTicketOrder(orderId: string): Promise<TicketOrder | null> {
-  const data = await adminFetch<{ order: AdminOrderNode | null }>(
-    `query Order($id: ID!) { order(id: $id) { ${ORDER_FIELDS} } }`,
+  const data = await orderQuery<{ order: AdminOrderNode | null }>(
+    (fields) => `query Order($id: ID!) { order(id: $id) { ${fields} } }`,
     { id: orderGid(orderId) }
   );
   return data.order ? toTicketOrder(data.order) : null;
@@ -91,16 +114,16 @@ export async function fetchTicketOrder(orderId: string): Promise<TicketOrder | n
 export async function findTicketOrder(orderNumber: string, email: string): Promise<TicketOrder | null> {
   const digits = orderNumber.replace(/\D/g, '');
   if (!digits || digits.length > 9) return null;
-  const data = await adminFetch<{ orders: { nodes: AdminOrderNode[] } }>(
-    `query Find($q: String!) { orders(first: 5, query: $q) { nodes { ${ORDER_FIELDS} } } }`,
+  const data = await orderQuery<{ orders: { nodes: AdminOrderNode[] } }>(
+    (fields) => `query Find($q: String!) { orders(first: 5, query: $q) { nodes { ${fields} } } }`,
     { q: `name:${digits}` }
   );
   const wanted = email.trim().toLowerCase();
-  const node = data.orders.nodes.find(
-    (n) => n.name === `#${digits}` && n.email?.trim().toLowerCase() === wanted
-  );
-  if (!node) return null;
-  const order = toTicketOrder(node);
+  const order = data.orders.nodes
+    .filter((n) => n.name === `#${digits}`)
+    .map(toTicketOrder)
+    .find((o) => o.email?.toLowerCase() === wanted);
+  if (!order) return null;
   return order.status === 'none' ? null : order;
 }
 
@@ -111,10 +134,10 @@ export async function listTicketOrders(): Promise<TicketOrder[]> {
   for (let page = 0; page < 5; page++) {
     const data: {
       orders: { nodes: AdminOrderNode[]; pageInfo: { hasNextPage: boolean; endCursor: string | null } };
-    } = await adminFetch(
-      `query List($after: String, $q: String!) {
+    } = await orderQuery(
+      (fields) => `query List($after: String, $q: String!) {
         orders(first: 100, after: $after, sortKey: CREATED_AT, reverse: true, query: $q) {
-          nodes { ${ORDER_FIELDS} }
+          nodes { ${fields} }
           pageInfo { hasNextPage endCursor }
         }
       }`,

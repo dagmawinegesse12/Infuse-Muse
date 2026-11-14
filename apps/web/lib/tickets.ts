@@ -14,6 +14,9 @@ export type AdminOrderNode = {
   displayFinancialStatus: string;
   tags: string[];
   billingAddress: { name: string | null } | null;
+  /** Only present when the app may read customers. A POS sale keeps the guest's
+      email here rather than on the order. */
+  customer?: { email: string | null; displayName: string | null } | null;
   lineItems: { nodes: { currentQuantity: number; product: { productType: string } | null }[] };
 };
 
@@ -52,7 +55,9 @@ export function toTicketOrder(node: AdminOrderNode): TicketOrder {
   else if (node.displayFinancialStatus === 'REFUNDED' || total === 0) status = 'refunded';
   else if (!PAID.has(node.displayFinancialStatus)) status = 'unpaid';
 
-  const holder = node.billingAddress?.name?.trim() || node.email?.split('@')[0] || 'Guest';
+  const email = node.email?.trim() || node.customer?.email?.trim() || null;
+  const holder =
+    node.billingAddress?.name?.trim() || node.customer?.displayName?.trim() || email?.split('@')[0] || 'Guest';
 
   const admitted = node.tags
     .map((t) => ADMIT_TAG.exec(t)?.[1])
@@ -64,7 +69,7 @@ export function toTicketOrder(node: AdminOrderNode): TicketOrder {
     orderId: node.id.replace(/^gid:\/\/shopify\/Order\//, ''),
     name: node.name,
     holder,
-    email: node.email,
+    email,
     total,
     admitted,
     emailed: node.tags.includes(EMAILED_TAG),
