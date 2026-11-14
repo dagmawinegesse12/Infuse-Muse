@@ -83,7 +83,10 @@ export function mapCart(cart: CartNode): CartSnapshot {
   const discount =
     sumAllocations(cart.discountAllocations) +
     cart.lines.nodes.reduce((sum, l) => sum + sumAllocations(l.discountAllocations), 0);
-  const subtotal = toCents(cart.cost.subtotalAmount.amount);
+  // Shopify's subtotalAmount already has product-level discounts (an automatic
+  // sale, a per-product code) taken off, but not order-level ones. Start from
+  // the full prices instead so every discount comes off exactly once.
+  const subtotal = lines.reduce((sum, l) => sum + l.price * l.quantity, 0);
 
   return {
     id: cart.id,

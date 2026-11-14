@@ -45,42 +45,60 @@ export function DiscountField() {
     );
   }
 
+  // An automatic discount has no code to show, only the saving.
+  const automatic =
+    state.discount > 0 ? (
+      <div
+        className="flex items-baseline justify-between gap-6 border-t py-4"
+        style={{ borderColor: 'var(--rule)' }}
+      >
+        <p className="t-body">Discount</p>
+        <p className="t-price">−{formatPrice(state.discount, state.currency)}</p>
+      </div>
+    ) : null;
+
   if (!open) {
     return (
-      <div className="border-t py-4" style={{ borderColor: 'var(--rule)' }}>
-        <button type="button" onClick={() => setOpen(true)} className="hit t-label wipe-link">
-          Have a code?
-        </button>
-      </div>
+      <>
+        {automatic}
+        <div className="border-t py-4" style={{ borderColor: 'var(--rule)' }}>
+          <button type="button" onClick={() => setOpen(true)} className="hit t-label wipe-link">
+            Have a code?
+          </button>
+        </div>
+      </>
     );
   }
 
   return (
-    <form onSubmit={submit} className="border-t py-4" style={{ borderColor: 'var(--rule)' }}>
-      <label htmlFor="discount-code" className="t-label">
-        Discount code
-      </label>
-      <div className="mt-3 flex gap-3">
-        <input
-          id="discount-code"
-          name="code"
-          value={code}
-          onChange={(e) => setCode(e.target.value.toUpperCase())}
-          autoComplete="off"
-          autoCapitalize="characters"
-          spellCheck={false}
-          className="t-body min-w-0 flex-1 border bg-transparent px-4 py-3 outline-none focus-visible:border-current"
-          style={{ borderColor: 'var(--rule-strong)', color: 'var(--ink-strong)' }}
-        />
-        <button
-          type="submit"
-          disabled={!code.trim() || state.pending}
-          className="hit t-label border px-5 disabled:opacity-40"
-          style={{ borderColor: 'var(--rule-strong)', color: 'var(--ink-strong)' }}
-        >
-          Apply
-        </button>
-      </div>
-    </form>
+    <>
+      {automatic}
+      <form onSubmit={submit} className="border-t py-4" style={{ borderColor: 'var(--rule)' }}>
+        <label htmlFor="discount-code" className="t-label">
+          Discount code
+        </label>
+        <div className="mt-3 flex gap-3">
+          <input
+            id="discount-code"
+            name="code"
+            value={code}
+            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            className="t-body min-w-0 flex-1 border bg-transparent px-4 py-3 outline-none focus-visible:border-current"
+            style={{ borderColor: 'var(--rule-strong)', color: 'var(--ink-strong)' }}
+          />
+          <button
+            type="submit"
+            disabled={!code.trim() || state.pending}
+            className="hit t-label border px-5 disabled:opacity-40"
+            style={{ borderColor: 'var(--rule-strong)', color: 'var(--ink-strong)' }}
+          >
+            Apply
+          </button>
+        </div>
+      </form>
+    </>
   );
 }

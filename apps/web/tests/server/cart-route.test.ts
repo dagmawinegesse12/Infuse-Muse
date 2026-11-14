@@ -151,6 +151,29 @@ describe('POST /api/cart', () => {
     expect(cart.total).toBe(5990 - 1797);
   });
 
+  it('takes a product discount off once, although Shopify has already netted it out of the subtotal', async () => {
+    // Observed live with an automatic 30% off: one $28.32 tin came back with
+    // subtotalAmount 19.83 and an 8.49 line allocation.
+    const sale = cartNode({
+      totalQuantity: 1,
+      cost: { subtotalAmount: { amount: '19.83', currencyCode: 'CAD' } },
+      lines: {
+        nodes: [
+          {
+            ...cartNode().lines.nodes[0],
+            quantity: 1,
+            discountAllocations: [{ discountedAmount: { amount: '8.49' } }],
+            merchandise: { ...cartNode().lines.nodes[0].merchandise, price: { amount: '28.32', currencyCode: 'CAD' } },
+          },
+        ],
+      },
+    });
+    fakeShopify({ cart: () => sale });
+    const { cart } = await (await post({ op: 'get', cartId: CART })).json();
+
+    expect(cart).toMatchObject({ subtotal: 2832, discount: 849, total: 1983 });
+  });
+
   it('rejects a code Shopify marks inapplicable and clears it again', async () => {
     const calls = fakeShopify({
       cartDiscountCodesUpdate: (vars) => ({
