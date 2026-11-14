@@ -63,7 +63,7 @@ Today is Oct 16. Target: tickets on sale by Oct 23, dry run by Nov 8.
 - [x] The street address is shown only to ticket holders (ticket email and valid ticket pages); every public page still says "Downtown Toronto". Lives in server-only lib/event-venue.ts, guarded by tests/server/venue-privacy.test.ts.
 - [x] Personal ticket link emailed to each guest automatically when a ticket order is paid (Shopify ORDERS_PAID webhook -> /api/webhooks/orders-paid -> Resend; tagged `tickets-emailed` so it sends once). Verified live with a real order.
 - [x] Door guest list has an "Email tickets" / "Resend tickets email" button per order (`/api/checkin/email`, staff PIN), for orders with no email at payment time such as phone Quick Sales. The order needs an email added in Shopify first; the list says so when it is missing.
-- [x] Door (Shopify POS) sales: the guest email is read from the customer (read_customers), and an AUTHORIZED card sale counts as valid and is emailed on orders/create, so a guest can walk straight in. Verified with test order #1042 on 2026-11-14.
+- [x] Door (Shopify POS) sales: the guest email is read from the customer (read_customers), and an AUTHORIZED card sale counts as valid and is emailed on orders/create, so a guest can walk straight in. The customer-email part was verified with test order #1042 on 2026-11-14; the send-at-authorization part is unit tested only, so confirm it on the first door sale.
 - [ ] Optional: also add "Your tickets: infuseandmuse.com/tickets" to Shopify's own confirmation email
 - [ ] Reminder email the day before (Shopify Email, segment = bought the ticket)
 
