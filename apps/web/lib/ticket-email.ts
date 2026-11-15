@@ -38,7 +38,7 @@ export function ticketEmail({ holder, orderName, tickets, link, findUrl }: Ticke
     '',
     'Show the QR code at the door. A screenshot works.',
     '',
-    `You can find your tickets again at ${findUrl} with your order number (${orderName}) and this email address.`,
+    `Order ${orderName}. Lost this email? Enter this email address at ${findUrl} and we will send your tickets again.`,
     '',
     'Infuse & Muse',
   ].join('\n');
@@ -55,7 +55,7 @@ export function ticketEmail({ holder, orderName, tickets, link, findUrl }: Ticke
 <tr><td style="font-size:16px;line-height:1.6;padding:0 0 28px 0;">${escapeHtml(when)}<br>${escapeHtml(address)}<br><a href="${escapeHtml(maps.google)}" style="color:${GREEN};font-family:Arial,Helvetica,sans-serif;font-size:13px;">Google Maps</a> &nbsp;&middot;&nbsp; <a href="${escapeHtml(maps.apple)}" style="color:${GREEN};font-family:Arial,Helvetica,sans-serif;font-size:13px;">Apple Maps</a></td></tr>
 <tr><td style="font-size:16px;line-height:1.6;padding:0 0 28px 0;">Show the QR code at the door. A screenshot works.</td></tr>
 <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4a5f55;padding:0 0 8px 0;">If the button does not open, copy this link:<br><a href="${escapeHtml(link)}" style="color:#4a5f55;word-break:break-all;">${escapeHtml(link)}</a></td></tr>
-<tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4a5f55;">You can find your tickets again at <a href="${escapeHtml(findUrl)}" style="color:#4a5f55;">${escapeHtml(findUrl.replace(/^https?:\/\//, ''))}</a> with your order number (${escapeHtml(orderName)}) and this email address.</td></tr>
+<tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4a5f55;">Order ${escapeHtml(orderName)}. Lost this email? Enter this email address at <a href="${escapeHtml(findUrl)}" style="color:#4a5f55;">${escapeHtml(findUrl.replace(/^https?:\/\//, ''))}</a> and we will send your tickets again.</td></tr>
 </table>
 </td></tr></table>
 </body></html>`;

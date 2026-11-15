@@ -19,7 +19,7 @@ export default async function YourTicketsPage({ params }: { params: { token: str
         <PageHeader eyebrow="Opening Pour" title="We could not open these tickets." />
         <section className="shell pb-[var(--chapter)]">
           <p className="t-body max-w-measure">
-            The link may be incomplete. You can find your tickets again with your order number and email.
+            The link may be incomplete. Enter the email you used to buy and we will send your tickets again.
           </p>
           <div className="mt-8">
             <QuietLink href="/tickets">Find my tickets</QuietLink>

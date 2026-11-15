@@ -110,21 +110,17 @@ export async function fetchTicketOrder(orderId: string): Promise<TicketOrder | n
   return data.order ? toTicketOrder(data.order) : null;
 }
 
-/** "Find my tickets": the order number alone is guessable, so the email must match too. */
-export async function findTicketOrder(orderNumber: string, email: string): Promise<TicketOrder | null> {
-  const digits = orderNumber.replace(/\D/g, '');
-  if (!digits || digits.length > 9) return null;
-  const data = await orderQuery<{ orders: { nodes: AdminOrderNode[] } }>(
-    (fields) => `query Find($q: String!) { orders(first: 5, query: $q) { nodes { ${fields} } } }`,
-    { q: `name:${digits}` }
-  );
+/**
+ * "Find my tickets": every valid ticket order bought with this email, matched
+ * on the same resolved email as the guest list (the order's own, or the
+ * customer's for a POS sale). The caller emails them rather than showing them,
+ * so knowing an email is not enough to get someone else's QR codes.
+ */
+export async function findTicketOrdersByEmail(email: string): Promise<TicketOrder[]> {
   const wanted = email.trim().toLowerCase();
-  const order = data.orders.nodes
-    .filter((n) => n.name === `#${digits}`)
-    .map(toTicketOrder)
-    .find((o) => o.email?.toLowerCase() === wanted);
-  if (!order) return null;
-  return order.status === 'none' ? null : order;
+  if (!wanted) return [];
+  const orders = await listTicketOrders();
+  return orders.filter((o) => o.status === 'ok' && o.email?.toLowerCase() === wanted);
 }
 
 /** Every order with Opening Pour tickets, newest first, for the door's guest list. */

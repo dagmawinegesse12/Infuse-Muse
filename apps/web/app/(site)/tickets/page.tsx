@@ -10,7 +10,7 @@ export default function FindTicketsPage() {
       <PageHeader
         eyebrow="Opening Pour"
         title="Find my tickets"
-        lede="Enter the order number from your confirmation email and the email you used to buy."
+        lede="Enter the email you used to buy and we will send your tickets to it again."
       />
       <section className="shell pb-[var(--chapter)]">
         <TicketLookup />

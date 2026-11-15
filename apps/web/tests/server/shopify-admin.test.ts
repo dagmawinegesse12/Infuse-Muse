@@ -81,17 +81,15 @@ describe('Shopify Admin client', () => {
     await expect(listTicketOrders()).rejects.toThrow(/not configured/);
   });
 
-  it('finds an order only when the email matches, ignoring case and spaces', async () => {
-    stubShopify({ orders: [ORDER_NODE('#1042', 'Jane@Example.com')] });
-    const { findTicketOrder } = await import('@/lib/shopify-admin');
-    expect(await findTicketOrder('1042', '  jane@example.com ')).toMatchObject({ name: '#1042', total: 2 });
-    expect(await findTicketOrder('#1042', 'someone-else@example.com')).toBeNull();
-  });
-
-  it('does not match a different order number that merely contains the digits', async () => {
-    stubShopify({ orders: [ORDER_NODE('#11042', 'jane@example.com')] });
-    const { findTicketOrder } = await import('@/lib/shopify-admin');
-    expect(await findTicketOrder('1042', 'jane@example.com')).toBeNull();
+  it('finds every valid ticket order for an email, ignoring case and spaces', async () => {
+    const cancelled = { ...ORDER_NODE('#1044', 'jane@example.com'), cancelledAt: '2026-11-01T00:00:00Z' };
+    stubShopify({
+      orders: [ORDER_NODE('#1042', 'Jane@Example.com'), ORDER_NODE('#1043', 'jane@example.com'), cancelled],
+    });
+    const { findTicketOrdersByEmail } = await import('@/lib/shopify-admin');
+    expect((await findTicketOrdersByEmail('  jane@example.com ')).map((o) => o.name)).toEqual(['#1042', '#1043']);
+    expect(await findTicketOrdersByEmail('someone-else@example.com')).toEqual([]);
+    expect(await findTicketOrdersByEmail('   ')).toEqual([]);
   });
 
   it('keeps tea-only orders out of the guest list', async () => {
@@ -110,9 +108,9 @@ describe('Shopify Admin client', () => {
       customer: { email: 'guest@example.com', displayName: 'Testing Lastname' },
     };
     stubShopify({ orders: [pos] });
-    const { findTicketOrder, listTicketOrders } = await import('@/lib/shopify-admin');
+    const { findTicketOrdersByEmail, listTicketOrders } = await import('@/lib/shopify-admin');
     expect((await listTicketOrders())[0]).toMatchObject({ email: 'guest@example.com', holder: 'Testing Lastname' });
-    expect(await findTicketOrder('1042', 'guest@example.com')).toMatchObject({ name: '#1042' });
+    expect((await findTicketOrdersByEmail('guest@example.com')).map((o) => o.name)).toEqual(['#1042']);
   });
 
   it('carries on without customer fields if Shopify refuses them, and stops asking', async () => {
